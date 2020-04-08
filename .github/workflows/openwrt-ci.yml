@@ -78,10 +78,11 @@ jobs:
           df -h
 
       - name: Clone source code
-        run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH
+        run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
         
       - name: Update feeds
         run: |
+          cd openwrt
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
