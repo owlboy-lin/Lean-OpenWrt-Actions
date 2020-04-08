@@ -81,9 +81,10 @@ jobs:
         run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
 
       - name: Update feeds
-        run: |
-          cd openwrt &&./scripts/feeds update -a
-          cd openwrt &&./scripts/feeds install -a
+        run: cd openwrt && ./scripts/feeds update -a
+
+      - name: Install feeds
+        run: cd openwrt && ./scripts/feeds install -a
 
       - name: Generate configuration file
         run: make defconfig
