@@ -12,12 +12,40 @@ name: OpenWrt-CI
 on:
   schedule:
     - cron: 0 20 * * *
+      
+  push:
+    branches: 
+      - master
+    paths:
+      - '.github/workflows/openwrt-ci.yml'
+      - 'LeanR9-x64-simple'
+
+  watch:
+    types: [started]
+
+      
+env:
+  REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_BRANCH: master
+  FIRMWARE_NAME: Lean-x64-simple
+  CONFIG_FILE: Lean-x64-simple
+  DIY_SH: diy.sh
+  TARGET: x86
+  SUBTARGET: 64
+  SSH_ACTIONS: false
+  Gzip_file: true
+  UPLOAD_BIN_DIR: false
+  UPLOAD_ZIP: true
+  UPLOAD_FIRMWARE: false
+  UPLOAD_RELEASE: true
+  TZ: Asia/Shanghai
 
 jobs:
 
   build:
 
     runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
 
     steps:
       - name: Checkout
@@ -48,6 +76,9 @@ jobs:
           # ln -s /mnt/openwrt/staging_dir ./staging_dir
 
           df -h
+
+      - name: Clone source code
+        run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
 
       - name: Update feeds
         run: |
