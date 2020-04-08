@@ -78,13 +78,12 @@ jobs:
           df -h
 
       - name: Clone source code
-        run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
-
+        run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH
+        
       - name: Update feeds
-        run: cd openwrt && ./scripts/feeds update -a
-
-      - name: Install feeds
-        run: cd openwrt && ./scripts/feeds install -a
+        run: |
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
 
       - name: Generate configuration file
         run: make defconfig
