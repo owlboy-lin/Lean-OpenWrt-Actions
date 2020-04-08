@@ -82,8 +82,8 @@ jobs:
 
       - name: Update feeds
         run: |
-          ./scripts/feeds update -a
-          ./scripts/feeds install -a
+          cd openwrt &&./scripts/feeds update -a
+          cd openwrt &&./scripts/feeds install -a
 
       - name: Generate configuration file
         run: make defconfig
