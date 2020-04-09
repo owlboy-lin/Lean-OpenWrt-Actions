@@ -46,14 +46,19 @@ jobs:
 
     runs-on: ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
-
+    
     steps:
       - name: Checkout
         uses: actions/checkout@master
         with:
           ref: master
           fetch-depth: 1000000
-
+          
+      - name: Set Date
+        run: |
+           date=$(TZ=UTC-8 date +"%Y.%m.%d-%H%M%S")
+           echo "::set-env name=DATE::$date"
+           
       - name: Space cleanup
         env:
           DEBIAN_FRONTEND: noninteractive
@@ -130,7 +135,7 @@ jobs:
           rm -rf ./release/
           mkdir -p ./release/
           cd bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/
-          zip -r -j openwrt/release/${{ steps.rename.outputs.release_tag }}.zip * || true
+          zip -r -j openwrt/release/${{ env.DATE }}.zip * || true
           cd openwrt/release
           echo "::set-env name=RELEASE::$PWD"
           echo "::set-output name=status::success" 
@@ -145,7 +150,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.all_TOKEN }}
         with:
-          tag_name: ${{ env.date_TAG }}
+          tag_name: ${{ env.DATE }}
           body: 🚀 Automated build | 自动编译
 
 
