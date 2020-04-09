@@ -119,5 +119,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@master
         with:
-          name: OpenWrt firmware
+          name: OpenWrt_firmware
           path: openwrt/bin/targets/
