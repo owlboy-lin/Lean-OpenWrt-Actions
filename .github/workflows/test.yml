@@ -145,6 +145,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG_NAME: ${{ env.DATE }}
-            NAME： 123
-            BODY： 🚀 Automated build | 自动编译
-            ASSET_PATH： ${{ env.RELEASE }}/*
+        with:
+          NAME： 123
+          BODY： 🚀 Automated build | 自动编译
+          ASSET_PATH： ${{ env.RELEASE }}/*
