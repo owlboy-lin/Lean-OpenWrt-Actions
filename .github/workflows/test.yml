@@ -130,13 +130,11 @@ jobs:
       - name: Upload zip
         id: upload_zip
         run: |
-          cd openwrt
+          cd openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/
           rm -rf ./release/
           mkdir -p ./release/
-          cd bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/
-          zip -r -j ${{ env.DATE }}.zip * || true
-          cd ../../../..
           cd release
+          zip -r -j ${{ env.DATE }}.zip bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/* || true
           echo "::set-env name=RELEASE::$PWD"
           echo "::set-output name=status::success" 
           
