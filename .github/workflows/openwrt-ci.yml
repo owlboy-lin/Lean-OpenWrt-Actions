@@ -152,6 +152,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.all_TOKEN }}
         with:
-          tag_name: ${{ env.DATE }}
+          tag_name: ${{ env.FIRMWARE_NAME }}
           body: 🚀 Automated build | 自动编译
           files: ${{ env.RELEASE }}/
