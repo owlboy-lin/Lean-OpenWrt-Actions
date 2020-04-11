@@ -27,6 +27,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.all_TOKEN }}
         with:
-          name: 456
+          name: 789
           tag_name: /*-
+          body: 🚀 Automated build | 自动编译
           files: Release.txt
