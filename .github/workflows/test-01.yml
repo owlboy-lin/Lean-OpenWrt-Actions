@@ -28,6 +28,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.all_TOKEN }}
         with:
-          tag_name: 123
           name: 456
+          tag_name: /*-          
           files: Release.txt
