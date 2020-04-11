@@ -24,10 +24,10 @@ jobs:
         
       - name: Release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.all_TOKEN }}
         with:
           name: 456
-          tag_name: /*-          
+          tag_name: /*-
+          body: 🚀 Automated build | 自动编译         
           files: Release.txt
