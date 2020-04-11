@@ -135,7 +135,7 @@ jobs:
           cd openwrt
           rm -rf ./release/
           mkdir -p ./release/
-          zip -r -j openwrt/release/${{ steps.rename.outputs.release_tag }}-${{ env.SUBTARGET }}.zip bin/targets/$TARGET/$SUBTARGET/* || true
+          zip -r -j openwrt/release/${{ steps.rename.outputs.RELEASE_NAME }}.zip bin/targets/$TARGET/$SUBTARGET/* || true
           cd openwrt/release
           echo "::set-env name=RELEASE::$PWD"
           echo "::set-output name=status::success"   
