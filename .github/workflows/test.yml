@@ -144,5 +144,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.all_TOKEN }}
         with:
           tag_name: ${{ env.DATE }}
-          body_path: ${{ env.DATE }}
+          name: 123
           files: ${{ env.RELEASE }}/*
