@@ -29,4 +29,4 @@ jobs:
         with:
           tag_name: 123
           name: 456
-          body_path: release.txt
+          files: Release.txt
