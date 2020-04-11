@@ -117,10 +117,11 @@ jobs:
         run: |
           cd openwrt/bin/targets/$TARGET/$SUBTARGET
           release_tag="${FIRMWARE_NAME}-${DATE}"
-          for i in openwrt*; do mv -f $i `echo $i | sed "s/^openwrt-${{ env.TARGET }}-${{ env.SUBTARGET }}/${release_tag}/"`; done
+          for i in openwrt*; do mv -f $i `echo $i | sed "s/^openwrt/${release_tag}/"`; done
+          release_name="${FIRMWARE_NAME}-${SUBTARGET}"
           echo "::set-env name=FIRMWARE::$PWD"
           echo "::set-output name=status::success"
-          echo "##[set-output name=release_tag;]$release_tag"
+          echo "##[set-output name=RELEASE_NAME;]$release_name"
 
       - name: Prepare artifact
         run: |
@@ -135,7 +136,7 @@ jobs:
           rm -rf ./release/
           mkdir -p ./release/
           cd ${{ env.FIRMWARE }}
-          zip -r -j openwrt/release/${{ steps.rename.outputs.release_tag }}.zip * || true
+          zip -r -j openwrt/release/${{ steps.rename.outputs.release_tag }}-${{ env.SUBTARGET }}.zip * || true
           cd openwrt/release
           echo "::set-env name=RELEASE::$PWD"
           echo "::set-output name=status::success"   
@@ -152,7 +153,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.all_TOKEN }}
         with:
-          tag_name: ${{ env.FIRMWARE_NAME }}
-          name: ${{ env.DATE }}
+          name: 自动发布 ${{ env.FIRMWARE_NAME }}
+          tag_name: ${{ env.DATE }}-${{ env.RELEASE_NAME }}
           body: 🚀 Automated build | 自动编译
           files: ${{ env.RELEASE }}/
