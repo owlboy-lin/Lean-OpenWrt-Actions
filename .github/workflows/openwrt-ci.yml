@@ -18,17 +18,13 @@ on:
       - master
     paths:
       - '.github/workflows/openwrt-ci.yml'
-      - 'LeanR9-x64-simple'
-
-  watch:
-    types: [started]
 
       
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  FIRMWARE_NAME: Lean-x64-simple
-  CONFIG_FILE: Lean-x64-simple
+  FIRMWARE_NAME: coolsnowwolf-lede
+  CONFIG_FILE: 
   DIY_SH: diy.sh
   TARGET: x86
   SUBTARGET: 64
@@ -53,6 +49,11 @@ jobs:
         with:
           ref: master
           fetch-depth: 1000000
+       
+      - name: Set Date
+        run: |
+           date=$(TZ=UTC-8 date +"%Y.%m.%d-%H%M%S")
+           echo "::set-env name=DATE::$date"
 
       - name: Space cleanup
         env:
@@ -111,13 +112,46 @@ jobs:
           du -h --max-depth=1 ./build_dir
           du -h --max-depth=1 ./bin
 
+      - name: Rename for file
+        id: rename
+        run: |
+          cd openwrt/bin/targets/$TARGET/$SUBTARGET
+          release_tag="${FIRMWARE_NAME}-${DATE}"
+          for i in openwrt*; do mv -f $i `echo $i | sed "s/^openwrt-${{ env.TARGET }}-${{ env.SUBTARGET }}/${release_tag}/"`; done
+          echo "::set-env name=FIRMWARE::$PWD"
+          echo "::set-output name=status::success"
+          echo "##[set-output name=release_tag;]$release_tag"
+
       - name: Prepare artifact
         run: |
           cd openwrt
           find ./bin/targets/ -type d -name "packages" | xargs rm -rf {}
+          
+      - name: Upload zip
+        id: upload_zip
+        if: env.UPLOAD_ZIP == 'true' && !cancelled()
+        run: |
+          cd openwrt
+          rm -rf ./release/
+          mkdir -p ./release/
+          cd ${{ env.FIRMWARE }}
+          zip -r -j openwrt/release/${{ steps.rename.outputs.release_tag }}.zip * || true
+          cd openwrt/release
+          echo "::set-env name=RELEASE::$PWD"
+          echo "::set-output name=status::success"   
 
       - name: Upload artifact
         uses: actions/upload-artifact@master
         with:
-          name: OpenWrt_firmware
-          path: openwrt/bin/targets/
+          name: ${{ env.FIRMWARE_NAME }}
+          path: ${{ env.FIRMWARE }}/
+          
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: env.UPLOAD_ZIP == 'true' && !cancelled()
+        env:
+          GITHUB_TOKEN: ${{ secrets.all_TOKEN }}
+        with:
+          tag_name: ${{ env.DATE }}
+          body: 🚀 Automated build | 自动编译
+          files: ${{ env.RELEASE }}/
