@@ -28,6 +28,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.all_TOKEN }}
         with:
           name: 789
-          tag_name: /*-
+          tag_name: 147
           body: 🚀 Automated build | 自动编译
           files: Release.txt
