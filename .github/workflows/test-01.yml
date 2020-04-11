@@ -21,9 +21,12 @@ jobs:
         run: echo ${{ github.sha }} > Release.txt
       - name: Test
         run: cat Release.txt
+        
       - name: Release
         uses: softprops/action-gh-release@v1
-        with:
-          files: Release.txt
         env:
           GITHUB_TOKEN: ${{ secrets.all_TOKEN }}
+        with:
+          tag_name: 123
+          name: 456
+          body_path: release.txt
