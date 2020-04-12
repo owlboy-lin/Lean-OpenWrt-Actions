@@ -24,7 +24,7 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FIRMWARE_NAME: coolsnowwolf-lede
-  CONFIG_FILE: 
+  CONFIG_FILE: .config
   DIY_SH: diy.sh
   TARGET: x86
   SUBTARGET: 64
