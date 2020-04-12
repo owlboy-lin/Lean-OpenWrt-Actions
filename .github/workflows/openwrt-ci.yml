@@ -112,6 +112,11 @@ jobs:
           du -h --max-depth=1 ./build_dir
           du -h --max-depth=1 ./bin
 
+      - name: Prepare artifact
+        run: |
+          cd openwrt
+          find ./bin/targets/ -type d -name "packages" | xargs rm -rf {}
+ 
       - name: Rename for file
         id: rename
         run: |
@@ -123,11 +128,12 @@ jobs:
           echo "::set-output name=status::success"
           echo "##[set-output name=RELEASE_NAME;]$release_name"
 
-      - name: Prepare artifact
-        run: |
-          cd openwrt
-          find ./bin/targets/ -type d -name "packages" | xargs rm -rf {}
-          
+      - name: Upload artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: ${{ env.FIRMWARE_NAME }}
+          path: ${{ env.FIRMWARE }}/
+
       - name: Upload zip
         id: upload_zip
         if: env.UPLOAD_ZIP == 'true' && !cancelled()
@@ -139,12 +145,6 @@ jobs:
           cd openwrt/release
           echo "::set-env name=RELEASE::$PWD"
           echo "::set-output name=status::success"   
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@master
-        with:
-          name: ${{ env.FIRMWARE_NAME }}
-          path: ${{ env.FIRMWARE }}/
           
       - name: Release
         uses: softprops/action-gh-release@v1
