@@ -17,7 +17,7 @@ on:
     branches: 
       - master
     paths:
-      - '.github/workflows/openwrt-ci.yml'
+      - '.github/workflows/OpenWrt-CI.yml'
 
       
 env:
