@@ -141,7 +141,7 @@ jobs:
           cd openwrt
           rm -rf ./release/
           mkdir -p ./release/
-          zip -r -j release/${{ steps.rename.outputs.RELEASE_NAME }}-${{ env.DATE }}.zip ${{ vne.FIRMWARE }}/* || true
+          zip -r -j release/${{ steps.rename.outputs.RELEASE_NAME }}-${{ env.DATE }}.zip ${{ env.FIRMWARE }}/* || true
           cd openwrt/release
           echo "::set-env name=RELEASE::$PWD"
           echo "::set-output name=status::success"   
