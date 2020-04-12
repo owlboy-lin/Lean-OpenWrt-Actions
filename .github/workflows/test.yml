@@ -56,7 +56,7 @@ jobs:
           
       - name: Set Date
         run: |
-           date=$(TZ=UTC-8 date +"%Y.%m.%d-%H%M%S")
+           date=$(TZ=UTC-8 date +"%Y.%m.%d-%H%M")
            echo "::set-env name=DATE::$date"
            
       - name: Space cleanup
@@ -120,7 +120,19 @@ jobs:
         run: |
           cd openwrt
           find ./bin/targets/ -type d -name "packages" | xargs rm -rf {}
-
+         
+      - name: Rename file
+        id: rename
+        run: |
+          cd openwrt/bin/targets/$TARGET/$SUBTARGET
+          release_tag="${FIRMWARE_NAME}-${DATE}"
+          for i in openwrt*; do mv -f $i `echo $i | sed "s/^openwrt-$TARGET-$SUBTARGET/${release_tag}/"`; done
+          release_name="${DATE}-${FIRMWARE_NAME}-${SUBTARGET}"
+          echo "::set-env name=FIRMWARE::$PWD"
+          echo "::set-output name=status::success"
+          echo "##[set-output name=release_tag;]$release_tag"
+          echo "##[set-output name=RELEASE_NAME;]$release_name"
+          
       - name: Upload artifact
         uses: actions/upload-artifact@master
         with:
@@ -133,7 +145,7 @@ jobs:
           cd openwrt
           rm -rf ./release/
           mkdir -p ./release/
-          zip -r -j release/${{ env.DATE }}.zip bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/* || true
+          zip -r -j release/${{ env.RELEASE_NAME }}.zip bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/* || true
           cd release
           echo "::set-env name=RELEASE::$PWD"
           echo "::set-output name=status::success" 
@@ -143,6 +155,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.all_TOKEN }}
         with:
-          tag_name: ${{ env.DATE }}
-          name: 123
+          tag_name: ${{ env.RELEASE_NAME }}
+          name: ${{ env.DATE }}
           files: ${{ env.RELEASE }}/*
