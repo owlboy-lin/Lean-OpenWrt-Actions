@@ -18,16 +18,20 @@ on:
       - master
     paths:
       - '.github/workflows/OpenWrt-CI.yml'
+#      - 'LeanR9-x64-simple'
+
+  watch:
+    types: [started]
 
       
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  FIRMWARE_NAME: coolsnowwolf-lede
-  CONFIG_FILE: .config
-  DIY_SH: diy.sh
+  FIRMWARE_NAME: Lean-x64
   TARGET: x86
   SUBTARGET: 64
+  CONFIG_FILE: Lean-x64-simple
+  DIY_SH: diy.sh
   SSH_ACTIONS: false
   Gzip_file: true
   UPLOAD_BIN_DIR: false
@@ -42,19 +46,27 @@ jobs:
 
     runs-on: ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
-
+    
     steps:
       - name: Checkout
         uses: actions/checkout@master
         with:
           ref: master
           fetch-depth: 1000000
-       
+          
       - name: Set Date
         run: |
            date=$(TZ=UTC-8 date +"%Y.%m.%d-%H%M%S")
            echo "::set-env name=DATE::$date"
-
+           
+      - name: new name
+        run : |
+           firmware_name="${FIRMWARE_NAME}-${DATE}"
+           release_name="${DATE}-${FIRMWARE_NAME}"
+           echo "::set-env name=NEW_NAME::$firmware_name"
+           echo "::set-env name=RELEASE_NAME::$release_name"
+           
+           
       - name: Space cleanup
         env:
           DEBIAN_FRONTEND: noninteractive
@@ -116,43 +128,42 @@ jobs:
         run: |
           cd openwrt
           find ./bin/targets/ -type d -name "packages" | xargs rm -rf {}
- 
-      - name: Rename for file
+          
+      - name: Rename file
         id: rename
         run: |
           cd openwrt/bin/targets/$TARGET/$SUBTARGET
-          release_tag="${FIRMWARE_NAME}-${DATE}"
-          for i in openwrt*; do mv -f $i `echo $i | sed "s/^openwrt/${release_tag}/"`; done
-          release_name="${FIRMWARE_NAME}-${SUBTARGET}"
+          for i in openwrt*; do mv -f $i `echo $i | sed "s/^openwrt-$TARGET-$SUBTARGET/${NEW_NAME}/"`; done
           echo "::set-env name=FIRMWARE::$PWD"
           echo "::set-output name=status::success"
-          echo "##[set-output name=RELEASE_NAME;]$release_name"
+
 
       - name: Upload artifact
         uses: actions/upload-artifact@master
         with:
-          name: ${{ env.FIRMWARE_NAME }}
+          name: ${{ env.NEW_NAME }}
           path: ${{ env.FIRMWARE }}/
-
+          
       - name: Upload zip
         id: upload_zip
-        if: env.UPLOAD_ZIP == 'true' && !cancelled()
         run: |
           cd openwrt
           rm -rf ./release/
           mkdir -p ./release/
-          zip -r -j release/${{ env.RELEASE_NAME }}-${{ env.DATE }}.zip bin/targets/$TARGET/$SUBTARGET/* || true
-          cd openwrt/release
+          zip -r -j release/${{ env.RELEASE_NAME }}.zip bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/* || true
+          cd release
           echo "::set-env name=RELEASE::$PWD"
-          echo "::set-output name=status::success"   
+          echo "::set-output name=status::success" 
           
-      - name: Release
+      - name: SSH connection to Actions
+        uses: owlboy-lin/debugger-action@master
+        if: env.SSH_ACTIONS == 'true'              
+          
+      - name: Upload firmware to release
         uses: softprops/action-gh-release@v1
-        if: env.UPLOAD_ZIP == 'true' && !cancelled()
         env:
           GITHUB_TOKEN: ${{ secrets.all_TOKEN }}
         with:
-          name: 自动发布 ${{ env.FIRMWARE_NAME }}
-          tag_name: ${{ env.DATE }}-${{ env.RELEASE_NAME }}
-          body: 🚀 Automated build | 自动编译
-          files: ${{ env.RELEASE }}/
+          tag_name: ${{ env.RELEASE_NAME }}
+          name: 自动发布 ${{ env.NEW_NAME }}
+          files: ${{ env.RELEASE }}/*
