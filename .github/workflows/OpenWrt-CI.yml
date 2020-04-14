@@ -27,14 +27,14 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  FIRMWARE_NAME: Lean-x64
+  FIRMWARE_NAME: Lean
   TARGET: x86
   SUBTARGET: 64
   CONFIG_FILE: Lean-x64-simple
   DIY_SH: diy.sh
   SSH_ACTIONS: false
   Gzip_file: true
-  UPLOAD_BIN_DIR: false
+  UPLOAD_ALL: false
   UPLOAD_ZIP: true
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
