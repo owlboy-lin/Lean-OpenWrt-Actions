@@ -101,6 +101,7 @@ jobs:
 
       - name: Generate configuration file
         run: |
+          cd openwrt
           rm -f ./.config*
           touch ./.config
 
