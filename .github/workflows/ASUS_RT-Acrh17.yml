@@ -240,9 +240,6 @@ jobs:
           # 
 
           sed -i 's/^[ \t]*//g' ./.config
-          chmod +x $DIY_SH
-          cd openwrt
-          ../$DIY_SH
           make defconfig
 
       - name: Download package
