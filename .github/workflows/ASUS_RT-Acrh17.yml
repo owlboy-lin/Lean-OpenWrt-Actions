@@ -265,7 +265,7 @@ jobs:
         id: extract
         if: steps.compile.outputs.status == 'success'
         run: |
-          cd openwrt/bin/targets/$TARGET/$SUBTARGET
+          cd openwrt/bin/targets/*/*
           gzip -qd *.img.gz  || true
           rm -f *.img.gz
           echo "::set-env name=FIRMWARE::$PWD"
