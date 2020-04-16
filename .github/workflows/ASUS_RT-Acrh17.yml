@@ -54,7 +54,6 @@ jobs:
         uses: actions/checkout@master
         with:
           ref: master
-          fetch-depth: 1000000
           
       - name: Set Date
         run: |
@@ -266,7 +265,7 @@ jobs:
           
       - name: UPLOAD_ALL
         id: UPLOAD_ALL
-        if: env.UPLOAD_ALL == 'false' 
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_ALL == 'false' && !cancelled()
         run: |
           cd openwrt
           find ./bin/targets/ -type d -name "packages" | xargs rm -rf {}
@@ -283,7 +282,7 @@ jobs:
           
       - name: Rename file
         id: rename
-        if: env.rename == 'true'
+        if: env.rename == 'true' && steps.compile.outputs.status == 'success' 
         run: |
           cd openwrt/bin/targets/*/*
           for i in openwrt*; do mv -f $i `echo $i | sed "s/^openwrt-$TARGET-$SUBTARGET/${NEW_NAME}/"`; done || true
@@ -295,7 +294,7 @@ jobs:
     
       - name: Gz Files
         id: Gzip_file
-        if: steps.rename.outputs.status == 'success' && env.Gzip_file == 'true' 
+        if: steps.compile.outputs.status == 'success' && env.Gzip_file == 'true' 
         run: |
           cd openwrt/bin/targets/$TARGET/$SUBTARGET
           gzip *.img || true
@@ -319,14 +318,26 @@ jobs:
 
       - name: Upload zip
         id: upload_zip
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_ALL == 'true' 
         run: |
           cd openwrt
           rm -rf ./release/
           mkdir -p ./release/
-          zip -r release/${{ env.NEW_NAME }}.zip bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/* || true
+          zip -r -j release/${{ env.NEW_NAME }}.zip bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/* || true           
           cd release
           echo "::set-env name=RELEASE::$PWD"
           echo "::set-output name=status::success"   
+
+      - name: Upload zip
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_ALL == 'false'
+        run: |
+          cd openwrt
+          rm -rf ./release/
+          mkdir -p ./release/
+          zip -r release/${{ env.NEW_NAME }}.zip bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/* || true           
+          cd release
+          echo "::set-env name=RELEASE::$PWD"
+          echo "::set-output name=status::success" 
           
       - name: SSH connection to Actions
         uses: owlboy-lin/debugger-action@master
