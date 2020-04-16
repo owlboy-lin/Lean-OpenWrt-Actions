@@ -32,9 +32,11 @@ env:
   SUBTARGET: generic
   CONFIG_FILE: Lean-x64-simple
   DIY_SH: diy.sh
-  SSH_ACTIONS: false
-  Gzip_file: true
   UPLOAD_ALL: false
+  SSH_ACTIONS: false
+  extract:  false
+  rename: true
+  Gzip_file: false
   UPLOAD_ZIP: true
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
@@ -251,30 +253,40 @@ jobs:
           make download -j8
           find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
+          
       - name: Compile the firmware
         id: compile
         run: |
           cd openwrt
           echo -e "$(nproc) thread compile"
           make -j$(nproc) || make -j1 V=s
+          cd bin/targets/*/*
+          echo "::set-env name=FIRMWARE::$PWD"
+          echo "::set-output name=status::success"
+          
+      - name: UPLOAD_ALL
+        id: UPLOAD_ALL
+        if: env.UPLOAD_ALL == 'false' 
+        run: |
+          cd openwrt
+          find ./bin/targets/ -type d -name "packages" | xargs rm -rf {}
           echo "::set-output name=status::success"
       
       - name: Extract Gz Files
         id: extract
-        if: steps.compile.outputs.status == 'success'
+        if: steps.compile.outputs.status == 'success' && env.extract == 'true'
         run: |
           cd openwrt/bin/targets/*/*
           gzip -qd *.img.gz  || true
           rm -f *.img.gz
-          echo "::set-env name=FIRMWARE::$PWD"
           echo "::set-output name=status::success" 
           
       - name: Rename file
         id: rename
+        if: env.rename == 'true'
         run: |
           cd openwrt/bin/targets/*/*
-          for i in openwrt*; do mv -f $i `echo $i | sed "s/^openwrt-$TARGET-$SUBTARGET/${NEW_NAME}/"`; done
-          echo "::set-env name=FIRMWARE::$PWD"
+          for i in openwrt*; do mv -f $i `echo $i | sed "s/^openwrt-$TARGET-$SUBTARGET/${NEW_NAME}/"`; done || true
           echo "::set-output name=status::success"
       
 #      - name: SSH connection to Actions
@@ -296,13 +308,7 @@ jobs:
           mv sha256sums sha256sums.orig
           sha256sum *.* > sha256sums
          
-      - name: Organize files
-        id: organize
-        if: env.UPLOAD_ORGANIZE == 'false' 
-        run: |
-          cd openwrt
-          find ./bin/targets/ -type d -name "packages" | xargs rm -rf {}
-          echo "::set-output name=status::success"
+          
       - name: Upload firmware directory
         id: upload_firmware
         uses: actions/upload-artifact@master
@@ -321,6 +327,7 @@ jobs:
           cd release
           echo "::set-env name=RELEASE::$PWD"
           echo "::set-output name=status::success"   
+          
       - name: SSH connection to Actions
         uses: owlboy-lin/debugger-action@master
         if: env.SSH_ACTIONS == 'true'      
