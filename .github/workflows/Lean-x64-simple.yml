@@ -261,6 +261,7 @@ jobs:
 
           sed -i 's/^[ \t]*//g' ./.config
           make defconfig
+          cd ..
           chmod +x $DIY_SH
           cd openwrt
           ../$DIY_SH
