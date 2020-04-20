@@ -287,7 +287,7 @@ jobs:
           
       - name: UPLOAD_ALL
         id: UPLOAD_ALL
-        if: steps.compile.outputs.status == 'success' && env.UPLOAD_ALL == 'true' && !cancelled()
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_ALL == 'false'
         run: |
           cd openwrt
           find ./bin/targets/ -type d -name "packages" | xargs rm -rf {}
