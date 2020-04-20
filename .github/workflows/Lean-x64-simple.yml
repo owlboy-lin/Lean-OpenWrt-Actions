@@ -261,7 +261,7 @@ jobs:
 
           sed -i 's/^[ \t]*//g' ./.config
           chmod +x ./$DIY_SH && ./$DIY_SH
-          cd openwrt && make defconfig
+          make defconfig
 
       - name: Download package
         id: package
