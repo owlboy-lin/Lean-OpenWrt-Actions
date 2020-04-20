@@ -340,7 +340,7 @@ jobs:
 
       - name: Upload zip
         id: upload_zip
-        if: steps.compile.outputs.status == 'success' && env.UPLOAD_ALL == 'true' 
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_ZIP == 'true' && env.UPLOAD_ALL == 'true' 
         run: |
           cd openwrt
           rm -rf ./release/
@@ -351,7 +351,7 @@ jobs:
           echo "::set-output name=status::success"   
 
       - name: Upload zip
-        if: steps.compile.outputs.status == 'success' && env.UPLOAD_ALL == 'false'
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_ZIP == 'true' && env.UPLOAD_ALL == 'false'
         run: |
           cd openwrt
           rm -rf ./release/
