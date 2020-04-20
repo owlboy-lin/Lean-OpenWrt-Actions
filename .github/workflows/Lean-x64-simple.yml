@@ -30,7 +30,7 @@ env:
   FIRMWARE_NAME: Lean-x64-simple
   TARGET: x86
   SUBTARGET: 64
-  CONFIG_FILE: Lean-x64-simple
+  CONFIG_FILE: 
   DIY_SH: diy.sh
   UPLOAD_ALL: false
   SSH_ACTIONS: false
