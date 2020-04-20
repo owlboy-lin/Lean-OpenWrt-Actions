@@ -220,7 +220,7 @@ jobs:
           # 常用LuCI插件选择:
           cat >> .config <<EOF
           # koolproxyR
-          # CONFIG_PACKAGE_luci-app-koolproxyR=y 
+          CONFIG_PACKAGE_luci-app-koolproxyR=y 
           
           EOF
 
@@ -233,8 +233,8 @@ jobs:
           CONFIG_PACKAGE_luci-theme-bootstrap=y
           # CONFIG_PACKAGE_luci-theme-material is not set
           CONFIG_PACKAGE_luci-theme-netgear=y
-          # CONFIG_PACKAGE_luci-theme-atmaterial=y
-          # CONFIG_PACKAGE_luci-theme-rosy=y
+          CONFIG_PACKAGE_luci-theme-atmaterial=y
+          CONFIG_PACKAGE_luci-theme-rosy=y
           EOF
 
 
