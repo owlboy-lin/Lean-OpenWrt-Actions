@@ -9,8 +9,8 @@
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
 
 # Import external feeds
-git clone https://github.com/openwrt-develop/luci-theme-atmaterial.git
-git clone https://github.com/rosywrt/luci-theme-rosy.git
+git clone https://github.com/openwrt-develop/luci-theme-atmaterial package/luci-theme-atmaterial
+git clone https://github.com/rosywrt/luci-theme-rosy package/luci-theme-rosy
 git clone https://github.com/superstarfly/openwrt-package package/lienol
 git clone https://github.com/vernesong/OpenClash package/openclash
 git clone https://github.com/tzxiaozhen88/luci-app-koolproxyR package/koolproxyR
