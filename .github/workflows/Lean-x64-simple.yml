@@ -99,6 +99,12 @@ jobs:
 
       - name: Install feeds
         run: cd openwrt && ./scripts/feeds install -a
+        
+     - name: DIY
+        run: |   
+          chmod +x $DIY_SH
+          cd openwrt
+          ../$DIY_SH 
 
       - name: Generate configuration file
         run: |
@@ -260,7 +266,6 @@ jobs:
           # 
 
           sed -i 's/^[ \t]*//g' ./.config
-          chmod +x ./$DIY_SH && ./$DIY_SH
           make defconfig
 
       - name: Download package
