@@ -100,7 +100,7 @@ jobs:
       - name: Install feeds
         run: cd openwrt && ./scripts/feeds install -a
         
-     - name: DIY
+      - name: DIY
         run: |   
           chmod +x $DIY_SH
           cd openwrt
