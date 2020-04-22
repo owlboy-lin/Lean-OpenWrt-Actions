@@ -30,7 +30,7 @@ env:
   FIRMWARE_NAME: ASUS_RT-Acrh17
   TARGET: ipq40xx
   SUBTARGET: generic
-  CONFIG_FILE: Lean-x64-simple
+  CONFIG_FILE: 
   DIY_SH: diy.sh
   UPLOAD_ALL: false
   SSH_ACTIONS: false
