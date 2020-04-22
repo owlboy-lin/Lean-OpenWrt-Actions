@@ -18,3 +18,6 @@ git clone https://github.com/rufengsuixing/luci-app-adguardhome package/adguardh
 git clone https://github.com/frainzy1477/luci-app-clash package/clash
 git clone https://github.com/fw876/helloworld package/ssrplus
 # git clone 其他github插件源码地址 package/文件夹名称
+cd lede/package/lean  
+rm -rf luci-theme-argon  
+git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git  
