@@ -1,0 +1,221 @@
+#
+# This is free software, lisence use MIT.
+# 
+# Copyright (C) 2019 P3TERX <https://p3terx.com>
+# Copyright (C) 2019 KFERMercer <KFER.Mercer@gmail.com>
+# 
+# <https://github.com/KFERMercer/OpenWrt-CI>
+# 
+
+name: Lean-x64
+
+on:
+  schedule:
+    - cron: 0 20 * * *
+      
+  push:
+    branches: 
+      - master
+    paths:
+      - '.github/workflows/Lean-x64.yml'
+#      - 'x86-simple-config.seed'
+
+  watch:
+    types: [started]
+
+      
+env:
+  REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_BRANCH: master
+  FIRMWARE_NAME: Lean-x64-simple
+  TARGET: x86
+  SUBTARGET: 64
+  CONFIG_FILE: x86-simple-config.seed
+  DIY_SH: diy.sh
+  UPLOAD_ALL: false
+  SSH_ACTIONS: false
+  extract:  false
+  rename: true
+  Gzip_file: false
+  UPLOAD_ZIP: true
+  UPLOAD_FIRMWARE: false
+  UPLOAD_RELEASE: true
+  TZ: Asia/Shanghai
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+        with:
+          ref: master
+          
+      - name: Set Date
+        run: |
+           date=$(TZ=UTC-8 date +"%Y.%m.%d-%H%M%S")
+           echo "::set-env name=DATE::$date"
+           
+      - name: new name
+        run : |
+           firmware_name="${FIRMWARE_NAME}-${DATE}"
+           release_name="${DATE}-${FIRMWARE_NAME}"
+           echo "::set-env name=NEW_NAME::$firmware_name"
+           echo "::set-env name=RELEASE_NAME::$release_name"
+           
+           
+      - name: Space cleanup
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          docker rmi `docker images -q`
+          sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d
+          sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* mysql* php*
+          sudo -E apt-get update
+          sudo -E apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3.5 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler g++-multilib antlr3 gperf
+          sudo -E apt-get -y autoremove --purge
+          sudo -E apt-get clean
+
+          # 利用挂载在 /mnt/ 的 14G 额外空间:
+          # sudo mkdir -p -m 777 /mnt/openwrt/bin /mnt/openwrt/build_dir/host /mnt/openwrt/build_dir/hostpkg /mnt/openwrt/dl /mnt/openwrt/feeds /mnt/openwrt/staging_dir
+          # ln -s /mnt/openwrt/bin ./bin
+          # mkdir -p ./build_dir/host && ln -s /mnt/openwrt/build_dir/host ./build_dir/host
+          # mkdir -p ./build_dir/host && ln -s /mnt/openwrt/build_dir/hostpkg ./build_dir/hostpkg
+          # ln -s /mnt/openwrt/dl ./dl
+          # ln -s /mnt/openwrt/feeds ./feeds
+          # ln -s /mnt/openwrt/staging_dir ./staging_dir
+
+          df -h
+
+      - name: Clone source code
+        run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+        
+      - name: Update feeds
+        run: cd openwrt && ./scripts/feeds update -a
+
+      - name: Install feeds
+        run: cd openwrt && ./scripts/feeds install -a
+        
+      - name: DIY
+        run: |   
+          chmod +x $DIY_SH
+          cd openwrt
+          ../$DIY_SH 
+
+      - name: Generate configuration file
+        run: |
+          [ -e files ] && mv files openwrt/files
+          [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+          make defconfig
+
+      - name: Download package
+        id: package
+        run: |
+          cd openwrt
+          make defconfig
+          make download -j8
+          find dl -size -1024c -exec ls -l {} \;
+          find dl -size -1024c -exec rm -f {} \;
+          
+      - name: Compile the firmware
+        id: compile
+        run: |
+          cd openwrt
+          echo -e "$(nproc) thread compile"
+          make -j$(nproc) || make -j1 V=s
+          cd bin/targets/*/*
+          echo "::set-env name=FIRMWARE::$PWD"
+          echo "::set-output name=status::success"
+          
+      - name: UPLOAD_ALL
+        id: UPLOAD_ALL
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_ALL == 'false'
+        run: |
+          cd openwrt
+          find ./bin/targets/ -type d -name "packages" | xargs rm -rf {}
+          echo "::set-output name=status::success"
+      
+      - name: Extract Gz Files
+        id: extract
+        if: steps.compile.outputs.status == 'success' && env.extract == 'true'
+        run: |
+          cd openwrt/bin/targets/$TARGET/$SUBTARGET
+          gzip -qd *.img.gz  || true
+          rm -f *.img.gz
+          echo "::set-output name=status::success" 
+          
+      - name: Rename file
+        id: rename
+        if: env.rename == 'true' && steps.compile.outputs.status == 'success' 
+        run: |
+          cd openwrt/bin/targets/$TARGET/$SUBTARGET
+          for i in openwrt*; do mv -f $i `echo $i | sed "s/^openwrt-$TARGET-$SUBTARGET/${NEW_NAME}/"`; done || true
+          echo "::set-output name=status::success"
+      
+#      - name: SSH connection to Actions
+#        uses: owlboy-lin/debugger-action@master
+#        if: env.SSH_ACTIONS == 'true'      
+    
+      - name: Gz Files
+        id: Gzip_file
+        if: steps.compile.outputs.status == 'success' && env.Gzip_file == 'true' 
+        run: |
+          cd openwrt/bin/targets/$TARGET/$SUBTARGET
+          gzip *.img || true
+          # rm -f *.img
+          echo "::set-output name=status::success"
+  
+      - name: Generate Sha256sum File For Images
+        run: |
+          cd openwrt/bin/targets/$TARGET/$SUBTARGET
+          mv sha256sums sha256sums.orig
+          sha256sum *.* > sha256sums
+         
+          
+      - name: Upload firmware directory
+        id: upload_firmware
+        uses: actions/upload-artifact@master
+        if: steps.compile.outputs.status == 'success'
+        with:
+          name: ${{ env.NEW_NAME }}
+          path: ${{ env.FIRMWARE }}
+
+      - name: Upload zip
+        id: upload_zip
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_ZIP == 'true' && env.UPLOAD_ALL == 'true' 
+        run: |
+          cd openwrt
+          rm -rf ./release/
+          mkdir -p ./release/
+          zip -r -j release/${{ env.NEW_NAME }}.zip bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/* || true           
+          cd release
+          echo "::set-env name=RELEASE::$PWD"
+          echo "::set-output name=status::success"   
+
+      - name: Upload zip
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_ZIP == 'true' && env.UPLOAD_ALL == 'false'
+        run: |
+          cd openwrt
+          rm -rf ./release/
+          mkdir -p ./release/
+          zip -r release/${{ env.NEW_NAME }}.zip bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/* || true           
+          cd release
+          echo "::set-env name=RELEASE::$PWD"
+          echo "::set-output name=status::success" 
+          
+      - name: SSH connection to Actions
+        uses: owlboy-lin/debugger-action@master
+        if: env.SSH_ACTIONS == 'true'      
+        
+      - name: Upload firmware to release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.all_TOKEN }}
+        with:
+          tag_name: ${{ env.RELEASE_NAME }}
+          name: 自动发布 ${{ env.NEW_NAME }}
+          files: ${{ env.RELEASE }}/*
