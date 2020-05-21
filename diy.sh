@@ -27,6 +27,6 @@ git clone https://github.com/fw876/helloworld package/ssrplus
 # git clone 其他github插件源码地址 package/文件夹名称
 
 # luci-theme-argon
-cd openwrt/package/lean  
-rm -rf luci-theme-argon  
-git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git  
+# cd openwrt/package/lean  
+# rm -rf luci-theme-argon  
+# git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git  
