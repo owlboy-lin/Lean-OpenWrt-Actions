@@ -13,7 +13,7 @@ git clone https://github.com/openwrt-develop/luci-theme-atmaterial package/luci-
 
 git clone https://github.com/rosywrt/luci-theme-rosy package/luci-theme-rosy
 
-git clone https://github.com/superstarfly/openwrt-package package/lienol
+git clone https://github.com/Lienol/openwrt-package.git package/lienol
 
 git clone https://github.com/vernesong/OpenClash package/openclash
 
