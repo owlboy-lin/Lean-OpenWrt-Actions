@@ -9,7 +9,7 @@
 
 name: TEST
 
-# on:
+on:
 #   schedule:
 #     - cron: 0 20 * * *
       
