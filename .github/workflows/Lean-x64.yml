@@ -91,17 +91,13 @@ jobs:
       - name: Install feeds
         run: cd openwrt && ./scripts/feeds install -a
         
-      - name: DIY
-        run: |   
-          chmod +x $DIY_SH
-          cd openwrt
-          ../$DIY_SH 
-
-      - name: Generate configuration file
+      - name: Load custom configuration
         run: |
           [ -e files ] && mv files openwrt/files
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
-          make defconfig
+          chmod +x $DIY_SH
+          cd openwrt
+          ../$DIY_SH
 
       - name: Download package
         id: package
