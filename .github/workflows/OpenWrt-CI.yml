@@ -27,10 +27,10 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  FIRMWARE_NAME: Lean-x64
+  FIRMWARE_NAME: OpenWrt-CI-x64
   TARGET: x86
   SUBTARGET: 64
-  CONFIG_FILE: Lean-x64-simple
+  CONFIG_FILE: 
   DIY_SH: diy.sh
   SSH_ACTIONS: false
   Gzip_file: true
