@@ -230,10 +230,10 @@ jobs:
           # CONFIG_PACKAGE_luci-app-adblock is not set
           CONFIG_PACKAGE_luci-app-adbyby-plus=y
           CONFIG_PACKAGE_luci-app-adguardhome=y
-          CONFIG_PACKAGE_luci-app-advanced-reboot=y
+          # CONFIG_PACKAGE_luci-app-advanced-reboot is not set
           # CONFIG_PACKAGE_luci-app-advancedsetting is not set
           # CONFIG_PACKAGE_luci-app-ahcp is not set
-          CONFIG_PACKAGE_luci-app-airplay2=y
+          # CONFIG_PACKAGE_luci-app-airplay2 is not set
           CONFIG_PACKAGE_luci-app-aliddns=y
           # CONFIG_PACKAGE_luci-app-amule is not set
           # CONFIG_PACKAGE_luci-app-aria2 is not set
@@ -248,10 +248,11 @@ jobs:
           # CONFIG_PACKAGE_luci-app-bmx6 is not set
           # CONFIG_PACKAGE_luci-app-bmx7 is not set
           # CONFIG_PACKAGE_luci-app-cifs-mount is not set
-          CONFIG_PACKAGE_luci-app-cifsd=y
+          # CONFIG_PACKAGE_luci-app-cifsd is not set
           # CONFIG_PACKAGE_luci-app-cjdns is not set
           # CONFIG_PACKAGE_luci-app-clamav is not set
           # CONFIG_PACKAGE_luci-app-commands is not set
+          CONFIG_PACKAGE_luci-app-cpufreq=y
           # CONFIG_PACKAGE_luci-app-cshark is not set
           CONFIG_PACKAGE_luci-app-ddns=y
           # CONFIG_PACKAGE_luci-app-diag-core is not set
@@ -279,7 +280,7 @@ jobs:
           # CONFIG_PACKAGE_luci-app-frps is not set
           # CONFIG_PACKAGE_luci-app-fwknopd is not set
           # CONFIG_PACKAGE_luci-app-gost is not set
-          # CONFIG_PACKAGE_luci-app-guest-wifi is not set
+          CONFIG_PACKAGE_luci-app-guest-wifi=y
           # CONFIG_PACKAGE_luci-app-haproxy-tcp is not set
           CONFIG_PACKAGE_luci-app-hd-idle=y
           CONFIG_PACKAGE_luci-app-hnet=y
@@ -291,7 +292,7 @@ jobs:
           CONFIG_PACKAGE_luci-app-minidlna=y
           CONFIG_PACKAGE_luci-app-mjpg-streamer=y
           # CONFIG_PACKAGE_luci-app-mtwifi is not set
-          CONFIG_PACKAGE_luci-app-music-remote-center=y
+          # CONFIG_PACKAGE_luci-app-music-remote-center is not set
           CONFIG_PACKAGE_luci-app-mwan3=y
           CONFIG_PACKAGE_luci-app-mwan3helper=y
           # CONFIG_PACKAGE_luci-app-n2n_v2 is not set
@@ -344,7 +345,7 @@ jobs:
           CONFIG_PACKAGE_luci-app-samba=y
           # CONFIG_PACKAGE_luci-app-samba4 is not set
           # CONFIG_PACKAGE_luci-app-shadowsocks-libev is not set
-          CONFIG_PACKAGE_luci-app-shairplay=y
+          # CONFIG_PACKAGE_luci-app-shairplay is not set
           # CONFIG_PACKAGE_luci-app-siitwizard is not set
           # CONFIG_PACKAGE_luci-app-simple-adblock is not set
           # CONFIG_PACKAGE_luci-app-smartdns is not set
@@ -361,11 +362,11 @@ jobs:
           CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_ShadowsocksR_Server=y
           # CONFIG_PACKAGE_luci-app-ssrserver-python is not set
           # CONFIG_PACKAGE_luci-app-statistics is not set
-          CONFIG_PACKAGE_luci-app-syncdial=y
+          # CONFIG_PACKAGE_luci-app-syncdial is not set
           # CONFIG_PACKAGE_luci-app-tinyproxy is not set
           # CONFIG_PACKAGE_luci-app-transmission is not set
           # CONFIG_PACKAGE_luci-app-travelmate is not set
-          CONFIG_PACKAGE_luci-app-ttyd=y
+          # CONFIG_PACKAGE_luci-app-ttyd is not set
           # CONFIG_PACKAGE_luci-app-udpxy is not set
           # CONFIG_PACKAGE_luci-app-uhttpd is not set
           CONFIG_PACKAGE_luci-app-unblockmusic=y
@@ -382,7 +383,7 @@ jobs:
           CONFIG_PACKAGE_luci-app-vsftpd=y
           CONFIG_PACKAGE_luci-app-watchcat=y
           CONFIG_PACKAGE_luci-app-webadmin=y
-          # CONFIG_PACKAGE_luci-app-wifischedule is not set
+          CONFIG_PACKAGE_luci-app-wifischedule=y
           # CONFIG_PACKAGE_luci-app-wireguard is not set
           CONFIG_PACKAGE_luci-app-wol=y
           # CONFIG_PACKAGE_luci-app-wrtbwmon is not set
