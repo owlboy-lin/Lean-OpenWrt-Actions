@@ -51,7 +51,7 @@ jobs:
     
     steps:
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@main
         with:
           ref: master
           
@@ -165,7 +165,7 @@ jobs:
           
       - name: Upload firmware directory
         id: upload_firmware
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@main
         if: steps.compile.outputs.status == 'success'
         with:
           name: ${{ env.NEW_NAME }}
