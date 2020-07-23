@@ -97,7 +97,7 @@ jobs:
       - name: 自定义插件主题。
         run: |
           # Add a feed source
-          sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
+          src-git small https://github.com/kenzok8/small
           
           # Import external feeds
           git clone https://github.com/kenzok8/openwrt-packages.git package/kenzok8
