@@ -96,11 +96,10 @@ jobs:
       
       - name: 自定义插件主题。
         run: |
-                    
           # Import external feeds
           git clone https://github.com/kenzok8/openwrt-packages.git package/kenzok8
 
-          # git clone https://github.com/openwrt-develop/luci-theme-atmaterial package/luci-theme-atmaterial
+          git clone https://github.com/openwrt-develop/luci-theme-atmaterial package/luci-theme-atmaterial
 
           git clone https://github.com/rosywrt/luci-theme-rosy package/luci-theme-rosy
 
