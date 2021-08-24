@@ -128,7 +128,7 @@ jobs:
           release_tag="${FIRMWARE_NAME}-${DATE}"
           for i in openwrt*; do mv -f $i `echo $i | sed "s/^openwrt-$TARGET-$SUBTARGET/${release_tag}/"`; done
           release_name="${DATE}-${FIRMWARE_NAME}-${SUBTARGET}"
-          echo "::set-env name=FIRMWARE::$PWD"
+          echo "name=FIRMWARE" >> $PWD
           echo "::set-output name=status::success"
           echo "##[set-output name=release_tag;]$release_tag"
           echo "##[set-output name=RELEASE_NAME;]$release_name"
