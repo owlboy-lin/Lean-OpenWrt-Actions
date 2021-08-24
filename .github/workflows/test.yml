@@ -57,7 +57,7 @@ jobs:
       - name: Set Date
         run: |
            date=$(TZ=UTC-8 date +"%Y.%m.%d-%H%M")
-           echo "::set-env name=DATE::$date"
+           echo "name=DATE" >> $date
            
       - name: Space cleanup
         env:
