@@ -8,7 +8,7 @@
 # <https://github.com/KFERMercer/OpenWrt-CI>
 # 
 
-name: TEST
+name: TEST-1
 
 on:
 #   schedule:
