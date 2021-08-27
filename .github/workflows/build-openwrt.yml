@@ -14,6 +14,12 @@ on:
   schedule:
     - cron: 0 23 * * *
     
+  push:
+    branches: 
+      - master
+    paths:
+      - '.github/workflows/build-openwrt.yml' 
+ 
   repository_dispatch:
   workflow_dispatch:
     inputs:
@@ -24,8 +30,7 @@ on:
   watch:
     types: [started]
     
-    paths:
-      - '.github/workflows/build-openwrt.yml'
+
 
     
 env:
