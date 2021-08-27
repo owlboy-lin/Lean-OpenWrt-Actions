@@ -50,9 +50,9 @@ jobs:
     steps:
         - name: Checkout
           uses: actions/checkout@master
-          with:
-            ref: master
-            fetch-depth: 1000000
+          #with:
+            #ref: master
+            #fetch-depth: 1000000
           
         - name: Set Date
           run: |
@@ -158,4 +158,13 @@ jobs:
           with:
             tag_name: ${{ env.RELEASE_NAME }}
             name: ${{ env.DATE }}
-            files: ${{ env.RELEASE }}/
+            files: ${{ env.FIRMWARE }}/*
+
+        - name: Remove old Releases
+          uses: dev-drprasad/delete-older-releases@v0.1.0
+          if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+          with:
+            keep_latest: 3
+            delete_tags: true
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
