@@ -16,9 +16,6 @@ on:
       - master
     paths:
       - '.github/workflows/test-3.yml'
-
-  watch:
-    types: [started]
     
   repository_dispatch:
   workflow_dispatch:
