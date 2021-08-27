@@ -35,7 +35,7 @@ env:
   SSH_ACTIONS: false
   Gzip_file: true
   UPLOAD_BIN_DIR: false
-  #UPLOAD_ZIP: true
+  UPLOAD_ZIP: false
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
