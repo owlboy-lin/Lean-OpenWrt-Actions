@@ -104,6 +104,7 @@ jobs:
       - name: Make download
         run: |
           cd openwrt
+          make defconfig
           make download -j8
           find dl -size -1024c -exec ls -f {} \;
           find dl -size -1024c -exec rm -f {} \;
@@ -126,30 +127,30 @@ jobs:
       - name: Prepare artifact
         run: |
           cd openwrt
-          mkdir -p /artifact/firmware
-          mkdir -p /artifact/package
-          mkdir -p /artifact/buildinfo
-          rm -rf $(find /bin/targets/ -type d -name "packages")
-          cp -rf $(find /bin/targets/ -type f) /artifact/firmware/
-          cp -rf $(find /bin/packages/ -type f -name "*.ipk") ./artifact/package/
-          cp -rf $(find /bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
+          mkdir -p ./artifact/firmware
+          mkdir -p ./artifact/package
+          mkdir -p ./artifact/buildinfo
+          rm -rf $(find ./bin/targets/ -type d -name "packages")
+          cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
+          cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
+          cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
 
       - name: Deliver buildinfo
         uses: actions/upload-artifact@v2
         with:
-          name: OpenWrt_buildinfo
+          name: OpenWrt_buildinfo${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
           path: openwrt/artifact/buildinfo/
 
       - name: Deliver package
         uses: actions/upload-artifact@v2
         with:
-          name: OpenWrt_package
+          name: OpenWrt_package${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
           path: openwrt/artifact/package/
 
       - name: Deliver firmware
         uses: actions/upload-artifact@v2
         with:
-          name: OpenWrt_firmware
+          name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
           path: openwrt/bin/targets/
   
 
