@@ -43,23 +43,31 @@ jobs:
           sudo -E apt-get clean
 
           df -h
+          
+      - name: Clone source code
+        run: git clone https://github.com/coolsnowwolf/lede.git openwrt
 
       - name: Update feeds
         run: |
+          cd openwrt
           sed -i 's/#src-git helloworld/src-git helloworld/g' ./feeds.conf.default
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
       - name: Generate configuration file
-        run: make defconfig
+        run: |
+          cd openwrt
+          make defconfig
 
       - name: Make download
         run: |
+          cd openwrt
           make download -j8
           find dl -size -1024c -exec rm -f {} \;
 
       - name: Compile firmware
         run: |
+          cd openwrt
           make -j$(nproc) || make -j1 V=s
           echo "======================="
           echo "Space usage:"
@@ -72,6 +80,7 @@ jobs:
 
       - name: Prepare artifact
         run: |
+          cd openwrt
           mkdir -p ./artifact/firmware
           mkdir -p ./artifact/package
           mkdir -p ./artifact/buildinfo
@@ -84,19 +93,19 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: OpenWrt_buildinfo
-          path: ./artifact/buildinfo/
+          path: openwrt/artifact/buildinfo/
 
       - name: Deliver package
         uses: actions/upload-artifact@v2
         with:
           name: OpenWrt_package
-          path: ./artifact/package/
+          path: openwrt/artifact/package/
 
       - name: Deliver firmware
         uses: actions/upload-artifact@v2
         with:
           name: OpenWrt_firmware
-          path: ./bin/targets/
+          path: openwrt/bin/targets/
   
 
       - name: Upload release asset
@@ -104,6 +113,6 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.YOURTOKEN }}
-          file: ./artifact/firmware/*
+          file: openwret/artifact/firmware/*
           tag: ${{ github.ref }}
           file_glob: true
