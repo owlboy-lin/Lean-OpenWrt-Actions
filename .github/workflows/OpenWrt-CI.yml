@@ -19,7 +19,7 @@ on:
     paths:
       - '.github/workflows/OpenWrt-CI.yml'
 
-watch:
+  watch:
     types: [started]
 
 jobs:
