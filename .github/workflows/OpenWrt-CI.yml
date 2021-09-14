@@ -13,6 +13,15 @@ on:
   release:
     types: [published]
 
+  push:
+    branches: 
+      - master
+    paths:
+      - '.github/workflows/OpenWrt-CI.yml'
+
+watch:
+    types: [started]
+
 jobs:
 
   build_openwrt:
