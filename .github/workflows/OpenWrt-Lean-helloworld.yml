@@ -137,9 +137,10 @@ jobs:
           mkdir -p ./artifact/buildinfo
           rm -rf $(find ./bin/targets/ -type d -name "packages")
           cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
-          cp -rf .config ./artifact/firmware/config.info
           cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
           cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
+          cp -rf .config ./artifact/buildinfo/config.info
+
 
       - name: Deliver buildinfo
         uses: actions/upload-artifact@v2
