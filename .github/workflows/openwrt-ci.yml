@@ -12,17 +12,46 @@ on:
     - cron: 0 20 * * *
   release:
     types: [published]
+
+  push:
+    branches: 
+      - master
+    paths:
+      - '.github/workflows/build-openwrt.yml' 
+ 
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
   watch:
     types: [started]
-<<<<<<< HEAD
-=======
+    
 
->>>>>>> e958209f2c529af14932e9cb681596ca6de9757d
+
+    
+env:
+  REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_BRANCH: master
+  FEEDS_CONF: feeds.conf.default
+  CONFIG_FILE: .config
+  DIY_P1_SH: diy-part1.sh
+  DIY_P2_SH: diy-part2.sh
+  UPLOAD_BIN_DIR: false
+  UPLOAD_FIRMWARE: true
+  UPLOAD_COWTRANSFER: true
+  UPLOAD_WETRANSFER: false
+  UPLOAD_RELEASE: false
+  TZ: Asia/Shanghai
+  
+  
 jobs:
 
   build_openwrt:
 
-    name: Build OpenWrt firmware
+    name: Lean openwrt firmware
 
     runs-on: ubuntu-latest
 
@@ -51,20 +80,25 @@ jobs:
 
       - name: Update feeds
         run: |
+          cd openwrt
           sed -i 's/#src-git helloworld/src-git helloworld/g' ./feeds.conf.default
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
       - name: Generate configuration file
-        run: make defconfig
+        run: |
+          cd openwrt
+          make defconfig
 
       - name: Make download
         run: |
+          cd openwrt
           make download -j8
           find dl -size -1024c -exec rm -f {} \;
 
       - name: Compile firmware
         run: |
+          cd openwrt
           make -j$(nproc) || make -j1 V=s
           echo "======================="
           echo "Space usage:"
@@ -77,10 +111,12 @@ jobs:
 
       - name: Prepare artifact
         run: |
+          cd openwrt        
           mkdir -p ./artifact/firmware
           mkdir -p ./artifact/package
           mkdir -p ./artifact/buildinfo
           rm -rf $(find ./bin/targets/ -type d -name "packages")
+          cp -rf .config ./artifact/buildinfo/config
           cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
           cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
           cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
@@ -104,11 +140,3 @@ jobs:
           path: ./bin/targets/
   
 
-      - name: Upload release asset
-        if: github.event == 'release'
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.YOURTOKEN }}
-          file: ./artifact/firmware/*
-          tag: ${{ github.ref }}
-          file_glob: true
