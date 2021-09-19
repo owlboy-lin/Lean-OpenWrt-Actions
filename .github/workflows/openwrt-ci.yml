@@ -138,19 +138,19 @@ jobs:
       - name: Deliver buildinfo
         uses: actions/upload-artifact@v2
         with:
-          name: OpenWrt_buildinfo
+          name: Lean openwrt_buildinfo
           path: openwrt/artifact/buildinfo/
 
       - name: Deliver package
         uses: actions/upload-artifact@v2
         with:
-          name: OpenWrt_package
+          name: Lean openwrt_package
           path: openwrt/artifact/package/
 
       - name: Deliver firmware
         uses: actions/upload-artifact@v2
         with:
-          name: OpenWrt_firmware
+          name: Lean openwrt_firmware
           path: openwrt/bin/targets/
   
 
