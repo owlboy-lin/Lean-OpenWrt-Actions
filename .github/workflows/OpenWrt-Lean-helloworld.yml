@@ -145,19 +145,19 @@ jobs:
       - name: Deliver buildinfo
         uses: actions/upload-artifact@v2
         with:
-          name: OpenWrt_buildinfo${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+          name: OpenWrt-Lean-helloworld${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
           path: openwrt/artifact/buildinfo/
 
       - name: Deliver package
         uses: actions/upload-artifact@v2
         with:
-          name: OpenWrt_package${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+          name: OpenWrt-Lean-helloworld${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
           path: openwrt/artifact/package/
 
       - name: Deliver firmware
         uses: actions/upload-artifact@v2
         with:
-          name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+          name: OpenWrt-Lean-helloworld${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
           path: openwrt/bin/targets/
   
       - name: Generate release tag
