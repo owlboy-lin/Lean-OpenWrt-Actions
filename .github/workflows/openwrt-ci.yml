@@ -145,18 +145,18 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: OpenWrt_buildinfo
-          path: ./artifact/buildinfo/
+          path: openwrt/artifact/buildinfo/
 
       - name: Deliver package
         uses: actions/upload-artifact@v2
         with:
           name: OpenWrt_package
-          path: ./artifact/package/
+          path: openwrt/artifact/package/
 
       - name: Deliver firmware
         uses: actions/upload-artifact@v2
         with:
           name: OpenWrt_firmware
-          path: ./bin/targets/
+          path: openwrt/bin/targets/
   
 
