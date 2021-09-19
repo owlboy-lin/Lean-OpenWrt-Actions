@@ -13,12 +13,6 @@ on:
   release:
     types: [published]
 
-  push:
-    branches: 
-      - master
-    paths:
-      - '.github/workflows/build-openwrt.yml' 
- 
   repository_dispatch:
   workflow_dispatch:
     inputs:
