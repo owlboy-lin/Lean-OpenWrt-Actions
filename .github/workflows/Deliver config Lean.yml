@@ -58,7 +58,7 @@ jobs:
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
-        
+        echo "DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
 
     - name: Clone source code
@@ -122,5 +122,5 @@ jobs:
     - name: Deliver config
       uses: actions/upload-artifact@v2
       with:
-        name: OpenWrt_Lean_configinfo_${{ date +"%Y%m%d%H%M" }}
+        name: OpenWrt_Lean_configinfo_${{ env.DATE }}
         path: openwrt/artifact/buildinfo/
