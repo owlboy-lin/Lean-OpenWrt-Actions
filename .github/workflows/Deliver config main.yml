@@ -8,7 +8,7 @@
 # <https://github.com/KFERMercer/OpenWrt-CI>
 # 
 
-name: Deliver config main
+name: Deliver config Lean
 
 on:
   repository_dispatch:
@@ -24,10 +24,6 @@ on:
     branches: 
       - master
 
-
-#  watch:
-#    types: [started]
-
       
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede.git
@@ -36,9 +32,6 @@ env:
   CONFIG_FILE: .config
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: diy-part2.sh
-  UPLOAD_BIN_DIR: false
-  UPLOAD_FIRMWARE: true
-  UPLOAD_RELEASE: false
   TZ: Asia/Shanghai
 
 jobs:
@@ -46,40 +39,40 @@ jobs:
   build:
     runs-on: ubuntu-latest
     
-    name: Deliver config main
+    name: Deliver config Lean
     
     if: github.event.repository.owner.id == github.event.sender.id
     
     steps:
-        - name: Checkout
-          uses: actions/checkout@main
-          
-        - name: Set Date
-          run: |
-           date=$(TZ=UTC-8 date +"%Y.%m.%d-%H%M")
-           echo "name=DATE" >> $date
-           
-        - name: Initialization environment
-          env:
-            DEBIAN_FRONTEND: noninteractive
-          run: |
-            docker rmi `docker images -q`
-            sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d
-            sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* mysql* php* android*
-            sudo -E apt-get update
-            sudo apt-get -y install build-essential asciidoc binutils bzip2 curl gawk gettext git libncurses5-dev libz-dev patch python3.5 python2.7 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler g++-multilib antlr3 gperf
-            sudo -E apt-get -y autoremove --purge
-            sudo -E apt-get clean
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: master
+
+      - name: Space cleanup
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          docker rmi `docker images -q`
+          sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d
+          sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* mysql* php* android*
+          sudo -E apt-get update
+          sudo apt-get -y install build-essential asciidoc binutils bzip2 curl gawk gettext git libncurses5-dev libz-dev patch python3.5 python2.7 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler g++-multilib antlr3 gperf
+          sudo -E apt-get -y autoremove --purge
+          sudo -E apt-get clean
             sudo timedatectl set-timezone "$TZ"
             sudo mkdir -p /workdir
             sudo chown $USER:$GROUPS /workdir
             
-            
-            df -h
 
-        - name: Clone source code
-          run:   
-            git clone -b $REPO_BRANCH --single-branch $REPO_URL openwrt
+
+      - name: Clone source code
+        working-directory: /workdir
+        run: |
+          df -hT $PWD
+          git clone $REPO_URL -b $REPO_BRANCH openwrt
+          ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
             
             
