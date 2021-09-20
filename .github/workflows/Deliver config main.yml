@@ -122,5 +122,5 @@ jobs:
     - name: Deliver config
       uses: actions/upload-artifact@v2
       with:
-        name: OpenWrt_configinfo
+        name: OpenWrt_Lean_configinfo_${{ date +"%Y%m%d%H%M" }}
         path: openwrt/artifact/buildinfo/
