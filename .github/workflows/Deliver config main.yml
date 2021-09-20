@@ -25,7 +25,7 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede.git
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: .config
+  CONFIG_FILE: Lean-hellword-passwall.info
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: diy-part2.sh
   TZ: Asia/Shanghai
@@ -122,5 +122,5 @@ jobs:
     - name: Deliver config
       uses: actions/upload-artifact@v2
       with:
-        name: OpenWrt_configinfo
+        name: OpenWrt_Lean_configinfo_${{ date +"%Y%m%d%H%M" }}
         path: openwrt/artifact/buildinfo/
