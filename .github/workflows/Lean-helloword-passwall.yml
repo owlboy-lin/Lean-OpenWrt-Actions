@@ -36,7 +36,7 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     
-    name: Lean-passwall
+    name: Lean-hellword-passwall
 
     steps:
     - name: Checkout
