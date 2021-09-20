@@ -157,7 +157,7 @@ jobs:
       uses: actions/upload-artifact@main
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
-        name: Lean-hellword_${{ env.REPO_BRANCH }}buildinfo${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        name: Lean-hellword_${{ env.REPO_BRANCH }}_buildinfo${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: openwrt/artifact/buildinfo/
 
     - name: Deliver package
