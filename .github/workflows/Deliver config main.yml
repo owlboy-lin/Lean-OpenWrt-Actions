@@ -20,11 +20,9 @@ on:
         default: 'true'
 
         
-#  push:
-#    branches: 
-#      - master
-#    paths:
-#      - '.github/workflows/test.yml'
+  push:
+    branches: 
+      - master
 
 
 #  watch:
