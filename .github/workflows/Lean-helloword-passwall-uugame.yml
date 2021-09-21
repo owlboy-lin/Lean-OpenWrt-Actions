@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Lean-hellword-passwall
+name: Lean-helloword-passwall-uugame
 on:
   repository_dispatch:
   workflow_dispatch:
