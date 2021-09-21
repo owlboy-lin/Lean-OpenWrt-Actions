@@ -36,7 +36,7 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     
-    name: Lean-hellword-passwall
+    name: Lean-helloword-passwall-uugame
 
     steps:
     - name: Checkout
@@ -135,7 +135,7 @@ jobs:
       uses: actions/upload-artifact@main
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
       with:
-        name: Lean-hellword-passwall_${{ env.REPO_BRANCH }}_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        name: Lean-helloword-passwall-uugame_${{ env.REPO_BRANCH }}_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: openwrt/bin
 
     - name: Organize files
@@ -151,21 +151,21 @@ jobs:
       uses: actions/upload-artifact@main
       if: steps.compile.outputs.status == 'success' && steps.organize.outputs.status == 'success'
       with:
-        name: Lean-hellword-passwall_${{ env.REPO_BRANCH }}_firmware_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        name: Lean-helloword-passwall-uugame_${{ env.REPO_BRANCH }}_firmware_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: ${{ env.FIRMWARE }}
 
     - name: Deliver buildinfo
       uses: actions/upload-artifact@main
       if: steps.compile.outputs.status == 'success' && steps.organize.outputs.status == 'success'
       with:
-        name: Lean-hellword-passwall_${{ env.REPO_BRANCH }}_buildinfo${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        name: Lean-helloword-passwall-uugame_${{ env.REPO_BRANCH }}_buildinfo${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: openwrt/artifact/buildinfo/
 
     - name: Deliver package
       uses: actions/upload-artifact@main
       if: steps.compile.outputs.status == 'success' && steps.organize.outputs.status == 'success'
       with:
-        name: Lean-hellword-passwall_${{ env.REPO_BRANCH }}_package${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        name: Lean-helloword-passwall-uugame_${{ env.REPO_BRANCH }}_package${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: openwrt/artifact/package/
 
     - name: Upload firmware to cowtransfer
