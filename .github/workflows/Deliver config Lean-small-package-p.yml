@@ -1,0 +1,158 @@
+
+    #
+    # This is free software, lisence use MIT.
+    # 
+    # Copyright (C) 2019 P3TERX <https://p3terx.com>
+    # Copyright (C) 2019 KFERMercer <KFER.Mercer@gmail.com>
+    # 
+    # <https://github.com/KFERMercer/OpenWrt-CI>
+    # 
+
+    name: Deliver config Lean-small-package-p
+
+
+
+    on:
+      repository_dispatch:
+      workflow_dispatch:
+        inputs:
+          ssh:
+            description: 'SSH connection to Actions'
+            required: true
+            default: 'true'
+
+    permissions:
+      contents: read
+            
+          
+    env:
+      REPO_URL: https://github.com/coolsnowwolf/lede.git
+      REPO_BRANCH: master
+      FEEDS_CONF: feeds.conf.default
+      CONFIG_FILE: small-package.config
+      Firmware_Name: Lean-small-package-p
+      DIY_P1_SH: Lean-small-package/Lean-small-package-1.sh
+      DIY_P2_SH: Lean-small-package/Lean-small-package-2.sh
+      UPLOAD_WETRANSFER: false
+      GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
+      TZ: Asia/Shanghai
+
+    jobs:
+      build:
+        runs-on: ubuntu-22.04
+        
+        name: Deliver config Lean-small-packagee-p
+        
+        if: github.event.repository.owner.id == github.event.sender.id
+        
+        steps:
+        - name: 准备完成
+          uses: actions/checkout@v4
+
+        - name: 初始化系统环境
+          env:
+            DEBIAN_FRONTEND: noninteractive
+          run: |
+            sudo -E apt-get -qq update
+            sudo -E apt-get -qq install build-essential clang flex g++ gawk gcc-multilib gettext \
+            git libncurses5-dev libssl-dev python3-distutils python3-pyelftools python3-setuptools \
+            libpython3-dev rsync unzip zlib1g-dev swig aria2 jq subversion qemu-utils ccache rename \
+            libelf-dev device-tree-compiler libgnutls28-dev coccinelle libgmp3-dev libmpc-dev libfuse-dev
+            sudo -E apt-get -qq purge azure-cli ghc* zulu* llvm* firefox powershell openjdk* dotnet* google* mysql* php* android*
+            sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+            sudo -E apt-get -qq autoremove --purge
+            sudo -E apt-get -qq clean
+            sudo timedatectl set-timezone "$TZ"
+            sudo mkdir -p /workdir
+            sudo chown $USER:$GROUPS /workdir
+            echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+            
+        - name: 更新时区、编译时间
+          id: date
+          run: |
+            sudo timedatectl set-timezone "$TZ"
+            echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+            echo "FILE_TIME=$(date +"%m-%d %H.%M")" >> $GITHUB_ENV
+            echo "FILE_TIME1=$(date "+%Y年%m月%d日-%H点%M分")" >> $GITHUB_ENV
+            echo "FILE_TIME2=$(date "+%Y%m%d-%H%M")" >> $GITHUB_ENV
+            echo "编译开始时间..."
+            START_TIME=`date +'%Y-%m-%d %H:%M:%S'`
+            echo "START_SECONDS=$(date --date="$START_TIME" +%s)" >> $GITHUB_ENV
+            
+            
+        - name: 下载源代码
+          working-directory: /workdir
+          run: |
+            git clone $REPO_URL -b $REPO_BRANCH openwrt
+            ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+            
+        - name: Free up disk space
+          env:
+            DEBIAN_FRONTEND: noninteractive
+          run: |
+            sudo mkdir -p -m 777 /mnt/openwrt/dl /mnt/openwrt/bin /mnt/openwrt/staging_dir
+            ln -sf /mnt/openwrt/dl openwrt/dl
+            ln -sf /mnt/openwrt/bin openwrt/bin
+            ln -sf /mnt/openwrt/staging_dir openwrt/staging_dir
+
+            
+        - name: patch1补丁和自定义设置
+          run: |
+            [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
+            chmod +x $DIY_P1_SH
+            cd openwrt
+            $GITHUB_WORKSPACE/$DIY_P1_SH
+            
+        - name: 更新源 #Update feeds
+          run: cd openwrt && ./scripts/feeds update -a
+
+        - name: 安装源 #Install feeds
+          run: cd openwrt && ./scripts/feeds install -a
+
+        - name: patch2补丁和自定义设置
+          run: |
+            [ -e files ] && mv files openwrt/files
+            [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+            chmod +x $DIY_P2_SH
+            cd openwrt
+            $GITHUB_WORKSPACE/$DIY_P2_SH
+
+        - name: SSH connection to Actions
+          uses: P3TERX/ssh2actions@v1.0.0
+          if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+          env:
+            TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+            TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }} 
+                 
+        - name: Generate configuration file
+          run: |
+            cd openwrt
+            make defconfig
+     
+        - name: Prepare artifact
+          run: |
+            cd openwrt
+            mkdir -p ./artifact/buildinfo
+            cp -rf ./.config ./artifact/buildinfo/${{ env.Firmware_Name }}.info
+            cp -rf ./feeds.conf.default ./artifact/buildinfo/
+      
+         
+        - name: Upload config
+          uses: actions/upload-artifact@v4
+          with:
+            name: ${{ env.Firmware_Name }}_${{ env.FILE_DATE }}
+            path: openwrt/artifact/buildinfo/
+         
+    #    - name: SSH connection to Actions
+    #      uses: P3TERX/ssh2actions@v1.0.0
+    #      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+    #      env:
+    #        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+    #        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}     
+            
+
+        - name: 删除运行记录
+          uses: Mattraks/delete-workflow-runs@v2
+          with:
+            retain_days: 3     #保留最后多少记录不删除
+            keep_minimum_runs: 3
