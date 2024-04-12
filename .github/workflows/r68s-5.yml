@@ -32,7 +32,7 @@ env:
   DIY_P2_SH: r68s/5.15/diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
-  UPLOAD_RELEASE: true
+  UPLOAD_RELEASE: false
   GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
   TZ: Asia/Shanghai
 
@@ -228,7 +228,7 @@ jobs:
         echo "status=success" >> $GITHUB_OUTPUT
     
     - name: 自动发布固件到 Releases
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       if: steps.tag.outputs.status == 'success' && !cancelled()
       env:
         GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}

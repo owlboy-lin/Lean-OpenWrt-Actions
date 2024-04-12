@@ -33,6 +33,6 @@ sed -i "s/DISTRIB_REVISION.*/DISTRIB_REVISION=\'$date\'/g" package/base-files/fi
 sed -i "s/DISTRIB_RELEASE.*/DISTRIB_RELEASE=\'$date1\'/g" package/base-files/files/etc/openwrt_release
 
 #2. 修改自定义固件名,增加编译日期(by:kenzo）
-sed -i "s/IMG_PREFIX:=$(VERSION_DIST_SANITIZED)=\"IMG_PREFIX:=$(shell date +%m-%d)-$(VERSION_DIST_SANITIZED)'\"/g" include/image.mk
+# sed -i "s/IMG_PREFIX:=$(VERSION_DIST_SANITIZED)=\"IMG_PREFIX:=$(shell date +%m-%d)-$(VERSION_DIST_SANITIZED)'\"/g" include/image.mk
 
 exit

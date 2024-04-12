@@ -9,8 +9,8 @@
 name: Deliver config Lean-Mosdns(P)
 
 on:
-  schedule:
-    - cron: 0 20 * * *
+  # schedule:
+  #   - cron: 0 20 * * *
   release:
     types: [published]
     
@@ -37,7 +37,7 @@ env:
   CONFIG_FILE: .config
   Firmware_Name: Lean--p
   DIY_P1_SH: smpackage/smpackage-1.sh
-  DIY_P2_SH: smpackage/smpackage-2.sh
+  DIY_P2_SH: smpackage/diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: false
@@ -135,7 +135,7 @@ jobs:
 
 
       - name: 更新源 #Update feeds
-        run: cd openwrt && ./scripts/feeds update -a
+        run: cd openwrt && ./scripts/feeds clean && ./scripts/feeds update -a
 
       - name: 安装源 #Install feeds
         run: cd openwrt && ./scripts/feeds install -a
@@ -165,7 +165,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}   
 
-      - name: Prepare artifact
+      - name: 整理固件文件
         run: |
           cd openwrt
           mkdir -p ./artifact/buildinfo
@@ -176,7 +176,7 @@ jobs:
           cp -rf ./feeds.conf.default ./artifact/buildinfo/
 
         
-      - name: Upload config
+      - name: 上传配置文件
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.Firmware_Name }}_${{ env.FILE_DATE }}
