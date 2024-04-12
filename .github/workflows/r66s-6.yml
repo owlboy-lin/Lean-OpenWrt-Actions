@@ -231,55 +231,55 @@
           KERNEL_VERSION=$(ls -l *openwrt-rockchip-armv8-generic-kernel.bin | awk '{print $9}' | cut -d '-' -f1)
           echo "KERNEL_VERSION=$KERNEL_VERSION" >> $GITHUB_ENV
 
-      - name: 生成发布标签
-        id: tag
-        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-        run: |
-          echo "release_tag=$(date +"%Y.%m.%d")-Lean" >> $GITHUB_OUTPUT
-          echo "release_date=$(date +"%Y.%m.%d")" >> $GITHUB_OUTPUT
-          touch release.txt
-          echo "
-          ★ 源码 : https://github.com/coolsnowwolf/lede
-          ★ 分支 : master
-          ★ 感谢源码作者无私分享！
+      # - name: 生成发布标签
+      #   id: tag
+      #   if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+      #   run: |
+      #     echo "release_tag=$(date +"%Y.%m.%d")-Lean" >> $GITHUB_OUTPUT
+      #     echo "release_date=$(date +"%Y.%m.%d")" >> $GITHUB_OUTPUT
+      #     touch release.txt
+      #     echo "
+      #     ★ 源码 : https://github.com/coolsnowwolf/lede
+      #     ★ 分支 : master
+      #     ★ 感谢源码作者无私分享！
           
-          ⏰ 编译时间：${{ env.FILE_TIME1 }}
+      #     ⏰ 编译时间：${{ env.FILE_TIME1 }}
           
-          🎈 内核版本：${{ env.KERNEL_PATCHVER }}
+      #     🎈 内核版本：${{ env.KERNEL_PATCHVER }}
           
-          🎉 编译版本：${{ env.DISTRIB_REVISION }}
+      #     🎉 编译版本：${{ env.DISTRIB_REVISION }}
           
-          🖥 管理地址：192.168.1.1 
+      #     🖥 管理地址：192.168.1.1 
           
-          🌴 名称：root
+      #     🌴 名称：root
           
-          🛠 密码：password" >> release.txt
-          echo "status=success" >> $GITHUB_OUTPUT
+      #     🛠 密码：password" >> release.txt
+      #     echo "status=success" >> $GITHUB_OUTPUT
       
-      - name: 自动发布固件到 Releases
-        uses: softprops/action-gh-release@master
-        if: steps.tag.outputs.status == 'success' && !cancelled()
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
-        with:
-          name: ${{ steps.tag.outputs.release_date }} FastRhino-R66S-linux-固件下载
-          tag_name: ${{ steps.tag.outputs.release_tag }}
-          body_path: release.txt
-          files: ${{ env.FIRMWARE }}/*
+      # - name: 自动发布固件到 Releases
+      #   uses: softprops/action-gh-release@master
+      #   if: steps.tag.outputs.status == 'success' && !cancelled()
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
+      #   with:
+      #     name: ${{ steps.tag.outputs.release_date }} FastRhino-R66S-linux-固件下载
+      #     tag_name: ${{ steps.tag.outputs.release_tag }}
+      #     body_path: release.txt
+      #     files: ${{ env.FIRMWARE }}/*
 
-      - name: 删除运行记录
-        uses: Mattraks/delete-workflow-runs@main
-        continue-on-error: true
-        with:
-          retain_days: 3     #保留最后多少记录不删除
-          keep_minimum_runs: 0
+      # - name: 删除运行记录
+      #   uses: Mattraks/delete-workflow-runs@main
+      #   continue-on-error: true
+      #   with:
+      #     retain_days: 3     #保留最后多少记录不删除
+      #     keep_minimum_runs: 0
 
-      - name: 删除自动发布的旧固件
-        uses: dev-drprasad/delete-older-releases@master
-        continue-on-error: true
-        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-        with:
-          keep_latest: 20        #保留多少个releases不删除
-          delete_tags: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
+      # - name: 删除自动发布的旧固件
+      #   uses: dev-drprasad/delete-older-releases@master
+      #   continue-on-error: true
+      #   if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+      #   with:
+      #     keep_latest: 20        #保留多少个releases不删除
+      #     delete_tags: true
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}

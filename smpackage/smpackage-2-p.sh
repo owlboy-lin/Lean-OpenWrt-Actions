@@ -96,14 +96,19 @@ svn export https://github.com/kenzok8/openwrt-packages/trunk/v2dat package/v2dat
 
 
 # 添加自定义软件包
+
 echo "
+
 # 额外组件
 CONFIG_GRUB_IMAGES=y
 CONFIG_VMDK_IMAGES=y
 
 # 固件大小
-CONFIG_TARGET_KERNEL_PARTSIZE=128
+CONFIG_TARGET_KERNEL_PARTSIZE=256
 CONFIG_TARGET_ROOTFS_PARTSIZE=512
+
+# ipv6
+CONFIG_PACKAGE_ipv6helper=y
 
 # 自动重启
 CONFIG_PACKAGE_luci-app-autoreboot=y
@@ -114,6 +119,7 @@ CONFIG_PACKAGE_luci-app-argon-config=y
 CONFIG_PACKAGE_luci-app-argone-config=y
 CONFIG_PACKAGE_luci-i18n-argon-config-zh-cn=y
 CONFIG_PACKAGE_luci-i18n-argone-config-zh-cn=y
+CONFIG_PACKAGE_luci-theme-argone=y
 
 # 关机
 CONFIG_PACKAGE_luci-app-poweroff=y
@@ -135,7 +141,6 @@ CONFIG_PACKAGE_luci-i18n-mosdns-zh-cn=y
 CONFIG_PACKAGE_luci-app-netspeedtest=y
 CONFIG_PACKAGE_luci-i18n-netspeedtest-zh-cn=y
 
-
 # passwall
 CONFIG_PACKAGE_luci-app-passwall=y
 CONFIG_PACKAGE_luci-i18n-passwall-zh-cn=y
@@ -143,12 +148,19 @@ CONFIG_PACKAGE_luci-i18n-passwall-zh-cn=y
 CONFIG_PACKAGE_luci-app-passwall2=y
 CONFIG_PACKAGE_luci-i18n-passwall2-zh-cn=y
 
-#VPN
+# VPN
 CONFIG_PACKAGE_luci-app-ipsec-vpnd=y
 CONFIG_PACKAGE_luci-i18n-ipsec-vpnd-zh-cn=y
 
 CONFIG_PACKAGE_luci-app-openvpn=y
 CONFIG_PACKAGE_luci-i18n-openvpn-zh-cn=y
+
+# quickstart
+CONFIG_PACKAGE_luci-app-quickstart=y
+CONFIG_PACKAGE_luci-i18n-quickstart-zh-cn=y
+
+# store
+CONFIG_PACKAGE_luci-app-store=y
 
 # luci-app-ttyd=y
 CONFIG_PACKAGE_luci-app-ttyd=y
@@ -167,18 +179,18 @@ CONFIG_PACKAGE_luci-i18n-webadmin-zh-cn=y
 # CONFIG_PACKAGE_rclone=y
 # CONFIG_PACKAGE_fuse3-utils=y
 
-# # 删除不用的插件
-# CONFIG_PACKAGE_autosamba is not set
-# CONFIG_PACKAGE_luci-app-accesscontrol is not set
-# CONFIG_PACKAGE_luci-i18n-accesscontrol-zh-cn is not set
-# CONFIG_PACKAGE_luci-app-upnp is not set
-# CONFIG_PACKAGE_luci-i18n-upnp-zh-cn is not set
-# CONFIG_PACKAGE_luci-app-vlmcsd is not set
-# CONFIG_PACKAGE_luci-i18n-vlmcsd-zh-cn is not set
-# CONFIG_PACKAGE_luci-app-vsftpd is not set
-# CONFIG_PACKAGE_luci-i18n-vsftpd-zh-cn is not set
-# CONFIG_PACKAGE_luci-app-samba4 is not set
-# CONFIG_PACKAGE_luci-i18n-samba4-zh-cn is not set
+# 删除不用的插件
+# # CONFIG_PACKAGE_autosamba is not set
+# # CONFIG_PACKAGE_luci-app-accesscontrol is not set
+# # CONFIG_PACKAGE_luci-i18n-accesscontrol-zh-cn=y
+# # CONFIG_PACKAGE_luci-app-upnp is not set
+# # CONFIG_PACKAGE_luci-i18n-upnp-zh-cn is not set
+# # CONFIG_PACKAGE_luci-app-vlmcsd is not set
+# # CONFIG_PACKAGE_luci-i18n-vlmcsd-zh-cn is not set
+# # CONFIG_PACKAGE_luci-app-vsftpd is not set
+# # CONFIG_PACKAGE_luci-i18n-vsftpd-zh-cn is not set
+# # CONFIG_PACKAGE_luci-app-samba4 is not set
+# # CONFIG_PACKAGE_luci-i18n-samba4-zh-cn is not set
 
 " >> .config
 

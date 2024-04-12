@@ -37,7 +37,7 @@ env:
   CONFIG_FILE: Lean--p.info
   Firmware_Name: Lean--p
   DIY_P1_SH: smpackage/smpackage-1.sh
-  DIY_P2_SH: smpackage/diy-part2.sh
+  DIY_P2_SH: smpackage/smpackage-2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: false
@@ -55,20 +55,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: 释放Ubuntu磁盘空间
-        uses: jlumbroso/free-disk-space@main
-        with:
-          # this might remove tools that are actually needed,
-          # if set to "true" but frees about 6 GB
-          tool-cache: true
-          # all of these default to true, but feel free to set to
-          # "false" if necessary for your workflow
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          swap-storage: true 
-      
+
       - name: CPU检测
         run: |
           echo "警告⚠"
@@ -129,13 +116,32 @@ jobs:
           sudo mkdir -p /workdir
           sudo chown $USER:$GROUPS /workdir
 
-
+      - name: 释放Ubuntu磁盘空间
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # this might remove tools that are actually needed,
+          # if set to "true" but frees about 6 GB
+          tool-cache: true
+          # all of these default to true, but feel free to set to
+          # "false" if necessary for your workflow
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          swap-storage: true 
+        
       - name: 下载源代码
         working-directory: /workdir
         run: |
           df -hT $PWD
           git clone $REPO_URL -b $REPO_BRANCH openwrt
           ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+
+      - name: 缓存
+        uses: klever1988/cachewrtbuild@main
+        with:
+          ccache: 'true'
+          prefix: ${{ github.workspace }}/openwrt
 
       - name: Free up disk space
         env:
@@ -154,7 +160,15 @@ jobs:
           $GITHUB_WORKSPACE/$DIY_P1_SH
 
       - name: 更新源 #Update feeds
-        run: cd openwrt && ./scripts/feeds update -a 
+        run: |
+          cd openwrt 
+          ./scripts/feeds clean 
+          ./scripts/feeds update -a
+          rm -rf feeds/luci/applications/luci-app-mosdns && 
+          rm -rf feeds/packages/net/{alist,adguardhome,mosdns,smartdns}
+          rm -rf feeds/smpackage/{base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd-alt,miniupnpd-iptables,wireless-regdb}
+          rm -rf feeds/packages/lang/golang
+          git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
 
       - name: 安装源 #Install feeds
         run: cd openwrt && ./scripts/feeds install -a
@@ -191,10 +205,14 @@ jobs:
           make download -j$(($(nproc)+1))
           find dl -size -1024c -exec rm -f {} \;
 
-      - name: Cache
-        uses: stupidloud/cachewrtbuild@main
-        with:
-          ccache: 'true'
+      # - name: 缓存
+      #   uses: stupidloud/cachewrtbuild@main
+      #   if: env.USE_Cache == 'true' && !cancelled()
+      #   with:
+      #     ccache: 'true'
+      #     mixkey: ${{ matrix.target }}
+      #     clean: ${{ contains(github.event.action, 'nocache') }}
+      #     prefix: ${{ github.workspace }}/openwrt
   
       - name: SSH connection to Actions
         uses: P3TERX/ssh2actions@v1.0.0
@@ -206,7 +224,7 @@ jobs:
       - name: Compile firmware
         run: |
           cd openwrt
-          echo -e "$(nproc) thread compile"
+          echo -e "$(nproc) thread build."
           make -j$(nproc) || make -j1 || make -j1 V=s
           echo "======================="
           echo "Space usage:"
@@ -236,19 +254,19 @@ jobs:
           cp -rf ./feeds.conf.default ./artifact/buildinfo/
           
       - name: Deliver buildinfo
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}_buildinfo
           path: openwrt/artifact/buildinfo/
 
       - name: Deliver package
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}_package
           path: openwrt/artifact/package/
 
       - name: Deliver firmware
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}_firmware
           path: openwrt/artifact/firmware/
