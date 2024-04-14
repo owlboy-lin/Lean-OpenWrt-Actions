@@ -27,8 +27,7 @@
       REPO_URL: https://github.com/coolsnowwolf/lede.git
       REPO_BRANCH: master
       FEEDS_CONF: feeds.conf.default
-      CONFIG_FILE: Lean-Mosdns-netspeed-uugame-smatdns-netdate-ALL.info
-      
+      CONFIG_FILE: OpenWrt-CI.info
       Firmware_Name: Lean-Mosdns-netspeed-uugame-smatdns-netdate-ALL
       DIY_P1_SH: smpackage-1.sh
       DIY_P2_SH: smpackage-2.sh

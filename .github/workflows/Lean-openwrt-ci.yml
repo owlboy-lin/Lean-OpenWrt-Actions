@@ -7,7 +7,7 @@
 # <https://github.com/KFERMercer/OpenWrt-CI>
 # 
 
-name: Build Openwrt - Lean
+name: Lean-openwrt-ci
 
 on:
   schedule:

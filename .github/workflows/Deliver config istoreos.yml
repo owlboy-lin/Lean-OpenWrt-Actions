@@ -21,8 +21,8 @@
             required: true
             default: 'true'
 
-    permissions:
-      contents: read
+    # permissions:
+    #   contents: read
             
           
     env:
@@ -31,15 +31,15 @@
       FEEDS_CONF: feeds.conf
       CONFIG_FILE: istoreos.info
       Firmware_Name: istoreos
-      DIY_P1_SH: istoreos-1.sh
-      DIY_P2_SH: istoreos-2.sh
+      DIY_P1_SH: istoreos/istoreos-1.sh
+      DIY_P2_SH: istoreos/istoreos-2.sh
       GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
       TZ: Asia/Shanghai
 
     jobs:
 
       merge:
-        runs-on: Ubuntu-22.04
+        runs-on: ubuntu-latest
         if: github.event.repository.owner.id == github.event.sender.id
      
         name: Build ${{matrix.target}}
