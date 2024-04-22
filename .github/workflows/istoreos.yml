@@ -34,11 +34,10 @@
       FEEDS_CONF: feeds.conf
       CONFIG_FILE: istoreos.info
       Firmware_Name: istoreos
-      DIY_P1_SH: istoreos-1.sh
-      DIY_P2_SH: istoreos-2.sh
+      DIY_P1_SH: istoreos/istoreos-1.sh
+      DIY_P2_SH: istoreos/istoreos-2.sh
       UPLOAD_BIN_DIR: false
-      UPLOAD_organize: false
-      UPLOAD_FIRMWARE: true
+      UPLOAD_FIRMWARE: false
       UPLOAD_COWTRANSFER: false
       UPLOAD_WETRANSFER: false
       UPLOAD_RELEASE: false
@@ -211,44 +210,46 @@
             cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
             cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
             cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
-              
+            cd artifact
+            echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+            echo "{status}={success}" >> $GITHUB_OUTPUT  
         
         - name: 上传 bin 文件夹
           uses: actions/upload-artifact@main
           if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
           with:
             name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-            path: openwrt/bin
+            path: ${{ env.FIRMWARE }}/bin/
 
-        - name: 整理固件文件
-          id: organize
-          if: steps.compile.outputs.status == 'success' && env.UPLOAD_organize == 'true'
-          run: |
-            cd openwrt/bin/targets/*/*
-            rm -rf packages
-            echo "FIRMWARE=$PWD" >> $GITHUB_ENV
-            echo "{status}={success}" >> $GITHUB_OUTPUT
-            
+          
         - name: 上传固件目录
           uses: actions/upload-artifact@v4
           if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
           with:
             name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_firmware_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-            path: ${{ env.FIRMWARE }}
+            path: ${{ env.FIRMWARE }}/firmware/
 
         - name: 上传 buildinfo目录
           uses: actions/upload-artifact@v4
           if: steps.compile.outputs.status == 'success' && steps.organize.outputs.status == 'success'
           with:
             name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_buildinfo${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-            path: openwrt/artifact/buildinfo/
+            path: ${{ env.FIRMWARE }}/buildinfo/
 
         - name: 上传 package目录
           uses: actions/upload-artifact@v4
           if: steps.compile.outputs.status == 'success' && steps.organize.outputs.status == 'success'
           with:
             name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_package${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-            path: openwrt/artifact/package/
+            path: ${{ env.FIRMWARE }}/package/
+
+
+        - name: 固件目录
+          run: |
+            cd openwrt/bin/targets/*/*
+            echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+            echo "status=success" >> $GITHUB_OUTPUT
+
 
         - name: 上传固件 to cowtransfer
           id: cowtransfer
@@ -298,7 +299,7 @@
           uses: softprops/action-gh-release@v1
           if: steps.tag.outputs.status == 'success' && !cancelled()
           env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
           with:
             tag_name: ${{ steps.tag.outputs.release_tag }}
             body_path: release.txt
@@ -310,12 +311,12 @@
             retain_days: 10
             keep_minimum_runs: 3
 
-        # - name: 删除自动发布的旧固件
-          # uses: dev-drprasad/delete-older-releases@v0.3.2
-          # if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-          # with:
-            # keep_latest: 3
-            # delete_tags: true
-          # env:
-            # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        - name: 删除自动发布的旧固件
+          uses: dev-drprasad/delete-older-releases@v0.3.2
+          if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+          with:
+            keep_latest: 3
+            delete_tags: true
+          env:
+            GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
 

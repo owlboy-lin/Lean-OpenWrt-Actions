@@ -21,6 +21,14 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
+
+      CACHE_BUILD:
+        description: '缓存加速'
+        required: false
+        default: 'true'
+        type: boolean
+  
+  
   watch:
     types: [started]
     
@@ -38,7 +46,8 @@ env:
   Firmware_Name: Lean--p
   DIY_P1_SH: smpackage/smpackage-1-p.sh
   DIY_P2_SH: smpackage/smpackage-2.sh
-  UPLOAD_BIN_DIR: false
+  UPLOAD_ORGANIZE: true
+  UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: false
@@ -56,20 +65,6 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: 释放Ubuntu磁盘空间
-        uses: jlumbroso/free-disk-space@main
-        with:
-          # this might remove tools that are actually needed,
-          # if set to "true" but frees about 6 GB
-          tool-cache: true
-          # all of these default to true, but feel free to set to
-          # "false" if necessary for your workflow
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          swap-storage: true 
-      
       - name: CPU检测
         run: |
           echo "警告⚠"
@@ -84,10 +79,6 @@ jobs:
           echo -e "$(sudo lshw -short -C memory | grep GiB)\n"
           echo "--------------------------硬盘信息--------------------------"
           echo "硬盘数量: $(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT
-
-      - name: 准备完成
-        uses: actions/checkout@v4
-        
          
       - name: 初始化系统环境
         env:
@@ -115,6 +106,22 @@ jobs:
           START_TIME=`date +'%Y-%m-%d %H:%M:%S'`
           echo "START_SECONDS=$(date --date="$START_TIME" +%s)" >> $GITHUB_ENV
 
+      - name: 释放Ubuntu磁盘空间
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # this might remove tools that are actually needed,
+          # if set to "true" but frees about 6 GB
+          tool-cache: true
+          # all of these default to true, but feel free to set to
+          # "false" if necessary for your workflow
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          swap-storage: true 
+
+      - name: 准备完成
+        uses: actions/checkout@v4
 
       - name: 下载源代码
         working-directory: /workdir
@@ -123,28 +130,32 @@ jobs:
           git clone $REPO_URL -b $REPO_BRANCH openwrt
           ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
-      - name: 缓存
+      - name: 缓存加速
         uses: klever1988/cachewrtbuild@main
+        if: env.CACHE_BUILD == 'true' || (github.event.inputs.CACHE_BUILD == 'true')
         with:
           ccache: 'true'
+          mixkey: 'Lean-Mosdns(P)'
           prefix: ${{ github.workspace }}/openwrt
 
       - name: patch1补丁和自定义设置
+        if: (!cancelled())
         run: |
           [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
           chmod +x $DIY_P1_SH
           cd openwrt
           $GITHUB_WORKSPACE/$DIY_P1_SH
 
-
       - name: 更新源 #Update feeds
-        run: cd openwrt && ./scripts/feeds update -a
+        if: (!cancelled())
+        run: cd openwrt && ./scripts/feeds clean && ./scripts/feeds update -a
 
       - name: 安装源 #Install feeds
-        run: cd openwrt && ./scripts/feeds install -a
-
+        if: (!cancelled())
+        run: cd openwrt && ./scripts/feeds install -a && ./scripts/feeds install -a
 
       - name: patch2补丁和自定义设置
+        if: (!cancelled())
         run: |
           [ -e files ] && mv files openwrt/files
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
@@ -213,7 +224,8 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}   
 
-      - name: Compile firmware
+      - name: 编译固件
+        id: compile
         run: |
           cd openwrt
           echo -e "$(nproc) thread compile"
@@ -233,14 +245,23 @@ jobs:
 
       - name: 整理固件文件
         id: organize
-        if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_ORGANIZE == 'true' && !cancelled()
         run: |
           cd openwrt/bin/targets/*/*
           rm -rf packages
           echo "FIRMWARE=$PWD" >> $GITHUB_ENV
           echo "status=success" >> $GITHUB_OUTPUT
+
+      - name: Upload bin directory
+        uses: actions/upload-artifact@v4
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
+        with:
+          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+          path: ${{ env.FIRMWARE }}
           
-      - name: Prepare artifact
+      - name: 整理固件文件
+        id: artifact
+        if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
         run: |
           cd openwrt
           mkdir -p ./artifact/firmware
@@ -251,25 +272,29 @@ jobs:
           cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
           cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
           cp -rf ./.config ./artifact/buildinfo/
-          cp -rf ./feeds.conf.default ./artifact/buildinfo/
-          
+          cp -rf ./feeds.conf.default ./artifact/buildinfo/   
+  
+        
+      - name: Upload firmware directory
+        uses: actions/upload-artifact@v4
+        if: steps.compile.outputs.status == 'success' && steps.artifact.outputs.status == 'success'
+        with:
+          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_firmware_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+          path: openwrt/artifact/firmware/
+
       - name: Deliver buildinfo
         uses: actions/upload-artifact@v4
+        if: steps.compile.outputs.status == 'success' && steps.artifact.outputs.status == 'success'
         with:
-          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}_buildinfo
+          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_buildinfo${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
           path: openwrt/artifact/buildinfo/
 
       - name: Deliver package
         uses: actions/upload-artifact@v4
+        if: steps.compile.outputs.status == 'success' && steps.artifact.outputs.status == 'success'
         with:
-          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}_package
+          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_package${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
           path: openwrt/artifact/package/
-
-      - name: Deliver firmware
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}_firmware
-          path: openwrt/artifact/firmware/
   
       - name: 获取内核版本号
         run: |
@@ -281,7 +306,7 @@ jobs:
         id: tag
         if: env.UPLOAD_RELEASE == 'true' && !cancelled()
         run: |
-          echo "release_tag=$(date +"%Y.%m.%d")-Lean-x86_64 Lean-Mosdns(P)" >> $GITHUB_OUTPUT
+          echo "release_tag=$(date +"%Y.%m.%d")-Lean-x86_64-Lean-Mosdns(P)" >> $GITHUB_OUTPUT
           echo "release_date=$(date +"%Y.%m.%d")" >> $GITHUB_OUTPUT
           touch release.txt
           echo "
@@ -311,7 +336,7 @@ jobs:
           name: ${{ steps.tag.outputs.release_date }} X86_64-固件下载 Lean-Mosdns(P)
           tag_name: ${{ steps.tag.outputs.release_tag }}
           body_path: release.txt
-          files: ${{ env.FIRMWARE }}/*
+          files: openwrt/artifact/firmware/*
 
       - name: 删除运行记录
         uses: Mattraks/delete-workflow-runs@v2
@@ -321,11 +346,11 @@ jobs:
           keep_minimum_runs: 0
 
       - name: 删除自动发布的旧固件
-        uses: dev-drprasad/delete-older-releases@master
+        uses: dev-drprasad/delete-older-releases@v0.3.3
         continue-on-error: true
         if: env.UPLOAD_RELEASE == 'true' && !cancelled()
         with:
           keep_latest: 20        #保留多少个releases不删除
           delete_tags: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

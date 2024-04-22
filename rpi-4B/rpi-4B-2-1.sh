@@ -98,22 +98,26 @@ svn export https://github.com/kenzok8/openwrt-packages/trunk/v2dat package/v2dat
 # 添加自定义软件包
 
 echo "
+# 编译固件:
+CONFIG_TARGET_bcm27xx=y
+CONFIG_TARGET_bcm27xx_bcm2711=y
+CONFIG_TARGET_bcm27xx_bcm2711_DEVICE_rpi-4=y
 
-# 额外组件
-CONFIG_GRUB_IMAGES=y
-CONFIG_VMDK_IMAGES=y
+
+# 编译固件压缩
+CONFIG_TARGET_IMAGES_GZIP=y
 
 # 固件大小
-CONFIG_TARGET_KERNEL_PARTSIZE=256
-CONFIG_TARGET_ROOTFS_PARTSIZE=512
+CONFIG_TARGET_KERNEL_PARTSIZE=64
+CONFIG_TARGET_ROOTFS_PARTSIZE=160
 
 # ipv6
 CONFIG_PACKAGE_ipv6helper=y
 
 
 # airplay2
-CONFIG_PACKAGE_luci-app-airplay2=y
-CONFIG_PACKAGE_luci-i18n-airplay2-zh-cn=y
+CONFIG_PACKAGE_luci-app-airplay2 is not set
+CONFIG_PACKAGE_luci-i18n-airplay2-zh-cn is not set
 
 
 # 自动重启

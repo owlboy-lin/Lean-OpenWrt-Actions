@@ -10,10 +10,6 @@
 # Description: OpenWrt DIY script part 1 (Before Update feeds)
 # =================================================================
 
-# 执行命令来切换内核
-sed -i 's/PATCHVER:=5.15/PATCHVER:=6.1/g' target/linux/rockchip/Makefile
-
-# 添加软件源
 # Uncomment a feed source
  sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
 

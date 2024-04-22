@@ -182,7 +182,7 @@ CONFIG_PACKAGE_luci-i18n-webadmin-zh-cn=y
 # 删除不用的插件
 # # CONFIG_PACKAGE_autosamba is not set
 # # CONFIG_PACKAGE_luci-app-accesscontrol is not set
-# # CONFIG_PACKAGE_luci-i18n-accesscontrol-zh-cn=y
+# # CONFIG_PACKAGE_luci-i18n-accesscontrol-zh-cn is not set
 # # CONFIG_PACKAGE_luci-app-upnp is not set
 # # CONFIG_PACKAGE_luci-i18n-upnp-zh-cn is not set
 # # CONFIG_PACKAGE_luci-app-vlmcsd is not set

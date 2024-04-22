@@ -1,0 +1,245 @@
+#
+# Copyright (c) 2019-2020 P3TERX <https://p3terx.com>
+#
+# This is free software, licensed under the MIT License.
+# See /LICENSE for more information.
+#
+# https://github.com/P3TERX/Actions-OpenWrt
+# Description: Build OpenWrt using GitHub Actions
+#
+
+name: Deliver config Lean-bcm27xx-bcm2711-rpi-4B
+
+on:
+#  schedule:
+#    - cron: 0 20 * * *
+
+  release:
+    types: [published]
+ 
+  watch:
+    types: [started]
+
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
+        
+      # CACHE_BUILD:
+      #   description: '缓存加速'
+      #   required: false
+      #   default: 'true'
+      #   type: boolean
+
+
+env:
+  REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_BRANCH: master
+  FEEDS_CONF: feeds.conf.default
+  CONFIG_FILE: rpi-4B/Lean-bcm27xx-bcm2711-rpi-4B.info
+  Firmware_Name: Lean-bcm27xx-bcm2711-rpi-4B
+  DIY_P1_SH: rpi-4B/rpi-4B-1.sh
+  DIY_P2_SH: rpi-4B/rpi-4B-2.sh
+  UPLOAD_ORGANIZE: true
+  UPLOAD_BIN_DIR: false
+  UPLOAD_FIRMWARE: true
+  UPLOAD_COWTRANSFER: false
+  UPLOAD_WETRANSFER: false
+  UPLOAD_RELEASE: true
+  GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
+  TZ: Asia/Shanghai 
+
+jobs:
+  build_openwrt:
+
+    runs-on: ubuntu-latest
+    
+    name: Deliver config Lean-bcm27xx-bcm2711-rpi-4B
+
+    steps:
+      # - name: Free Disk Space
+      #   uses: endersonmenezes/free-disk-space@v2
+      #   with:
+      #     remove_android: true
+      #     remove_dotnet: true
+      #     remove_haskell: true
+      #     remove_tool_cache: true
+      #     remove_swap: true
+      #     remove_packages: "azure-cli google-cloud-cli microsoft-edge-stable google-chrome-stable firefox postgresql* temurin-* *llvm* mysql* dotnet-sdk-*"
+      #     remove_packages_one_command: true
+      #     remove_folders: "/usr/share/swift /usr/share/miniconda /usr/share/az* /usr/share/glade* /usr/local/lib/node_modules /usr/local/share/chromium /usr/local/share/powershell"
+      #     testing: false
+
+      - name: 初始化系统环境
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          sudo -E apt-get -qq update
+          sudo -E apt-get -qq install zip -y
+          sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-2204)
+          sudo -E apt-get install -y ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential \
+          bzip2 ccache cmake cpio curl device-tree-compiler fastjar flex gawk gettext gcc-multilib g++-multilib \
+          git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libglib2.0-dev libgmp3-dev libltdl-dev \
+          libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libreadline-dev libssl-dev libtool lrzsz \
+          mkisofs msmtp nano ninja-build p7zip p7zip-full patch pkgconf python2.7 python3 python3-pyelftools \
+          libpython3-dev qemu-utils rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip \
+          vim wget xmlto xxd zlib1g-dev python3-setuptools
+          sudo -E apt-get -qq autoremove --purge
+          sudo -E apt-get -qq clean
+          sudo timedatectl set-timezone "$TZ"
+          sudo mkdir -p /workdir
+          sudo chown $USER:$GROUPS /workdir
+          # docker rmi `docker images -q`
+          # sudo -E rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
+          # sudo -E apt-mark hold grub-efi-amd64-signed
+          # sudo -E apt update
+          # sudo -E apt -y purge azure-cli* docker* ghc* zulu* llvm* firefox google* dotnet* powershell* openjdk* mysql* php* mongodb* dotnet* snap*
+          # sudo -E apt -y full-upgrade
+          # sudo -E apt -y install ack antlr3 aria2 asciidoc autoconf automake autopoint binutils bison build-essential bzip2 ccache cmake cpio curl device-tree-compiler fastjar flex gawk gettext gcc-multilib g++-multilib git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libreadline-dev libssl-dev libtool lrzsz mkisofs msmtp nano ninja-build p7zip p7zip-full patch pkgconf python3 python3-pip libpython3-dev qemu-utils rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev
+          # sudo -E systemctl daemon-reload
+          # sudo -E apt -y autoremove --purge
+          # sudo -E apt clean
+          # sudo -E timedatectl set-timezone "Asia/Shanghai"
+          # sudo mkdir -p /workdir
+          # sudo chown $USER:$GROUPS /workdir 
+
+      - name: 更新时区、编译时间
+        id: date
+        run: |
+          sudo timedatectl set-timezone "$TZ"
+          echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+          echo "FILE_TIME=$(date +"%m-%d %H.%M")" >> $GITHUB_ENV
+          echo "FILE_TIME1=$(date "+%Y年%m月%d日-%H点%M分")" >> $GITHUB_ENV
+          echo "FILE_TIME2=$(date "+%Y%m%d-%H%M")" >> $GITHUB_ENV
+          echo "编译开始时间..."
+          START_TIME=`date +'%Y-%m-%d %H:%M:%S'`
+          echo "START_SECONDS=$(date --date="$START_TIME" +%s)" >> $GITHUB_ENV
+
+      - name: 准备完成
+        uses: actions/checkout@v4
+
+      - name: 下载源代码
+        working-directory: /workdir
+        run: |
+          df -hT $PWD
+          git clone $REPO_URL -b $REPO_BRANCH openwrt
+          ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+
+      # - name: 缓存
+      #   uses: klever1988/cachewrtbuild@main
+      #   if: env.CACHE_BUILD == 'true' || (github.event.inputs.CACHE_BUILD == 'true')
+      #   with:
+      #     ccache: 'true'
+      #     mixkey: 'Lean-bcm27xx-bcm2711-rpi-4B'
+      #     prefix: ${{ github.workspace }}/openwrt
+
+      - name: patch1补丁和自定义设置
+        run: |
+          [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
+          chmod +x $DIY_P1_SH
+          cd openwrt
+          $GITHUB_WORKSPACE/$DIY_P1_SH
+
+
+      - name: 更新源 #Update feeds
+        if: (!cancelled())
+        run: cd openwrt && ./scripts/feeds clean && ./scripts/feeds update -a
+
+      - name: 安装源 #Install feeds
+        if: (!cancelled())
+        run: cd openwrt && ./scripts/feeds install -a && ./scripts/feeds install -a
+
+
+      - name: patch2补丁和自定义设置
+        run: |
+          [ -e files ] && mv files openwrt/files
+          [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+          chmod +x $DIY_P2_SH
+          cd openwrt
+          $GITHUB_WORKSPACE/$DIY_P2_SH
+          make defconfig
+          echo "status=success" >> $GITHUB_OUTPUT
+          grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
+          [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
+          echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+
+        
+      - name: SSH connection to Actions
+        uses: P3TERX/ssh2actions@v1.0.0
+        if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+        env:
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
+      - name: 整理固件文件
+        run: |
+          cd openwrt
+          mkdir -p ./artifact/buildinfo
+          cp -rf ./.config ./artifact/buildinfo/
+          cp -rf ./.config ./artifact/buildinfo/${{ env.Firmware_Name }}.info
+          cp -rf ./feeds.conf.default ./artifact/buildinfo/
+          cd ./artifact/buildinfo/
+          echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+          echo "status=success" >> $GITHUB_OUTPUT
+          
+        
+      - name: SSH connection to Actions
+        uses: P3TERX/ssh2actions@v1.0.0
+        if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+        env:
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+       
+      - name: 上传配置文件
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.Firmware_Name }}_${{ env.FILE_DATE }}
+          path: openwrt/artifact/buildinfo/
+
+      - name: 生成发布标签
+        id: tag
+        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+        run: |
+          echo "release_tag=$(date +"%Y.%m.%d.%H.%M")-编译信息-Lean-bcm27xx-bcm2711-rpi-4B.info" >> $GITHUB_OUTPUT
+          echo "release_date=$(date +"%Y.%m.%d.%H.%M")" >> $GITHUB_OUTPUT
+          touch release.txt
+          echo "
+          ★ 源码 : https://github.com/coolsnowwolf/lede
+          ★ 分支 : master
+          ★ 感谢源码作者无私分享！
+          
+          输出编译信息 Lean-bcm27xx-bcm2711-rpi-4B" >> release.txt
+          echo "status=success" >> $GITHUB_OUTPUT
+      
+      - name: 自动发布固件到 Releases
+        uses: softprops/action-gh-release@v2
+        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
+        with:
+          name: ${{ steps.tag.outputs.release_date }} 编译信息 Lean-bcm27xx-bcm2711-rpi-4B 
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          body_path: release.txt
+          files: ${{ env.FIRMWARE }}/*
+
+      - name: 删除运行记录
+        uses: Mattraks/delete-workflow-runs@v2
+        continue-on-error: true
+        with:
+          retain_days: 3     #保留最后多少记录不删除
+          keep_minimum_runs: 0
+
+      - name: 删除自动发布的旧固件
+        uses: dev-drprasad/delete-older-releases@v0.3.3
+        continue-on-error: true
+        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+        with:
+          keep_latest: 20        #保留多少个releases不删除
+          delete_tags: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

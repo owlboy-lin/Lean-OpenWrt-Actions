@@ -8,15 +8,15 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Lean-bcm27xx-bcm2711-rpi-4B
+name: Lean-p2w_r619ac-128m
 
 on:
-#  schedule:
-#    - cron: 0 20 * * *
+  # schedule:
+    # - cron: 0 20 * * *
 
   release:
     types: [published]
- 
+  
   watch:
     types: [started]
 
@@ -34,18 +34,22 @@ on:
         default: 'true'
         type: boolean
 
+# permissions:
+#   contents: read
+
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: rpi-4B/Lean-bcm27xx-bcm2711-rpi-4B.info
-  Firmware_Name: Lean-bcm27xx-bcm2711-rpi-4B
-  DIY_P1_SH: rpi-4B/rpi-4B-1.sh
-  DIY_P2_SH: rpi-4B/rpi-4B-2.sh
-  UPLOAD_ORGANIZE: true
-  UPLOAD_BIN_DIR: true
+  CONFIG_FILE: p2w_r619ac-128m/Lean-p2w_r619ac-128m.info
+  Firmware_Name: Lean-p2w_r619ac-128m
+  DIY_P1_SH: p2w_r619ac-128m/p2w_r619ac-128m-1.sh
+  DIY_P2_SH: p2w_r619ac-128m/p2w_r619ac-128m-2.sh
+  UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
+  UPLOAD_BUILDINFO: true
+  UPLOAD_PACKAGE: true
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: true
@@ -53,14 +57,20 @@ env:
   TZ: Asia/Shanghai 
 
 jobs:
+
+
   build_openwrt:
 
+        
+    name: Lean-p2w_r619ac-128m
+        
+    # if: github.event.repository.owner.id == github.event.sender.id
+        
     runs-on: ubuntu-latest
-    
-    name: Lean-bcm27xx-bcm2711-rpi-4B
+
 
     steps:
-      - name: Free Disk Space
+      - name: 释放磁盘空间
         uses: endersonmenezes/free-disk-space@v2
         with:
           remove_android: true
@@ -73,6 +83,22 @@ jobs:
           remove_folders: "/usr/share/swift /usr/share/miniconda /usr/share/az* /usr/share/glade* /usr/local/lib/node_modules /usr/local/share/chromium /usr/local/share/powershell"
           testing: false
 
+      # - name: CPU检测
+      #   run: |
+      #     echo "警告⚠"
+      #     echo "分配的服务器性能有限，若选择的插件过多，务必注意CPU性能！"
+      #     echo -e "已知CPU型号(降序): 7763，8370C，8272CL，8171M，E5-2673\n"
+      #     echo "--------------------------CPU信息--------------------------"
+      #     echo "CPU物理数量: $(cat /proc/cpuinfo | grep "physical id" | sort | uniq | wc -l)"
+      #     echo "CPU核心数量: $(nproc)"
+      #     echo -e "CPU型号信息:$(cat /proc/cpuinfo | grep -m1 name | awk -F: '{print $2}')\n"
+      #     echo "--------------------------内存信息--------------------------"
+      #     echo "已安装内存详细信息:"
+      #     echo -e "$(sudo lshw -short -C memory | grep GiB)\n"
+      #     echo "--------------------------硬盘信息--------------------------"
+      #     echo "硬盘数量: $(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT
+
+            
       - name: 初始化系统环境
         env:
           DEBIAN_FRONTEND: noninteractive
@@ -91,6 +117,7 @@ jobs:
           sudo mkdir -p /workdir
           sudo chown $USER:$GROUPS /workdir 
 
+          
       - name: 更新时区、编译时间
         id: date
         run: |
@@ -105,7 +132,7 @@ jobs:
 
       - name: 准备完成
         uses: actions/checkout@v4
-
+            
       - name: 下载源代码
         working-directory: /workdir
         run: |
@@ -118,16 +145,25 @@ jobs:
         if: env.CACHE_BUILD == 'true' || (github.event.inputs.CACHE_BUILD == 'true')
         with:
           ccache: 'true'
-          mixkey: 'Lean-bcm27xx-bcm2711-rpi-4B'
+          mixkey: 'Lean-p2w_r619ac-128m'
           prefix: ${{ github.workspace }}/openwrt
+            
+      # - name: Free up disk space
+      #   env:
+      #     DEBIAN_FRONTEND: noninteractive
+      #   run: |
+      #     sudo mkdir -p -m 777 /mnt/openwrt/dl /mnt/openwrt/bin /mnt/openwrt/staging_dir
+      #     ln -sf /mnt/openwrt/dl openwrt/dl
+      #     ln -sf /mnt/openwrt/bin openwrt/bin
+      #     ln -sf /mnt/openwrt/staging_dir openwrt/staging_dir
 
       - name: patch1补丁和自定义设置
+        if: (!cancelled())
         run: |
           [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
           chmod +x $DIY_P1_SH
           cd openwrt
           $GITHUB_WORKSPACE/$DIY_P1_SH
-
 
       - name: 更新源 #Update feeds
         if: (!cancelled())
@@ -137,53 +173,101 @@ jobs:
         if: (!cancelled())
         run: cd openwrt && ./scripts/feeds install -a && ./scripts/feeds install -a
 
+      - name: iStore商店
+        run: |
+          cd openwrt
+          ./scripts/feeds update istore
+          ./scripts/feeds install -d y -p istore luci-app-store
+
+
+      # - name: Custom script
+      #   run: |
+      #     mv rpi-4B/rpi-4B.sh openwrt/rpi-4B.sh
+      #     cd openwrt
+      #     chmod +x ./rpi-4B.sh && ./rpi-4B.sh
+
+      # - name: Costom configure file
+      #   env:
+      #     CONFIG_FILE: rpi-4B/config.rpi-4B
+      #   run: |
+      #     rm -f openwrt/.config*
+      #     mv $CONFIG_FILE openwrt/.config
+      #     cd openwrt
+      #     sed -i 's/^[ \t]*//g' ./.config
+      #     make defconfig
 
       - name: patch2补丁和自定义设置
+        if: (!cancelled())
         run: |
           [ -e files ] && mv files openwrt/files
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
           chmod +x $DIY_P2_SH
           cd openwrt
           $GITHUB_WORKSPACE/$DIY_P2_SH
+          make defconfig
+
+      # - name: SSH connection to Actions
+      #   uses: P3TERX/ssh2actions@v1.0.0
+      #   if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      #   env:
+      #     TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      #     TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}  
+            
+      - name: 下载固件包
+        id: package
+        run: |
+          cd openwrt
+          make download -j$(($(nproc)+1))
+          find dl -size -1024c -exec ls -l {} \;
+          find dl -size -1024c -exec rm -f {} \;
+
+      # - name: Check space usage
+      #   run: |
+      #     shopt -s extglob
+      #     cd openwrt
+      #     if [[ -f staging_dir/*${{ env.MTARGET }}*/bin ]]; then
+      #         rm -rf staging_dir/!(*${{ env.MTARGET }}*|host|hostpkg) build_dir/!(*${{ env.MTARGET }}*|host|hostpkg)
+      #     fi
+      #     df -hT  
 
       - name: 输出编译信息
         run: |
           cd openwrt
           echo " 系统空间      类型   总数  已用  可用 使用率"
           df -hT $PWD
-          
+            
           echo
           echo "=========================================="
           echo
-  
+
           ZZZ="package/lean/default-settings/files/zzz-default-settings"
           echo "DISTRIB_REVISION=$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')" >> $GITHUB_ENV
-          echo "KERNEL_PATCHVER=$(cat target/linux/bcm27xx/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')" >> $GITHUB_ENV
+          echo "KERNEL_PATCHVER=$(cat target/linux/ipq40xx/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')" >> $GITHUB_ENV
           echo "	    当前编译版本：$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')"
-          echo "	    内核版本：$(cat target/linux/bcm27xx/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')"
-  
+          echo "	    内核版本：$(cat target/linux/ipq40xx/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')"
+
           echo
           echo "=========================================="
-  
+
           grep -i CONFIG_PACKAGE_luci-app .config | grep  -v \# > Plug-in
           grep -i CONFIG_PACKAGE_luci-theme .config | grep  -v \# >> Plug-in
           sed -i '/INCLUDE/d' Plug-in > /dev/null 2>&1
           sed -i 's/CONFIG_PACKAGE_/、/g' Plug-in
-          # sed -i '/Transparent_Proxy/d' Plug-in > /dev/null 2>&1 #排除 luci-app-passwall_Transparent_Proxy
-          # sed -i '/qbittorrent-simple_dynamic/d' Plug-in > /dev/null 2>&1 #排除 luci-app-qbittorrent-simple_dynamic
+          sed -i '/Transparent_Proxy/d' Plug-in > /dev/null 2>&1 #排除 luci-app-passwall_Transparent_Proxy
+          sed -i '/qbittorrent-simple_dynamic/d' Plug-in > /dev/null 2>&1 #排除 luci-app-qbittorrent-simple_dynamic
           sed -i 's/=y/\ /g' Plug-in
           awk '$0=NR$0' Plug-in > Plug-2
           awk '{print "	" $0}' Plug-2 > Plug-in
-  
+
           echo
           echo
           echo "	      已选插件列表"
           cat Plug-in
           rm -rf {Plug-in,Plug-2}
-  
+
           echo
           echo "=========================================="
-  
+
           echo
           echo
           echo "输出完整插件信息..."
@@ -191,23 +275,14 @@ jobs:
           echo
           cat .config
         
-      - name: 下载固件包
-        id: package
-        run: |
-          cd openwrt
-          make defconfig
-          make download -j$(($(nproc)+1))
-          # find dl -size -1024c -exec ls -l {} \;
-          # find dl -size -1024c -exec rm -f {} \;
-        
-      - name: SSH connection to Actions
-        uses: P3TERX/ssh2actions@v1.0.0
-        if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
-        env:
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      # - name: SSH connection to Actions
+      #   uses: P3TERX/ssh2actions@v1.0.0
+      #   if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      #   env:
+      #     TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      #     TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
-      - name: Compile firmware
+      - name: 编译固件
         id: compile
         run: |
           cd openwrt
@@ -227,36 +302,35 @@ jobs:
           echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
         
       - name: Check space usage
-        if: cancelled()
+        if: (!cancelled())
         run: df -hT
-        
+
       - name: SSH connection to Actions
         uses: P3TERX/ssh2actions@v1.0.0
         if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
         env:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}  
 
-
-      - name: 整理固件文件
+      - name: 整理文件
         id: organize
-        if: steps.compile.outputs.status == 'success' && env.UPLOAD_ORGANIZE == 'true' && !cancelled()
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true' && !cancelled()
         run: |
           cd openwrt/bin/targets/*/*
-          rm -rf packages
+          # rm -rf packages
           echo "FIRMWARE=$PWD" >> $GITHUB_ENV
           echo "status=success" >> $GITHUB_OUTPUT
 
       - name: 上传完整固件目录
         uses: actions/upload-artifact@v4
-        if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true' && !cancelled()
         with:
           name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
           path: ${{ env.FIRMWARE }}
           
       - name: 整理固件文件
         id: artifact
-        if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+        if: (!cancelled())
         run: |
           cd openwrt
           mkdir -p ./artifact/firmware
@@ -267,36 +341,60 @@ jobs:
           cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
           cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
           cp -rf ./.config ./artifact/buildinfo/
-          cp -rf ./feeds.conf.default ./artifact/buildinfo/   
-  
-        
+          cp -rf ./feeds.conf.default ./artifact/buildinfo/ 
+ 
+       
       - name: 上传固件
+        if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
         uses: actions/upload-artifact@v4
-        if: steps.compile.outputs.status == 'success' && steps.artifact.outputs.status == 'success'
         with:
           name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_firmware_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
           path: openwrt/artifact/firmware/
 
       - name: 上传配置文件
+        if: env.UPLOAD_BUILDINFO == 'true' && !cancelled()
         uses: actions/upload-artifact@v4
-        if: steps.compile.outputs.status == 'success' && steps.artifact.outputs.status == 'success'
         with:
           name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_buildinfo${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
           path: openwrt/artifact/buildinfo/
 
       - name: 上传插件
+        if: env.UPLOAD_PACKAGE == 'true' && !cancelled()
         uses: actions/upload-artifact@v4
-        if: steps.compile.outputs.status == 'success' && steps.artifact.outputs.status == 'success'
         with:
           name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_package${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
           path: openwrt/artifact/package/
+
+      - name: Upload firmware to cowtransfer
+        id: cowtransfer
+        if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
+        run: |
+          curl -fsSL git.io/file-transfer | sh
+          ./transfer cow --block 2621440 -s -p 64 --no-progress ${FIRMWARE} 2>&1 | tee cowtransfer.log
+          echo "::warning file=cowtransfer.com::$(cat cowtransfer.log | grep https)"
+          echo "::set-output name=url::$(cat cowtransfer.log | grep https | cut -f3 -d" ")"
+
+      - name: Upload firmware to WeTransfer
+        id: wetransfer
+        if: steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
+        run: |
+          curl -fsSL git.io/file-transfer | sh
+          ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
+          echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
+          echo "::set-output name=url::$(cat wetransfer.log | grep https | cut -f3 -d" ")"
+
+      # - name: 获取内核版本号
+      #   run: |
+      #     cd openwrt/bin/targets/*/*
+      #     KERNEL_VERSION=$(ls -l *openwrt-ipq40xx-generic-p2w_r619ac-128m*.bin | awk '{print $9}' | cut -d '-' -f1)
+      #     echo "KERNEL_VERSION=$KERNEL_VERSION" >> $GITHUB_ENV
 
       - name: 生成发布标签
         id: tag
         if: steps.compile.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
         run: |
-          echo "release_tag=$(date +"%Y.%m.%d")-Lean-bcm27xx-bcm2711-rpi-4B" >> $GITHUB_OUTPUT
-          echo "release_date=$(date +"%Y.%m.%d")" >> $GITHUB_OUTPUT
+          echo "release_tag=$(date +"%Y.%m.%d.%H.%M")-Lean-p2w_r619ac-128m" >> $GITHUB_OUTPUT
+          echo "release_date=$(date +"%Y.%m.%d.%H.%M")" >> $GITHUB_OUTPUT
           touch release.txt
           echo "
           ★ 源码 : https://github.com/coolsnowwolf/lede
@@ -322,7 +420,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
         with:
-          name: ${{ steps.tag.outputs.release_date }} Lean-bcm27xx-bcm2711-rpi-4B ${{ env.name }}
+          name: ${{ steps.tag.outputs.release_date }} Lean-p2w_r619ac-128m ${{ env.name }}
           tag_name: ${{ steps.tag.outputs.release_tag }}
           body_path: release.txt
           files: openwrt/artifact/firmware/*
@@ -344,4 +442,5 @@ jobs:
           delete_tags: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+  
+  
