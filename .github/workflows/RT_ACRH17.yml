@@ -161,6 +161,12 @@ jobs:
         if: (!cancelled())
         run: cd openwrt && ./scripts/feeds install -a && ./scripts/feeds install -a
 
+      - name: iStore商店
+        run: |
+          cd openwrt
+          ./scripts/feeds update istore
+          ./scripts/feeds install -d y -p istore luci-app-store
+
 
       # - name: SSH connection to Actions
         # uses: P3TERX/ssh2actions@v1.0.0
