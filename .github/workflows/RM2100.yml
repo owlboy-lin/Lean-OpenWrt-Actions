@@ -40,8 +40,8 @@ env:
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: RM2100/Lean-RM2100.info
   Firmware_Name: Lean-RM2100
-  DIY_P1_SH: RM2100/Lean-RM2100-1.sh
-  DIY_P2_SH: RM2100/Lean-RM2100-2.sh
+  DIY_P1_SH: RM2100/RM2100-1.sh
+  DIY_P2_SH: RM2100/RM2100-2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_BUILDINFO: true
