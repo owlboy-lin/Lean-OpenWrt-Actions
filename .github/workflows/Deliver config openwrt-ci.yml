@@ -39,7 +39,7 @@ env:
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: false
-  UPLOAD_WETRANSFER: true
+  UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai 
 
@@ -51,7 +51,7 @@ jobs:
      
     name: Deliver config  OpenWrt-CI
     
-    if: github.event.repository.owner.id == github.event.sender.id
+    # if: github.event.repository.owner.id == github.event.sender.id
     
     runs-on: ubuntu-latest
 
@@ -72,9 +72,7 @@ jobs:
           echo "--------------------------硬盘信息--------------------------"
           echo "硬盘数量: $(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT
 
-      - name: 准备完成
-        uses: actions/checkout@v4
-        
+       
       - name: 初始化系统环境
         env:
           DEBIAN_FRONTEND: noninteractive
@@ -105,6 +103,9 @@ jobs:
           echo "编译开始时间..."
           START_TIME=`date +'%Y-%m-%d %H:%M:%S'`
           echo "START_SECONDS=$(date --date="$START_TIME" +%s)" >> $GITHUB_ENV
+
+      - name: 准备完成
+        uses: actions/checkout@v4
           
           
       - name: 下载源代码
@@ -134,7 +135,7 @@ jobs:
         run: cd openwrt && ./scripts/feeds clean && ./scripts/feeds update -a
 
       - name: 安装源 #Install feeds
-        run: cd openwrt && ./scripts/feeds install -a
+        run: cd openwrt && ./scripts/feeds install -a && ./scripts/feeds install -a
 
 
       - name: patch2补丁和自定义设置
@@ -144,15 +145,22 @@ jobs:
           chmod +x $DIY_P2_SH
           cd openwrt
           $GITHUB_WORKSPACE/$DIY_P2_SH
+
+      - name: SSH connection to Actions
+        uses: P3TERX/ssh2actions@v1.0.0
+        if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+        env:
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}  
           
-      - name: 下载固件包
-        id: package
-        run: |
-          cd openwrt
-          make defconfig
-          make download -j8
-          find dl -size -1024c -exec ls -l {} \;
-          find dl -size -1024c -exec rm -f {} \;
+      # - name: 下载固件包
+      #   id: package
+      #   run: |
+      #     cd openwrt
+      #     make defconfig
+      #     make download -j8
+      #     find dl -size -1024c -exec ls -l {} \;
+      #     find dl -size -1024c -exec rm -f {} \;
     
       - name: Cache
         uses: stupidloud/cachewrtbuild@main
@@ -285,4 +293,4 @@ jobs:
           keep_latest: 20        #保留多少个releases不删除
           delete_tags: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

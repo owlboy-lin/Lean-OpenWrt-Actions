@@ -33,7 +33,7 @@ env:
   DIY_P1_SH: smpackage/smpackage-1-p.sh
   DIY_P2_SH: smpackage/smpackage-2-all.sh
   UPLOAD_BIN_DIR: false
-  UPLOAD_FIRMWARE: true
+  UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: false
   TZ: Asia/Shanghai 
 

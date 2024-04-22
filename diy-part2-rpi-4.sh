@@ -10,6 +10,9 @@
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 #
 
+# Modify default IP
+#sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
+
 # 修改openwrt登陆地址,把下面的 10.0.0.1 修改成你想要的就可以了
 # sed -i 's/192.168.1.1/10.0.0.1/g' package/base-files/files/bin/config_generate
 # 修改 子网掩码
@@ -100,20 +103,40 @@ svn export https://github.com/kenzok8/openwrt-packages/trunk/v2dat package/v2dat
 echo "
 
 # 额外组件
-CONFIG_GRUB_IMAGES=y
-CONFIG_VMDK_IMAGES=y
+CONFIG_TARGET_BOARD="bcm27xx"
+CONFIG_TARGET_SUBTARGET="bcm2711"
+CONFIG_TARGET_PROFILE="DEVICE_rpi-4"
+CONFIG_TARGET_ARCH_PACKAGES="aarch64_cortex-a72"
+CONFIG_DEFAULT_TARGET_OPTIMIZATION="-Os -pipe"
+CONFIG_CPU_TYPE="cortex-a72"
+
+# CONFIG_GRUB_IMAGES=y
+# CONFIG_VMDK_IMAGES=y
 
 # 固件大小
-CONFIG_TARGET_KERNEL_PARTSIZE=256
-CONFIG_TARGET_ROOTFS_PARTSIZE=512
+# CONFIG_TARGET_KERNEL_PARTSIZE=256
+# CONFIG_TARGET_ROOTFS_PARTSIZE=512
 
 # ipv6
 CONFIG_PACKAGE_ipv6helper=y
 
+# CONFIG_DEFAULT_luci-app-accesscontrol=y
+# CONFIG_DEFAULT_luci-app-arpbind=y
+# CONFIG_DEFAULT_luci-app-autoreboot=y
+# CONFIG_DEFAULT_luci-app-ddns=y
+# CONFIG_DEFAULT_luci-app-filetransfer=y
+# CONFIG_DEFAULT_luci-app-nlbwmon=y
+# CONFIG_DEFAULT_luci-app-ssr-plus=y
+# CONFIG_DEFAULT_luci-app-turboacc=y
+# CONFIG_DEFAULT_luci-app-upnp=y
+# CONFIG_DEFAULT_luci-app-vlmcsd=y
+# CONFIG_DEFAULT_luci-app-vsftpd=y
+# CONFIG_DEFAULT_luci-app-wol=y
+
 
 # airplay2
-CONFIG_PACKAGE_luci-app-airplay2=y
-CONFIG_PACKAGE_luci-i18n-airplay2-zh-cn=y
+# CONFIG_PACKAGE_luci-app-airplay2=y
+# CONFIG_PACKAGE_luci-i18n-airplay2-zh-cn=y
 
 
 # 自动重启
@@ -188,8 +211,8 @@ CONFIG_PACKAGE_luci-app-webadmin=y
 CONFIG_PACKAGE_luci-i18n-webadmin-zh-cn=y
 
 # rclone
-CONFIG_PACKAGE_rclone=y
-CONFIG_PACKAGE_fuse3-utils=y
+# CONFIG_PACKAGE_rclone=y
+# CONFIG_PACKAGE_fuse3-utils=y
 
 # 删除不用的插件
 CONFIG_PACKAGE_autosamba=y
@@ -258,3 +281,6 @@ CONFIG_PACKAGE_luci-i18n-samba4-zh-cn=y
 # sed -i 's/CONFIG_PACKAGE_kmod-mt7921-firmware=y/CONFIG_PACKAGE_kmod-mt7921-firmware=n/' .config
 # sed -i 's/CONFIG_PACKAGE_kmod-mt7921e=y/CONFIG_PACKAGE_kmod-mt7921e=n/' .config
 # sed -i 's/CONFIG_PACKAGE_kmod-mt7921u=y/CONFIG_PACKAGE_kmod-mt7921u=n/' .config
+
+
+

@@ -1,262 +1,312 @@
-    #
-    # Copyright (c) 2019-2020 P3TERX <https://p3terx.com>
-    #
-    # This is free software, licensed under the MIT License.
-    # See /LICENSE for more information.
-    #
-    # https://github.com/P3TERX/Actions-OpenWrt
-    # Description: Build OpenWrt using GitHub Actions
-    #
+#
+# Copyright (c) 2019-2020 P3TERX <https://p3terx.com>
+#
+# This is free software, licensed under the MIT License.
+# See /LICENSE for more information.
+#
+# https://github.com/P3TERX/Actions-OpenWrt
+# Description: Build OpenWrt using GitHub Actions
+#
 
+name: OpenWrt-FastRhino-r66s
+
+on:
+
+# 定时触发编译(每月1日早3点)
+  schedule:
+    - cron: 0 17 2,12,22 * *
+
+  release:
+    types: [published]
+  
+  watch:
+    types: [started]
+
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
+        
+      CACHE_BUILD:
+        description: '缓存加速'
+        required: false
+        default: 'true'
+        type: boolean
+          
+
+
+env:
+  REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_BRANCH: master
+  FEEDS_CONF: feeds.conf.default
+  CONFIG_FILE: r66s/6.1/config/r66s.config
+  Firmware_Name: OpenWrt-FastRhino-r66s    
+  DIY_P1_SH: r66s/6.1/diy-part1.sh
+  DIY_P2_SH: r66s/6.1/diy-part2.sh
+  UPLOAD_ORGANIZE: false
+  UPLOAD_BIN_DIR: false
+  UPLOAD_FIRMWARE: true
+  UPLOAD_COWTRANSFER: false
+  UPLOAD_WETRANSFER: false
+  UPLOAD_RELEASE: true
+  GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
+  TZ: Asia/Shanghai 
+
+jobs:
+  build:
     name: OpenWrt-FastRhino-r66s
 
-    on:
-      repository_dispatch:
-      workflow_dispatch:
-        inputs:
-          ssh:
-            description: 'SSH connection to Actions'
-            required: false
-            default: 'false'
-            
-    # 定时触发编译(每月1日早3点)
-      schedule:
-        - cron: 0 17 2,12,22 * *
+    runs-on: ubuntu-latest
 
-    env:
-      REPO_URL: https://github.com/coolsnowwolf/lede
-      REPO_BRANCH: master
-      FEEDS_CONF: feeds.conf.default
-      CONFIG_FILE: r66s/6.1/config/r66s.config
-      Firmware_Name: OpenWrt-FastRhino-r66s    
-      DIY_P1_SH: r66s/6.1/diy-part1.sh
-      DIY_P2_SH: r66s/6.1/diy-part2.sh
-      TZ: Asia/Shanghai
+    steps:
+      - name: 释放磁盘空间
+        uses: endersonmenezes/free-disk-space@v2
+        with:
+          remove_android: true
+          remove_dotnet: true
+          remove_haskell: true
+          remove_tool_cache: true
+          remove_swap: true
+          remove_packages: "azure-cli google-cloud-cli microsoft-edge-stable google-chrome-stable firefox postgresql* temurin-* *llvm* mysql* dotnet-sdk-*"
+          remove_packages_one_command: true
+          remove_folders: "/usr/share/swift /usr/share/miniconda /usr/share/az* /usr/share/glade* /usr/local/lib/node_modules /usr/local/share/chromium /usr/local/share/powershell"
+          testing: false
+      
+      - name: CPU检测
+        run: |
+          echo "警告⚠"
+          echo "分配的服务器性能有限，若选择的插件过多，务必注意CPU性能！"
+          echo -e "已知CPU型号(降序): 7763，8370C，8272CL，8171M，E5-2673\n"
+          echo "--------------------------CPU信息--------------------------"
+          echo "CPU物理数量: $(cat /proc/cpuinfo | grep "physical id" | sort | uniq | wc -l)"
+          echo "CPU核心数量: $(nproc)"
+          echo -e "CPU型号信息:$(cat /proc/cpuinfo | grep -m1 name | awk -F: '{print $2}')\n"
+          echo "--------------------------内存信息--------------------------"
+          echo "已安装内存详细信息:"
+          echo -e "$(sudo lshw -short -C memory | grep GiB)\n"
+          echo "--------------------------硬盘信息--------------------------"
+          echo "硬盘数量: $(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT
+      
+      - name: 初始化系统环境
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          sudo -E apt-get -qq update
+          sudo -E apt-get -qq install $(curl -fsSL https://github.com/popeyema/OpenWrt-R66s/raw/main/depends-ubuntu-latest)
+          sudo apt install clang
+          sudo -E apt-get -qq autoremove --purge
+          sudo -E apt-get -qq clean
+          sudo timedatectl set-timezone "$TZ"
+          sudo mkdir -p /workdir
+          sudo chown $USER:$GROUPS /workdir
+          
+      - name: 更新时区、编译时间
+        id: date
+        run: |
+          sudo timedatectl set-timezone "$TZ"
+          echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+          echo "FILE_TIME=$(date +"%m-%d %H.%M")" >> $GITHUB_ENV
+          echo "FILE_TIME1=$(date "+%Y年%m月%d日-%H点%M分")" >> $GITHUB_ENV
+          echo "FILE_TIME2=$(date "+%Y%m%d-%H%M")" >> $GITHUB_ENV
+          echo "编译开始时间..."
+          START_TIME=`date +'%Y-%m-%d %H:%M:%S'`
+          echo "START_SECONDS=$(date --date="$START_TIME" +%s)" >> $GITHUB_ENV
 
-    jobs:
-      build:
-        runs-on: ubuntu-latest
+      - name: 准备完成
+        uses: actions/checkout@v4
+          
+      - name: 下载源代码
+        working-directory: /workdir
+        run: |
+          df -hT $PWD
+          git clone $REPO_URL -b $REPO_BRANCH openwrt
+          ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
-        steps:
-        - name: 释放Ubuntu磁盘空间
-          uses: jlumbroso/free-disk-space@main
-          with:
-            # this might remove tools that are actually needed,
-            # if set to "true" but frees about 6 GB
-            tool-cache: true
-            # all of these default to true, but feel free to set to
-            # "false" if necessary for your workflow
-            android: true
-            dotnet: true
-            haskell: true
-            large-packages: true
-            swap-storage: true 
+      - name: 缓存
+        uses: klever1988/cachewrtbuild@main
+        if: env.CACHE_BUILD == 'true' || (github.event.inputs.CACHE_BUILD == 'true')
+        with:
+          ccache: 'true'
+          mixkey: 'OpenWrt-FastRhino-r66s'
+          prefix: ${{ github.workspace }}/openwrt
+
+      - name: patch1补丁和自定义设置
+        run: |
+          [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
+          chmod +x $DIY_P1_SH
+          cd openwrt
+          $GITHUB_WORKSPACE/$DIY_P1_SH
+
+      - name: 更新源 #Update feeds
+        run: |
+          cd openwrt 
+          ./scripts/feeds update -a 
+          rm -rf feeds/luci/applications/luci-app-mosdns
+          rm -rf feeds/packages/net/{alist,adguardhome,xray*,v2ray*,v2ray*,sing*,smartdns}
+          rm -rf feeds/packages/lang/golang
+          git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
+
+      - name: 安装源 #Install feeds
+        run: cd openwrt && ./scripts/feeds install -a
+
+      - name: patch2补丁和自定义设置
+        run: |
+          [ -e files ] && mv files openwrt/files
+          [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+          chmod +x $DIY_P2_SH
+          cd openwrt
+          $GITHUB_WORKSPACE/$DIY_P2_SH
+
+      - name: SSH connection to Actions
+        uses: P3TERX/ssh2actions@v1.0.0
+        if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+        env:
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          
+      - name: 输出编译信息
+        run: |
+          cd openwrt
+          echo " 系统空间      类型   总数  已用  可用 使用率"
+          df -hT $PWD
+          
+          echo
+          echo "=========================================="
+          echo
+
+          ZZZ="package/lean/default-settings/files/zzz-default-settings"
+          echo "DISTRIB_REVISION=$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')" >> $GITHUB_ENV
+          echo "KERNEL_PATCHVER=$(cat target/linux/rockchip/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')" >> $GITHUB_ENV
+          echo "	    当前编译版本：$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')"
+          echo "	    内核版本：$(cat target/linux/rockchip/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')"
+
+          echo
+          echo "=========================================="
+
+          grep -i CONFIG_PACKAGE_luci-app .config | grep  -v \# > Plug-in
+          grep -i CONFIG_PACKAGE_luci-theme .config | grep  -v \# >> Plug-in
+          sed -i '/INCLUDE/d' Plug-in > /dev/null 2>&1
+          sed -i 's/CONFIG_PACKAGE_/、/g' Plug-in
+          sed -i '/Transparent_Proxy/d' Plug-in > /dev/null 2>&1 #排除 luci-app-passwall_Transparent_Proxy
+          sed -i '/qbittorrent-simple_dynamic/d' Plug-in > /dev/null 2>&1 #排除 luci-app-qbittorrent-simple_dynamic
+          sed -i 's/=y/\ /g' Plug-in
+          awk '$0=NR$0' Plug-in > Plug-2
+          awk '{print "	" $0}' Plug-2 > Plug-in
+
+          echo
+          echo
+          echo "	      已选插件列表"
+          cat Plug-in
+          rm -rf {Plug-in,Plug-2}
+
+          echo
+          echo "=========================================="
+
+          echo
+          echo
+          echo "输出完整插件信息..."
+          echo
+          echo
+          cat .config
+
+      - name: 下载固件包
+        id: package
+        run: |
+          cd openwrt
+          make defconfig
+          make download -j$(($(nproc)+1))
+          find dl -size -1024c -exec ls -l {} \;
+          find dl -size -1024c -exec rm -f {} \;
+
+      - name: 开始编译固件
+        id: compile
+        run: |
+          cd openwrt
+          echo -e "$(nproc) thread compile"
+          make -j$(nproc) || make -j1 || make -j1 V=s
+          echo "status=success" >> $GITHUB_OUTPUT
+          grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
+          [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
+          echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+          
+      - name: 检查空间使用情况
+        run: |
+          echo "======================="
+          echo "Space usage:"
+          echo "======================="
+          df -hT
+          echo "======================="
+          du -h --max-depth=1 openwrt/ --exclude=build_dir --exclude=bin
+          du -h --max-depth=1 openwrt/build_dir
+          du -h --max-depth=1 openwrt/bin  
+
+      - name: 整理固件文件
+        id: organize
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_ORGANIZE == 'true' && !cancelled()
+        run: |
+          cd openwrt/bin/targets/*/*
+          rm -rf packages
+          echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+          echo "status=success" >> $GITHUB_OUTPUT
+
+      - name: 上传完整固件目录
+        uses: actions/upload-artifact@v4
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
+        with:
+          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+          path: ${{ env.FIRMWARE }}
+          
+      - name: 整理固件文件
+        id: artifact
+        if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+        run: |
+          cd openwrt
+          mkdir -p ./artifact/firmware
+          mkdir -p ./artifact/package
+          mkdir -p ./artifact/buildinfo
+          rm -rf $(find ./bin/targets/ -type d -name "packages")
+          cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
+          cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
+          cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
+          cp -rf ./.config ./artifact/buildinfo/
+          cp -rf ./feeds.conf.default ./artifact/buildinfo/   
+  
         
-        - name: CPU检测
-          run: |
-            echo "警告⚠"
-            echo "分配的服务器性能有限，若选择的插件过多，务必注意CPU性能！"
-            echo -e "已知CPU型号(降序): 7763，8370C，8272CL，8171M，E5-2673\n"
-            echo "--------------------------CPU信息--------------------------"
-            echo "CPU物理数量: $(cat /proc/cpuinfo | grep "physical id" | sort | uniq | wc -l)"
-            echo "CPU核心数量: $(nproc)"
-            echo -e "CPU型号信息:$(cat /proc/cpuinfo | grep -m1 name | awk -F: '{print $2}')\n"
-            echo "--------------------------内存信息--------------------------"
-            echo "已安装内存详细信息:"
-            echo -e "$(sudo lshw -short -C memory | grep GiB)\n"
-            echo "--------------------------硬盘信息--------------------------"
-            echo "硬盘数量: $(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT
-        
-        - name: 准备完成
-          uses: actions/checkout@v4
+      - name: 上传固件
+        uses: actions/upload-artifact@v4
+        if: steps.compile.outputs.status == 'success' && steps.artifact.outputs.status == 'success'
+        with:
+          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_firmware_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+          path: openwrt/artifact/firmware/
 
-        - name: 初始化系统环境
-          env:
-            DEBIAN_FRONTEND: noninteractive
-          run: |
-            sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
-            sudo -E apt-get -qq update
-            sudo -E apt-get -qq install $(curl -fsSL https://github.com/popeyema/OpenWrt-R66s/raw/main/depends-ubuntu-latest)
-            sudo apt install clang
-            sudo -E apt-get -qq autoremove --purge
-            sudo -E apt-get -qq clean
-            sudo timedatectl set-timezone "$TZ"
-            sudo mkdir -p /workdir
-            sudo chown $USER:$GROUPS /workdir
-            
-        - name: 更新时区、编译时间
-          id: date
-          run: |
-            sudo timedatectl set-timezone "$TZ"
-            echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
-            echo "FILE_TIME=$(date +"%m-%d %H.%M")" >> $GITHUB_ENV
-            echo "FILE_TIME1=$(date "+%Y年%m月%d日-%H点%M分")" >> $GITHUB_ENV
-            echo "FILE_TIME2=$(date "+%Y%m%d-%H%M")" >> $GITHUB_ENV
-            echo "编译开始时间..."
-            START_TIME=`date +'%Y-%m-%d %H:%M:%S'`
-            echo "START_SECONDS=$(date --date="$START_TIME" +%s)" >> $GITHUB_ENV
-            
-        - name: 下载源代码
-          working-directory: /workdir
-          run: |
-            df -hT $PWD
-            git clone $REPO_URL -b $REPO_BRANCH openwrt
-            ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+      - name: 上传配置文件
+        uses: actions/upload-artifact@v4
+        if: steps.compile.outputs.status == 'success' && steps.artifact.outputs.status == 'success'
+        with:
+          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_buildinfo${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+          path: openwrt/artifact/buildinfo/
 
+      - name: 上传插件
+        uses: actions/upload-artifact@v4
+        if: steps.compile.outputs.status == 'success' && steps.artifact.outputs.status == 'success'
+        with:
+          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_package${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+          path: openwrt/artifact/package/
 
+      - name: 删除运行记录
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          retain_days: 3     #保留最后多少记录不删除
+          keep_minimum_runs: 0
 
-
-        - name: patch1补丁和自定义设置
-          run: |
-            [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
-            chmod +x $DIY_P1_SH
-            cd openwrt
-            $GITHUB_WORKSPACE/$DIY_P1_SH
-
-        - name: 更新源 #Update feeds
-          run: |
-            cd openwrt 
-            ./scripts/feeds update -a 
-            rm -rf feeds/luci/applications/luci-app-mosdns
-            rm -rf feeds/packages/net/{alist,adguardhome,xray*,v2ray*,v2ray*,sing*,smartdns}
-            rm -rf feeds/packages/lang/golang
-            git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
-
-        - name: 安装源 #Install feeds
-          run: cd openwrt && ./scripts/feeds install -a
-
-        - name: patch2补丁和自定义设置
-          run: |
-            [ -e files ] && mv files openwrt/files
-            [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
-            chmod +x $DIY_P2_SH
-            cd openwrt
-            $GITHUB_WORKSPACE/$DIY_P2_SH
-
-        - name: SSH connection to Actions
-          uses: P3TERX/ssh2actions@v1.0.0
-          if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
-          env:
-            TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-            TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-            
-        - name: 输出编译信息
-          run: |
-            cd openwrt
-            echo " 系统空间      类型   总数  已用  可用 使用率"
-            df -hT $PWD
-            
-            echo
-            echo "=========================================="
-            echo
-
-            ZZZ="package/lean/default-settings/files/zzz-default-settings"
-            echo "DISTRIB_REVISION=$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')" >> $GITHUB_ENV
-            echo "KERNEL_PATCHVER=$(cat target/linux/rockchip/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')" >> $GITHUB_ENV
-            echo "	    当前编译版本：$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')"
-            echo "	    内核版本：$(cat target/linux/rockchip/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')"
-
-            echo
-            echo "=========================================="
-
-            grep -i CONFIG_PACKAGE_luci-app .config | grep  -v \# > Plug-in
-            grep -i CONFIG_PACKAGE_luci-theme .config | grep  -v \# >> Plug-in
-            sed -i '/INCLUDE/d' Plug-in > /dev/null 2>&1
-            sed -i 's/CONFIG_PACKAGE_/、/g' Plug-in
-            sed -i '/Transparent_Proxy/d' Plug-in > /dev/null 2>&1 #排除 luci-app-passwall_Transparent_Proxy
-            sed -i '/qbittorrent-simple_dynamic/d' Plug-in > /dev/null 2>&1 #排除 luci-app-qbittorrent-simple_dynamic
-            sed -i 's/=y/\ /g' Plug-in
-            awk '$0=NR$0' Plug-in > Plug-2
-            awk '{print "	" $0}' Plug-2 > Plug-in
-
-            echo
-            echo
-            echo "	      已选插件列表"
-            cat Plug-in
-            rm -rf {Plug-in,Plug-2}
-
-            echo
-            echo "=========================================="
-
-            echo
-            echo
-            echo "输出完整插件信息..."
-            echo
-            echo
-            cat .config
-
-        - name: 下载固件包
-          id: package
-          run: |
-            cd openwrt
-            make defconfig
-            make download -j$(($(nproc)+1))
-            find dl -size -1024c -exec ls -l {} \;
-            find dl -size -1024c -exec rm -f {} \;
-
-        - name: 开始编译固件
-          id: compile
-          run: |
-            cd openwrt
-            echo -e "$(nproc) thread compile"
-            make -j$(nproc) || make -j1 || make -j1 V=s
-            echo "status=success" >> $GITHUB_OUTPUT
-            grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
-            [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
-            echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
-            
-        - name: 检查空间使用情况
-          run: |
-            echo "======================="
-            echo "Space usage:"
-            echo "======================="
-            df -hT
-            echo "======================="
-            du -h --max-depth=1 openwrt/ --exclude=build_dir --exclude=bin
-            du -h --max-depth=1 openwrt/build_dir
-            du -h --max-depth=1 openwrt/bin
-
-        - name: Prepare artifact
-          run: |
-            cd openwrt
-            mkdir -p ./artifact/firmware
-            mkdir -p ./artifact/package
-            mkdir -p ./artifact/buildinfo
-            rm -rf $(find ./bin/targets/ -type d -name "packages")
-            cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
-            cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
-            cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
-            cp -rf ./.config ./artifact/buildinfo/
-            cp -rf ./feeds.conf.default ./artifact/buildinfo/
-
-        - name: Deliver buildinfo
-          uses: actions/upload-artifact@v4
-          with:
-            name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}_buildinfo
-            path: openwrt/artifact/buildinfo/
-
-        - name: Deliver package
-          uses: actions/upload-artifact@v4
-          with:
-            name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}_package
-            path: openwrt/artifact/package/
-
-        - name: Deliver firmware
-          uses: actions/upload-artifact@v4
-          with:
-            name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}_firmware
-            path: openwrt/artifact/firmware/
-
-        - name: 删除运行记录
-          uses: Mattraks/delete-workflow-runs@v2
-          with:
-            retain_days: 3     #保留最后多少记录不删除
-            keep_minimum_runs: 0
-
-        - name: 删除自动发布的旧固件
-          uses: dev-drprasad/delete-older-releases@v0.3.2
-          if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-          with:
-            keep_latest: 20        #保留多少个releases不删除
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 删除自动发布的旧固件
+        uses: dev-drprasad/delete-older-releases@v0.3.2
+        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+        with:
+          keep_latest: 20        #保留多少个releases不删除
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
