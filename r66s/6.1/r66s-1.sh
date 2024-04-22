@@ -56,7 +56,7 @@
 
 #  下载源码
 ## adguardhome
-# git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app-adguardhome
+git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app-adguardhome
 
 ## autoreboot
 # git clone https://github.com/f8q8/luci-app-autoreboot package/luci-app-autoreboot
@@ -81,11 +81,11 @@ echo 'src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2' >>feeds.
 ## poweroff
 git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
 
-
-# git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
-
 ## istore
 echo 'src-git istore https://github.com/linkease/istore;main' >> feeds.conf.default
+
+
+# git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
 
 # sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
 # sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
