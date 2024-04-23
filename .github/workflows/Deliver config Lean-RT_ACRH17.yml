@@ -39,7 +39,7 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: Lean-RT_ACRH17.info
+  CONFIG_FILE: RT_ACRH17/Lean-RT_ACRH17.info
   Firmware_Name: Lean-RT_ACRH17
   DIY_P1_SH: RT_ACRH17/RT_ACRH17-1.sh
   DIY_P2_SH: RT_ACRH17/RT_ACRH17-2.sh
