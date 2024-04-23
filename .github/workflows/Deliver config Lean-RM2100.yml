@@ -11,12 +11,12 @@
 name: Deliver config Lean-RM2100
 
 on:
-#  schedule:
-#    - cron: 0 20 * * *
+  # schedule:
+    # - cron: 0 20 * * *
 
   release:
     types: [published]
- 
+  
   watch:
     types: [started]
 
@@ -28,6 +28,11 @@ on:
         required: false
         default: 'false'
         
+      # CACHE_BUILD:
+      #   description: '缓存加速'
+      #   required: false
+      #   default: 'true'
+      #   type: boolean
 
 
 env:
@@ -46,7 +51,7 @@ env:
   UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: true
   GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
-  TZ: Asia/Shanghai
+  TZ: Asia/Shanghai 
 
 jobs:
   build_openwrt:
@@ -56,19 +61,6 @@ jobs:
     name: Deliver config Lean-RM2100
 
     steps:
-      # - name: Free Disk Space
-      #   uses: endersonmenezes/free-disk-space@v2
-      #   with:
-      #     remove_android: true
-      #     remove_dotnet: true
-      #     remove_haskell: true
-      #     remove_tool_cache: true
-      #     remove_swap: true
-      #     remove_packages: "azure-cli google-cloud-cli microsoft-edge-stable google-chrome-stable firefox postgresql* temurin-* *llvm* mysql* dotnet-sdk-*"
-      #     remove_packages_one_command: true
-      #     remove_folders: "/usr/share/swift /usr/share/miniconda /usr/share/az* /usr/share/glade* /usr/local/lib/node_modules /usr/local/share/chromium /usr/local/share/powershell"
-      #     testing: false
-
       - name: 初始化系统环境
         env:
           DEBIAN_FRONTEND: noninteractive
