@@ -1,12 +1,11 @@
-#
-# Copyright (c) 2019-2020 P3TERX <https://p3terx.com>
-#
-# This is free software, licensed under the MIT License.
-# See /LICENSE for more information.
-#
-# https://github.com/P3TERX/Actions-OpenWrt
-# Description: Build OpenWrt using GitHub Actions
-#
+  #
+  # This is free software, lisence use MIT.
+  # 
+  # Copyright (C) 2019 P3TERX <https://p3terx.com>
+  # Copyright (C) 2019 KFERMercer <KFER.Mercer@gmail.com>
+  # 
+  # <https://github.com/KFERMercer/OpenWrt-CI>
+  # 
 
 name: Deliver config Lean-p2w_r619ac-128m
 
@@ -39,7 +38,7 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: p2w_r619ac-128m/p2w_r619ac-128m.info
+  CONFIG_FILE: p2w_r619ac-128m/Lean-p2w_r619ac-128m.info
   Firmware_Name: Lean-p2w_r619ac-128m
   DIY_P1_SH: p2w_r619ac-128m/p2w_r619ac-128m-1.sh
   DIY_P2_SH: p2w_r619ac-128m/p2w_r619ac-128m-2.sh
@@ -152,6 +151,12 @@ jobs:
       - name: 安装源 #Install feeds
         if: (!cancelled())
         run: cd openwrt && ./scripts/feeds install -a && ./scripts/feeds install -a
+
+      - name: iStore商店
+        run: |
+          cd openwrt
+          ./scripts/feeds update istore
+          ./scripts/feeds install -d y -p istore luci-app-store
 
 
       - name: patch2补丁和自定义设置
