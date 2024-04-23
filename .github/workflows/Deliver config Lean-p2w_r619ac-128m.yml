@@ -39,7 +39,7 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: p2w_r619ac-128m/p2w_r619ac-128m.info
+  CONFIG_FILE: p2w_r619ac-128m/Lean-p2w_r619ac-128m.info
   Firmware_Name: Lean-p2w_r619ac-128m
   DIY_P1_SH: p2w_r619ac-128m/p2w_r619ac-128m-1.sh
   DIY_P2_SH: p2w_r619ac-128m/p2w_r619ac-128m-2.sh
