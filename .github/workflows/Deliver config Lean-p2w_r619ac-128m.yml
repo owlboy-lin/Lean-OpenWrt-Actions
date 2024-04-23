@@ -1,12 +1,11 @@
-#
-# Copyright (c) 2019-2020 P3TERX <https://p3terx.com>
-#
-# This is free software, licensed under the MIT License.
-# See /LICENSE for more information.
-#
-# https://github.com/P3TERX/Actions-OpenWrt
-# Description: Build OpenWrt using GitHub Actions
-#
+  #
+  # This is free software, lisence use MIT.
+  # 
+  # Copyright (C) 2019 P3TERX <https://p3terx.com>
+  # Copyright (C) 2019 KFERMercer <KFER.Mercer@gmail.com>
+  # 
+  # <https://github.com/KFERMercer/OpenWrt-CI>
+  # 
 
 name: Deliver config Lean-p2w_r619ac-128m
 
