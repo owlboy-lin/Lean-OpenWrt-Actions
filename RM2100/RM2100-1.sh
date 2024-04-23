@@ -62,7 +62,7 @@ git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app
 # git clone https://github.com/f8q8/luci-app-autoreboot package/luci-app-autoreboot
 
 ## mosdns
-echo 'src-git mosdns https://github.com/sbwml/luci-app-mosdns' >>feeds.conf.default
+# echo 'src-git mosdns https://github.com/sbwml/luci-app-mosdns' >>feeds.conf.default
 
 rm -rf feeds/packages/net/v2ray-geodata
 
@@ -96,6 +96,9 @@ echo 'src-git istore https://github.com/linkease/istore;main' >> feeds.conf.defa
 # sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
 
 # sed -i '1i src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default
+
+# sed -i '1i src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
+# sed -i '2i src-git small https://github.com/kenzok8/small' feeds.conf.default
 
 
 
