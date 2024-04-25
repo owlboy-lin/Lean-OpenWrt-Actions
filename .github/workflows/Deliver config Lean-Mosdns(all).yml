@@ -52,7 +52,6 @@ jobs:
 
   build_openwrt:
 
-
     name: Deliver config Lean-Mosdns(all)
 
     runs-on: ubuntu-latest
