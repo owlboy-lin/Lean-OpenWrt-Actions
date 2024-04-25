@@ -39,8 +39,8 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: rpi-4B/Lean-bcm27xx-bcm2711-rpi-4B.info
-  Firmware_Name: Lean-bcm27xx-bcm2711-rpi-4B
+  CONFIG_FILE: rpi-4B/rpi-4B-all.info
+  Firmware_Name: rpi-4B-all
   DIY_P1_SH: rpi-4B/rpi-4B-1-all.sh
   DIY_P2_SH: rpi-4B/rpi-4B-2-all.sh
   UPLOAD_BIN_DIR: false
