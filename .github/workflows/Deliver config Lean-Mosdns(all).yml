@@ -108,7 +108,7 @@ jobs:
         run: cd openwrt && ./scripts/feeds clean && ./scripts/feeds update -a
 
       - name: 安装源 #Install feeds
-      run: cd openwrt && ./scripts/feeds install -a && ./scripts/feeds install -a
+        run: cd openwrt && ./scripts/feeds install -a && ./scripts/feeds install -a
 
       - name: patch2补丁和自定义设置
         run: |
