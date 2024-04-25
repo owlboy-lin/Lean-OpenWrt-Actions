@@ -11,7 +11,7 @@ name: Deliver config Lean-Mosdns(P)-1
 on:
   # schedule:
   #   - cron: 0 20 * * *
-  
+
   release:
     types: [published]
     
@@ -35,10 +35,10 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: .config
-  Firmware_Name: Lean--p-1
-  DIY_P1_SH: smpackage/test-p.sh
-  DIY_P2_SH: smpackage/test-2-p.sh
+  CONFIG_FILE: Lean--p.info
+  Firmware_Name: Lean--p
+  DIY_P1_SH: smpackage/smpackage-1.sh
+  DIY_P2_SH: smpackage/smpackage-2.sh
   UPLOAD_ORGANIZE: false
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
