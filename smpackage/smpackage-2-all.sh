@@ -111,11 +111,6 @@ CONFIG_TARGET_ROOTFS_PARTSIZE=512
 CONFIG_PACKAGE_ipv6helper=y
 
 
-# airplay2
-CONFIG_PACKAGE_luci-app-airplay2=y
-CONFIG_PACKAGE_luci-i18n-airplay2-zh-cn=y
-
-
 # 自动重启
 CONFIG_PACKAGE_luci-app-autoreboot=y
 CONFIG_PACKAGE_luci-i18n-autoreboot-zh-cn=y
