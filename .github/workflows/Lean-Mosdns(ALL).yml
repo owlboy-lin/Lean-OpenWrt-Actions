@@ -40,7 +40,7 @@ env:
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: OpenWrt-CI.info
   Firmware_Name: Lean-Mosdns-netspeed-uugame-netdate-ALL
-  DIY_P1_SH: smpackage/smpackage-1-p.sh
+  DIY_P1_SH: smpackage/smpackage-1.sh
   DIY_P2_SH: smpackage/smpackage-2-all.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
