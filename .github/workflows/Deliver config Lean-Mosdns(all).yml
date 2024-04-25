@@ -122,11 +122,11 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}  
 
-      # - name: 下载固件包
-      #   id: package
-      #   run: |
-      #     cd openwrt
-      #     make defconfig 
+      - name: 下载固件包
+        id: package
+        run: |
+          cd openwrt
+          make defconfig 
 
       - name: 整理固件文件
         run: |
