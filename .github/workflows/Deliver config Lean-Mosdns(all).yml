@@ -57,7 +57,7 @@ jobs:
 
     runs-on: ubuntu-latest
     
-    steps:      
+    steps:
       - name: 初始化系统环境
         env:
           DEBIAN_FRONTEND: noninteractive
