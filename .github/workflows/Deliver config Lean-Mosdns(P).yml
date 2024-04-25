@@ -184,7 +184,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
         with:
-          name: ${{ steps.tag.outputs.release_date }} 编译信息 Lean-p2w_r619ac-128m 
+          name: ${{ steps.tag.outputs.release_date }} 编译信息 Lean-Mosdns(P)
           tag_name: ${{ steps.tag.outputs.release_tag }}
           body_path: release.txt
           files: ${{ env.FIRMWARE }}/*
