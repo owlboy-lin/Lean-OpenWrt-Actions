@@ -40,9 +40,12 @@ env:
   DIY_P2_SH: smpackage/diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
+  UPLOAD_BUILDINFO: true
+  UPLOAD_PACKAGE: true
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: false
-  UPLOAD_RELEASE: false
+  UPLOAD_RELEASE: true
+  GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
   TZ: Asia/Shanghai 
 
 jobs:
@@ -54,40 +57,7 @@ jobs:
 
     runs-on: ubuntu-latest
     
-    steps:
-      # - name: 释放Ubuntu磁盘空间
-      #   uses: jlumbroso/free-disk-space@main
-      #   with:
-      #     # this might remove tools that are actually needed,
-      #     # if set to "true" but frees about 6 GB
-      #     tool-cache: true
-      #     # all of these default to true, but feel free to set to
-      #     # "false" if necessary for your workflow
-      #     android: true
-      #     dotnet: true
-      #     haskell: true
-      #     large-packages: true
-      #     swap-storage: true 
-      
-      - name: CPU检测
-        run: |
-          echo "警告⚠"
-          echo "分配的服务器性能有限，若选择的插件过多，务必注意CPU性能！"
-          echo -e "已知CPU型号(降序): 7763，8370C，8272CL，8171M，E5-2673\n"
-          echo "--------------------------CPU信息--------------------------"
-          echo "CPU物理数量: $(cat /proc/cpuinfo | grep "physical id" | sort | uniq | wc -l)"
-          echo "CPU核心数量: $(nproc)"
-          echo -e "CPU型号信息:$(cat /proc/cpuinfo | grep -m1 name | awk -F: '{print $2}')\n"
-          echo "--------------------------内存信息--------------------------"
-          echo "已安装内存详细信息:"
-          echo -e "$(sudo lshw -short -C memory | grep GiB)\n"
-          echo "--------------------------硬盘信息--------------------------"
-          echo "硬盘数量: $(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT
-          
-      - name: 准备完成
-        uses: actions/checkout@v4
-        
-        
+    steps:         
       - name: 初始化系统环境
         env:
           DEBIAN_FRONTEND: noninteractive
@@ -118,6 +88,8 @@ jobs:
           START_TIME=`date +'%Y-%m-%d %H:%M:%S'`
           echo "START_SECONDS=$(date --date="$START_TIME" +%s)" >> $GITHUB_ENV
 
+      - name: 准备完成
+        uses: actions/checkout@v4
          
       - name: 下载源代码
         working-directory: /workdir
@@ -182,24 +154,56 @@ jobs:
           echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
           cp -rf ./.config ./artifact/buildinfo/${{ env.Firmware_Name }}.info
           cp -rf ./feeds.conf.default ./artifact/buildinfo/
-
-        
+          echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+          echo "status=success" >> $GITHUB_OUTPUT
+       
       - name: 上传配置文件
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.Firmware_Name }}_${{ env.FILE_DATE }}
           path: openwrt/artifact/buildinfo/
-        
-      #    - name: SSH connection to Actions
-      #      uses: P3TERX/ssh2actions@v1.0.0
-      #      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
-      #      env:
-      #        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-      #        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}     
-          
 
-      # - name: 删除运行记录
-      #   uses: Mattraks/delete-workflow-runs@v2
-      #   with:
-      #     retain_days: 3     #保留最后多少记录不删除
-      #     keep_minimum_runs: 3
+      - name: 生成发布标签
+        id: tag
+        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+        run: |
+          echo "release_tag=$(date +"%Y.%m.%d.%H.%M")-编译信息-Lean-Mosdns(P).info" >> $GITHUB_OUTPUT
+          echo "release_date=$(date +"%Y.%m.%d.%H.%M")" >> $GITHUB_OUTPUT
+          touch release.txt
+          echo "
+          ★ 源码 : https://github.com/coolsnowwolf/lede
+          ★ 分支 : master
+          ★ 感谢源码作者无私分享！
+          
+          输出编译信息 Lean-Mosdns(P)" >> release.txt
+          echo "status=success" >> $GITHUB_OUTPUT
+      
+      - name: 自动发布固件到 Releases
+        uses: softprops/action-gh-release@v2
+        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
+        with:
+          name: ${{ steps.tag.outputs.release_date }} 编译信息 Lean-p2w_r619ac-128m 
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          body_path: release.txt
+          files: ${{ env.FIRMWARE }}/*
+
+      - name: 删除运行记录
+        uses: Mattraks/delete-workflow-runs@v2
+        continue-on-error: true
+        with:
+          retain_days: 3     #保留最后多少记录不删除
+          keep_minimum_runs: 0
+
+      - name: 删除自动发布的旧固件
+        uses: dev-drprasad/delete-older-releases@v0.3.3
+        continue-on-error: true
+        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+        with:
+          keep_latest: 20        #保留多少个releases不删除
+          delete_tags: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+
