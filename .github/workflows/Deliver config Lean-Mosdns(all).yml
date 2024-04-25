@@ -137,10 +137,10 @@ jobs:
           echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
           cp -rf ./.config ./artifact/buildinfo/${{ env.Firmware_Name }}.info
           cp -rf ./feeds.conf.default ./artifact/buildinfo/
+          cd ./artifact/buildinfo/
           echo "FIRMWARE=$PWD" >> $GITHUB_ENV
           echo "status=success" >> $GITHUB_OUTPUT
-          
-   
+      
       
       - name: 上传配置文件
         uses: actions/upload-artifact@v4
