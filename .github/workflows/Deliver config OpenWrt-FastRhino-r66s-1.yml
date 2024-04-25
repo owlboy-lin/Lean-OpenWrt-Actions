@@ -1,4 +1,3 @@
-
 #
 # This is free software, lisence use MIT.
 # 
@@ -8,13 +7,11 @@
 # <https://github.com/KFERMercer/OpenWrt-CI>
 # 
 
-name: Deliver config Lean-istoreos-all
-
-
+name: Deliver config OpenWrt-FastRhino-r66s-1
 
 on:
   # schedule:
-  #   - cron: 0 20 * * *
+    # - cron: 0 20 * * *
 
   release:
     types: [published]
@@ -30,65 +27,59 @@ on:
         required: false
         default: 'false'
         
+      # CACHE_BUILD:
+      #   description: '缓存加速'
+      #   required: false
+      #   default: 'true'
+      #   type: boolean
+
+        
       
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede.git
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: Lean-istoreos-all.info
-  Firmware_Name: Lean-istoreos-all
-  DIY_P1_SH: smpackage-1.sh
-  DIY_P2_SH: smpackage-2.sh
-  UPLOAD_ORGANIZE: false
+  CONFIG_FILE: r66s/r66s-6.1.info
+  Firmware_Name: r66s-6.1
+  DIY_P1_SH: r66s/6.1/r66s-1.sh
+  DIY_P2_SH: r66s/6.1/r66s-2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
+  UPLOAD_BUILDINFO: true
+  UPLOAD_PACKAGE: true
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: false
-  UPLOAD_RELEASE: true
+  UPLOAD_RELEASE: false
   GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
   TZ: Asia/Shanghai 
 
-
 jobs:
+  build_openwrt:
 
-  # build:
-  
-    # runs-on: ubuntu-latest
-  # #   container: node:16.16.0
-  
-  merge:
-    runs-on: Ubuntu-22.04
-    if: github.event.repository.owner.id == github.event.sender.id
-  
-    name: Build ${{matrix.target}}
-    strategy:
-      fail-fast: false
-      matrix:
-        target: [Deliver config Lean-istoreos-all]
+    runs-on: ubuntu-latest
     
+    name: Deliver config OpenWrt-FastRhino-r66s-1
+
     steps:
       - name: 初始化系统环境
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          sudo -E apt-get -qq update
-          sudo -E apt-get -qq install build-essential clang flex g++ gawk gcc-multilib gettext \
-          git libncurses5-dev libssl-dev python3-distutils python3-pyelftools python3-setuptools \
-          libpython3-dev rsync unzip zlib1g-dev swig aria2 jq subversion qemu-utils ccache rename \
-          libelf-dev device-tree-compiler libgnutls28-dev coccinelle libgmp3-dev libmpc-dev libfuse-dev
-          sudo -E apt-get -qq purge azure-cli ghc* zulu* llvm* firefox powershell openjdk* dotnet* google* mysql* php* android*
           sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          sudo -E apt-get -qq update
+          sudo -E apt-get -qq install $(curl -fsSL https://github.com/popeyema/OpenWrt-R66s/raw/main/depends-ubuntu-latest)
+          sudo apt install clang
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
           sudo timedatectl set-timezone "$TZ"
           sudo mkdir -p /workdir
-          sudo chown $USER:$GROUPS /workdir
-          echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
-          
+          sudo chown $USER:$GROUPS /workdir 
+
       - name: 更新时区、编译时间
         id: date
         run: |
           sudo timedatectl set-timezone "$TZ"
+          echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
           echo "FILE_TIME=$(date +"%m-%d %H.%M")" >> $GITHUB_ENV
           echo "FILE_TIME1=$(date "+%Y年%m月%d日-%H点%M分")" >> $GITHUB_ENV
           echo "FILE_TIME2=$(date "+%Y%m%d-%H%M")" >> $GITHUB_ENV
@@ -99,12 +90,29 @@ jobs:
       - name: 准备完成
         uses: actions/checkout@v4
           
-          
       - name: 下载源代码
         working-directory: /workdir
         run: |
+          df -hT $PWD
           git clone $REPO_URL -b $REPO_BRANCH openwrt
           ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+          
+      # - name: Free up disk space
+      #   env:
+      #     DEBIAN_FRONTEND: noninteractive
+      #   run: |
+      #     sudo mkdir -p -m 777 /mnt/openwrt/dl /mnt/openwrt/bin /mnt/openwrt/staging_dir
+      #     ln -sf /mnt/openwrt/dl openwrt/dl
+      #     ln -sf /mnt/openwrt/bin openwrt/bin
+      #     ln -sf /mnt/openwrt/staging_dir openwrt/staging_dir
+
+      # - name: SSH connection to Actions
+      #   uses: P3TERX/ssh2actions@main
+      #   if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      #   env:
+      #     TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      #     TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          
           
       - name: patch1补丁和自定义设置
         run: |
@@ -112,12 +120,26 @@ jobs:
           chmod +x $DIY_P1_SH
           cd openwrt
           $GITHUB_WORKSPACE/$DIY_P1_SH
-          
+
       - name: 更新源 #Update feeds
-        run: cd openwrt && ./scripts/feeds clean && ./scripts/feeds update -a
+        run: |
+          cd openwrt 
+          ./scripts/feeds clean
+          ./scripts/feeds update -a 
+          rm -rf feeds/luci/applications/luci-app-mosdns
+          rm -rf feeds/packages/net/{alist,adguardhome,xray*,v2ray*,v2ray*,sing*,smartdns}
+          rm -rf feeds/packages/lang/golang
+          git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
 
       - name: 安装源 #Install feeds
+        if: (!cancelled())
         run: cd openwrt && ./scripts/feeds install -a && ./scripts/feeds install -a
+
+      - name: iStore商店
+        run: |
+          cd openwrt
+          ./scripts/feeds update istore
+          ./scripts/feeds install -d y -p istore luci-app-store
 
       - name: patch2补丁和自定义设置
         run: |
@@ -126,26 +148,39 @@ jobs:
           chmod +x $DIY_P2_SH
           cd openwrt
           $GITHUB_WORKSPACE/$DIY_P2_SH
-
-          
-      - name: Generate configuration file
-        run: |
-          cd openwrt
-          make defconfig 
+          make defconfig
+          echo "status=success" >> $GITHUB_OUTPUT
+          grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
+          [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
+          echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+    
+    
+      - name: SSH connection to Actions
+        uses: P3TERX/ssh2actions@main
+        if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+        env:
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
       - name: 整理固件文件
         run: |
           cd openwrt
           mkdir -p ./artifact/buildinfo
-          grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
-          [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
-          echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+          cp -rf ./.config ./artifact/buildinfo/
           cp -rf ./.config ./artifact/buildinfo/${{ env.Firmware_Name }}.info
           cp -rf ./feeds.conf.default ./artifact/buildinfo/
           cd ./artifact/buildinfo/
           echo "FIRMWARE=$PWD" >> $GITHUB_ENV
           echo "status=success" >> $GITHUB_OUTPUT
+          
         
+      - name: SSH connection to Actions
+        uses: P3TERX/ssh2actions@v1.0.0
+        if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+        env:
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+             
       - name: 上传配置文件
         uses: actions/upload-artifact@v4
         with:
@@ -156,7 +191,7 @@ jobs:
         id: tag
         if: env.UPLOAD_RELEASE == 'true' && !cancelled()
         run: |
-          echo "release_tag=$(date +"%Y.%m.%d.%H.%M")-编译信息-Lean-istoreos-all.info" >> $GITHUB_OUTPUT
+          echo "release_tag=$(date +"%Y.%m.%d.%H.%M")-编译信息-OpenWrt-FastRhino-r66s-1.info" >> $GITHUB_OUTPUT
           echo "release_date=$(date +"%Y.%m.%d.%H.%M")" >> $GITHUB_OUTPUT
           touch release.txt
           echo "
@@ -164,7 +199,7 @@ jobs:
           ★ 分支 : master
           ★ 感谢源码作者无私分享！
           
-          输出编译信息 Lean-istoreos-all" >> release.txt
+          输出编译信息 OpenWrt-FastRhino-r66s-1" >> release.txt
           echo "status=success" >> $GITHUB_OUTPUT
       
       - name: 自动发布固件到 Releases
@@ -173,7 +208,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
         with:
-          name: ${{ steps.tag.outputs.release_date }} 编译信息 Lean-istoreos-all
+          name: ${{ steps.tag.outputs.release_date }} 编译信息 OpenWrt-FastRhino-r66s-1 
           tag_name: ${{ steps.tag.outputs.release_tag }}
           body_path: release.txt
           files: ${{ env.FIRMWARE }}/*
@@ -194,5 +229,3 @@ jobs:
           delete_tags: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
-
