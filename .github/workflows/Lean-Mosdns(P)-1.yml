@@ -12,9 +12,13 @@ name: Lean-Mosdns(P-1)
 on:
   # schedule:
   #   - cron: 0 20 * * *
-  # release:
-  #   types: [published]
-    
+
+  release:
+    types: [published]
+  
+  watch:
+    types: [started]
+
   repository_dispatch:
   workflow_dispatch:
     inputs:
@@ -22,11 +26,15 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
-  watch:
-    types: [started]
+        
+      CACHE_BUILD:
+        description: '缓存加速'
+        required: false
+        default: 'true'
+        type: boolean
 
-permissions:
-  contents: read
+# permissions:
+#   contents: read
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -45,24 +53,12 @@ env:
 
 jobs:
   build:
+    
+    name: Lean-Mosdns(P-1)
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: 释放Ubuntu磁盘空间
-        uses: jlumbroso/free-disk-space@main
-        with:
-          # this might remove tools that are actually needed,
-          # if set to "true" but frees about 6 GB
-          tool-cache: true
-          # all of these default to true, but feel free to set to
-          # "false" if necessary for your workflow
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          swap-storage: true 
-          docker-images: false
-
       - name: Free Disk Space
         uses: endersonmenezes/free-disk-space@v2
         with:
@@ -76,28 +72,8 @@ jobs:
           remove_folders: "/usr/share/swift /usr/share/miniconda /usr/share/az* /usr/share/glade* /usr/local/lib/node_modules /usr/local/share/chromium /usr/local/share/powershell"
           testing: false
       
-      
-      - name: CPU检测
-        run: |
-          echo "警告⚠"
-          echo "分配的服务器性能有限，若选择的插件过多，务必注意CPU性能！"
-          echo -e "已知CPU型号(降序): 7763，8370C，8272CL，8171M，E5-2673\n"
-          echo "--------------------------CPU信息--------------------------"
-          echo "CPU物理数量: $(cat /proc/cpuinfo | grep "physical id" | sort | uniq | wc -l)"
-          echo "CPU核心数量: $(nproc)"
-          echo -e "CPU型号信息:$(cat /proc/cpuinfo | grep -m1 name | awk -F: '{print $2}')\n"
-          echo "--------------------------内存信息--------------------------"
-          echo "已安装内存详细信息:"
-          echo -e "$(sudo lshw -short -C memory | grep GiB)\n"
-          echo "--------------------------硬盘信息--------------------------"
-          echo "硬盘数量: $(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT
-      
-      - name: 准备完成
-        uses: actions/checkout@v4
-        with:
-          ref: master
-      
-      - name: Space cleanup
+     
+      - name: 初始化系统环境
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
@@ -127,6 +103,9 @@ jobs:
           START_TIME=`date +'%Y-%m-%d %H:%M:%S'`
           echo "START_SECONDS=$(date --date="$START_TIME" +%s)" >> $GITHUB_ENV
 
+      - name: 准备完成
+        uses: actions/checkout@v4
+
       - name: 下载源代码
         working-directory: /workdir
         run: |
@@ -134,10 +113,12 @@ jobs:
           git clone --depth 1 $REPO_URL openwrt -b $REPO_BRANCH
           ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
-      - name: Cache
+      - name: 缓存
         uses: klever1988/cachewrtbuild@main
+        if: env.CACHE_BUILD == 'true' || (github.event.inputs.CACHE_BUILD == 'true')
         with:
           ccache: 'true'
+          mixkey: 'Lean-Mosdns(P-1)'
           prefix: ${{ github.workspace }}/openwrt
 
       - name: Update feeds
