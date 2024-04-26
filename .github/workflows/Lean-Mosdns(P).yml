@@ -44,8 +44,8 @@ env:
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: Lean--p.info
   Firmware_Name: Lean--p
-  DIY_P1_SH: smpackage/smpackage-1-p.sh
-  DIY_P2_SH: smpackage/smpackage-2.sh
+  DIY_P1_SH: smpackage/smpackage-1.sh
+  DIY_P2_SH: smpackage/smpackage-2-all.sh
   UPLOAD_ORGANIZE: true
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
