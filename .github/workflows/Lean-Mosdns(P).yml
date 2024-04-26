@@ -46,9 +46,10 @@ env:
   Firmware_Name: Lean--p
   DIY_P1_SH: smpackage/smpackage-1.sh
   DIY_P2_SH: smpackage/smpackage-2-all.sh
-  UPLOAD_ORGANIZE: true
-  UPLOAD_BIN_DIR: true
+  UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
+  UPLOAD_BUILDINFO: true
+  UPLOAD_PACKAGE: true
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: true
@@ -222,7 +223,7 @@ jobs:
         if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
         env:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}   
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
       - name: 编译固件
         id: compile
@@ -242,26 +243,37 @@ jobs:
           grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
           [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
           echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+        
+      - name: Check space usage
+        if: (!cancelled())
+        run: df -hT
 
-      - name: 整理固件文件
+      - name: SSH connection to Actions
+        uses: P3TERX/ssh2actions@v1.0.0
+        if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+        env:
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}  
+
+      - name: 整理文件
         id: organize
-        if: steps.compile.outputs.status == 'success' && env.UPLOAD_ORGANIZE == 'true' && !cancelled()
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true' && !cancelled()
         run: |
           cd openwrt/bin/targets/*/*
-          rm -rf packages
+          # rm -rf packages
           echo "FIRMWARE=$PWD" >> $GITHUB_ENV
           echo "status=success" >> $GITHUB_OUTPUT
 
-      - name: Upload bin directory
+      - name: 上传完整固件目录
         uses: actions/upload-artifact@v4
-        if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true' && !cancelled()
         with:
           name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
           path: ${{ env.FIRMWARE }}
           
       - name: 整理固件文件
         id: artifact
-        if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+        if: (!cancelled())
         run: |
           cd openwrt
           mkdir -p ./artifact/firmware
@@ -272,41 +284,34 @@ jobs:
           cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
           cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
           cp -rf ./.config ./artifact/buildinfo/
-          cp -rf ./feeds.conf.default ./artifact/buildinfo/   
+          cp -rf ./feeds.conf.default ./artifact/buildinfo/ 
   
         
-      - name: Upload firmware directory
+      - name: 上传固件
+        if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
         uses: actions/upload-artifact@v4
-        if: steps.compile.outputs.status == 'success' && steps.artifact.outputs.status == 'success'
         with:
           name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_firmware_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
           path: openwrt/artifact/firmware/
 
-      - name: Deliver buildinfo
+      - name: 上传配置文件
+        if: env.UPLOAD_BUILDINFO == 'true' && !cancelled()
         uses: actions/upload-artifact@v4
-        if: steps.compile.outputs.status == 'success' && steps.artifact.outputs.status == 'success'
         with:
           name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_buildinfo${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
           path: openwrt/artifact/buildinfo/
 
-      - name: Deliver package
+      - name: 上传插件
+        if: env.UPLOAD_PACKAGE == 'true' && !cancelled()
         uses: actions/upload-artifact@v4
-        if: steps.compile.outputs.status == 'success' && steps.artifact.outputs.status == 'success'
         with:
           name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_package${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-          path: openwrt/artifact/package/
-  
-      - name: 获取内核版本号
-        run: |
-          cd openwrt/bin/targets/x86/64
-          KERNEL_VERSION=$(ls -l *openwrt-x86-64-generic-kernel.bin | awk '{print $9}' | cut -d '-' -f1)
-          echo "KERNEL_VERSION=$KERNEL_VERSION" >> $GITHUB_ENV
 
       - name: 生成发布标签
         id: tag
-        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
         run: |
-          echo "release_tag=$(date +"%Y.%m.%d.%H.%M")-Lean-x86_64-Lean-Mosdns(P)" >> $GITHUB_OUTPUT
+          echo "release_tag=$(date +"%Y.%m.%d.%H.%M")-Lean-Mosdns(P)" >> $GITHUB_OUTPUT
           echo "release_date=$(date +"%Y.%m.%d.%H.%M")" >> $GITHUB_OUTPUT
           touch release.txt
           echo "
@@ -329,17 +334,18 @@ jobs:
       
       - name: 自动发布固件到 Releases
         uses: softprops/action-gh-release@v2
-        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
         with:
-          name: ${{ steps.tag.outputs.release_date }} X86_64-固件下载 Lean-Mosdns(P)
+          name: ${{ steps.tag.outputs.release_date }} Lean-Mosdns(P) ${{ env.name }}
           tag_name: ${{ steps.tag.outputs.release_tag }}
           body_path: release.txt
           files: openwrt/artifact/firmware/*
 
       - name: 删除运行记录
         uses: Mattraks/delete-workflow-runs@v2
+        if: steps.compile.outputs.status == 'success' && !cancelled()
         continue-on-error: true
         with:
           retain_days: 3     #保留最后多少记录不删除
@@ -348,9 +354,11 @@ jobs:
       - name: 删除自动发布的旧固件
         uses: dev-drprasad/delete-older-releases@v0.3.3
         continue-on-error: true
-        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
         with:
           keep_latest: 20        #保留多少个releases不删除
           delete_tags: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+  
