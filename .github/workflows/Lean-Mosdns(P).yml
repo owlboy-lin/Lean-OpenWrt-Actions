@@ -245,7 +245,7 @@ jobs:
           echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
         
       - name: Check space usage
-        if: (!cancelled())
+        if: steps.compile.outputs.status == 'success' && !cancelled()
         run: df -hT
 
       - name: SSH connection to Actions
@@ -273,7 +273,6 @@ jobs:
           
       - name: 整理固件文件
         id: artifact
-        if: (!cancelled())
         run: |
           cd openwrt
           mkdir -p ./artifact/firmware
