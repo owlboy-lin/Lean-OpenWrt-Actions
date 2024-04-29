@@ -240,7 +240,7 @@ jobs:
           echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
         
       - name: Check space usage
-        if: (!cancelled())
+        if: !cancelled()
         run: df -hT
 
       - name: SSH connection to Actions
