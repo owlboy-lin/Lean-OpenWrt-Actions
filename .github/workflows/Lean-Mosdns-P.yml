@@ -38,7 +38,7 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: Lean-Mosdns-all.info
+  CONFIG_FILE: OpenWrt-CI.info
   Firmware_Name: Lean--p
   DIY_P1_SH: smpackage/smpackage-1-all.sh
   DIY_P2_SH: smpackage/smpackage-2-all-1.sh
@@ -160,9 +160,9 @@ jobs:
         run: |
           cd openwrt 
           ./scripts/feeds clean 
-          ./scripts/feeds update -a 
-          rm -rf feeds/luci/applications/luci-app-mosdns
-          rm -rf feeds/packages/net/{alist,adguardhome,xray*,v2ray*,v2ray*,sing*,smartdns}
+          ./scripts/feeds update -a
+          rm -rf feeds/smpackage/{base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd-alt,miniupnpd-iptables,wireless-regdb}
+          rm -rf feeds/luci/applications/luci-app-mosdns && rm -rf feeds/packages/net/{alist,adguardhome,mosdns,smartdns}
           rm -rf feeds/packages/lang/golang
           git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
 
