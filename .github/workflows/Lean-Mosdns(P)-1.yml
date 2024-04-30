@@ -7,7 +7,7 @@
 # <https://github.com/KFERMercer/OpenWrt-CI>
 # 
 
-name: Lean-Mosdns(P-1)
+name: Lean-Mosdns(P)-1
 
 on:
   # schedule:
@@ -54,7 +54,7 @@ env:
 jobs:
   build:
     
-    name: Lean-Mosdns(P-1)
+    name: Lean-Mosdns(P)-1
 
     runs-on: ubuntu-latest
 
