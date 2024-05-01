@@ -140,7 +140,6 @@ jobs:
           prefix: ${{ github.workspace }}/openwrt
 
       - name: patch1补丁和自定义设置
-        if: (!cancelled())
         run: |
           [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
           chmod +x $DIY_P1_SH
@@ -148,15 +147,12 @@ jobs:
           $GITHUB_WORKSPACE/$DIY_P1_SH
 
       - name: 更新源 #Update feeds
-        if: (!cancelled())
         run: cd openwrt && ./scripts/feeds clean && ./scripts/feeds update -a
 
       - name: 安装源 #Install feeds
-        if: (!cancelled())
         run: cd openwrt && ./scripts/feeds install -a && ./scripts/feeds install -a
 
       - name: patch2补丁和自定义设置
-        if: (!cancelled())
         run: |
           [ -e files ] && mv files openwrt/files
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
@@ -273,6 +269,7 @@ jobs:
           
       - name: 整理固件文件
         id: artifact
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_BUILDINFO == 'true' && !cancelled()
         run: |
           cd openwrt
           mkdir -p ./artifact/firmware
@@ -287,21 +284,21 @@ jobs:
   
         
       - name: 上传固件
-        if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_firmware_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
           path: openwrt/artifact/firmware/
 
       - name: 上传配置文件
-        if: env.UPLOAD_BUILDINFO == 'true' && !cancelled()
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_BUILDINFO == 'true' && !cancelled()
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_buildinfo${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
           path: openwrt/artifact/buildinfo/
 
       - name: 上传插件
-        if: env.UPLOAD_PACKAGE == 'true' && !cancelled()
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_PACKAGE == 'true' && !cancelled()
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_package${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
