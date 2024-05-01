@@ -31,8 +31,8 @@ env:
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: Lean-Mosdns-all.info
   Firmware_Name: Lean-Mosdns-all
-  DIY_P1_SH: smpackage/smpackage-1.sh
-  DIY_P2_SH: smpackage/smpackage-2-all.sh
+  DIY_P1_SH: smpackage/smpackage-1-all.sh
+  DIY_P2_SH: smpackage/smpackage-2-all-1.sh
   UPLOAD_ORGANIZE: false
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
