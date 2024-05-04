@@ -156,7 +156,7 @@ jobs:
         if: env.CACHE_BUILD == 'true' || (github.event.inputs.CACHE_BUILD == 'true')
         with:
           ccache: 'true'
-          mixkey: 'Lean-Mosdns(ALL)'
+          mixkey: 'Lean-istoreos-P'
           prefix: ${{ github.workspace }}/openwrt
           
       - name: patch1补丁和自定义设置
