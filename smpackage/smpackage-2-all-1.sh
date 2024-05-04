@@ -160,10 +160,10 @@ CONFIG_PACKAGE_luci-app-store=y
 CONFIG_PACKAGE_luci-app-ttyd=y
 CONFIG_PACKAGE_luci-i18n-ttyd-zh-cn=y
 
-CONFIG_PACKAGE_luci-app-unblockmusic=y
-CONFIG_PACKAGE_luci-app-unblockmusic_INCLUDE_UnblockNeteaseMusic_Go=y
-CONFIG_PACKAGE_luci-app-unblockmusic_INCLUDE_UnblockNeteaseMusic_NodeJS=y
-CONFIG_PACKAGE_luci-i18n-unblockmusic-zh-cn=y
+## CONFIG_PACKAGE_luci-app-unblockmusic=y
+## CONFIG_PACKAGE_luci-app-unblockmusic_INCLUDE_UnblockNeteaseMusic_Go=y
+## CONFIG_PACKAGE_luci-app-unblockmusic_INCLUDE_UnblockNeteaseMusic_NodeJS=y
+## CONFIG_PACKAGE_luci-i18n-unblockmusic-zh-cn=y
 
 # luci-app-uugamebooster=y
 CONFIG_PACKAGE_luci-app-uugamebooster=y
