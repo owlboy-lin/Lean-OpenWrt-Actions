@@ -100,6 +100,15 @@
 echo "
 # 编译固件:
 
+# 额外组件
+CONFIG_GRUB_IMAGES=y
+CONFIG_QCOW2_IMAGES=y
+CONFIG_VMDK_IMAGES=y
+
+# 固件大小
+CONFIG_TARGET_KERNEL_PARTSIZE=256
+CONFIG_TARGET_ROOTFS_PARTSIZE=512
+
 # ipv6
 CONFIG_PACKAGE_ipv6helper=y
 
@@ -160,9 +169,8 @@ CONFIG_PACKAGE_luci-app-store=y
 CONFIG_PACKAGE_luci-app-ttyd=y
 CONFIG_PACKAGE_luci-i18n-ttyd-zh-cn=y
 
-CONFIG_PACKAGE_luci-app-unblockmusic=y
+# CONFIG_PACKAGE_luci-app-unblockmusic=y
 CONFIG_PACKAGE_luci-app-unblockmusic_INCLUDE_UnblockNeteaseMusic_Go=y
-CONFIG_PACKAGE_luci-app-unblockmusic_INCLUDE_UnblockNeteaseMusic_NodeJS=y
 CONFIG_PACKAGE_luci-i18n-unblockmusic-zh-cn=y
 
 # luci-app-uugamebooster=y

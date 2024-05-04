@@ -52,10 +52,6 @@
 
 # Themes
 # git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git package/lean/luci-theme-argon
-# git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git lpackage/uci-theme-argon
-# echo 'src-git argon https://github.com/jerrykuku/luci-theme-argon' >>feeds.conf.default
-# git clone -b 18.06 https://github.com/jerrykuku/luci-app-argon-config.git package/luci-app-argon-config
-# echo 'src-git argon-config https://github.com/jerrykuku/luci-app-argon-config' >>feeds.conf.default
 
 # 添加额外软件包
 
@@ -67,50 +63,46 @@
 
 
 
-# # openclash
-# svn export https://github.com/kenzok8/openwrt-packages/trunk/luci-app-openclash  package/luci-app-openclash
-# # svn export https://github.com/kiddin9/openwrt-packages/trunk/luci-app-openclash  package/luci-app-openclash
-# # 加入OpenClash核心
-# # chmod -R a+x $GITHUB_WORKSPACE/preset-clash-core.sh
-# # if [ "$1" = "rk33xx" ]; then
-# #     $GITHUB_WORKSPACE/preset-clash-core.sh arm64
-# # elif [ "$1" = "rk35xx" ]; then
-# #     $GITHUB_WORKSPACE/preset-clash-core.sh arm64
-# # elif [ "$1" = "x86" ]; then
-# #     $GITHUB_WORKSPACE/preset-clash-core.sh amd64
-# # fi
+# openclash
+svn export https://github.com/kenzok8/openwrt-packages/trunk/luci-app-openclash  package/luci-app-openclash
+# svn export https://github.com/kiddin9/openwrt-packages/trunk/luci-app-openclash  package/luci-app-openclash
+# 加入OpenClash核心
+# chmod -R a+x $GITHUB_WORKSPACE/preset-clash-core.sh
+# if [ "$1" = "rk33xx" ]; then
+#     $GITHUB_WORKSPACE/preset-clash-core.sh arm64
+# elif [ "$1" = "rk35xx" ]; then
+#     $GITHUB_WORKSPACE/preset-clash-core.sh arm64
+# elif [ "$1" = "x86" ]; then
+#     $GITHUB_WORKSPACE/preset-clash-core.sh amd64
+# fi
 
-# # adguardhome
-# svn export https://github.com/kenzok8/openwrt-packages/trunk/luci-app-adguardhome package/luci-app-adguardhome
-# svn export https://github.com/kenzok8/openwrt-packages/trunk/adguardhome package/adguardhome
-# # svn export https://github.com/kiddin9/openwrt-packages/trunk/luci-app-adguardhome package/luci-app-adguardhome
-# # svn export https://github.com/kiddin9/openwrt-packages/trunk/adguardhome package/adguardhome
+# adguardhome
+svn export https://github.com/kenzok8/openwrt-packages/trunk/luci-app-adguardhome package/luci-app-adguardhome
+svn export https://github.com/kenzok8/openwrt-packages/trunk/adguardhome package/adguardhome
+# svn export https://github.com/kiddin9/openwrt-packages/trunk/luci-app-adguardhome package/luci-app-adguardhome
+# svn export https://github.com/kiddin9/openwrt-packages/trunk/adguardhome package/adguardhome
 
-# # mosdns
-# svn export https://github.com/kenzok8/openwrt-packages/trunk/luci-app-mosdns package/luci-app-mosdns
-# svn export https://github.com/kenzok8/openwrt-packages/trunk/mosdns package/mosdns
-# svn export https://github.com/kenzok8/openwrt-packages/trunk/v2dat package/v2dat
-# # svn export https://github.com/kiddin9/openwrt-packages/trunk/luci-app-mosdns package/luci-app-mosdns
-# # svn export https://github.com/kiddin9/openwrt-packages/trunk/mosdns package/mosdns
-# # svn export https://github.com/kiddin9/openwrt-packages/trunk/v2dat package/v2dat
+# mosdns
+svn export https://github.com/kenzok8/openwrt-packages/trunk/luci-app-mosdns package/luci-app-mosdns
+svn export https://github.com/kenzok8/openwrt-packages/trunk/mosdns package/mosdns
+svn export https://github.com/kenzok8/openwrt-packages/trunk/v2dat package/v2dat
+# svn export https://github.com/kiddin9/openwrt-packages/trunk/luci-app-mosdns package/luci-app-mosdns
+# svn export https://github.com/kiddin9/openwrt-packages/trunk/mosdns package/mosdns
+# svn export https://github.com/kiddin9/openwrt-packages/trunk/v2dat package/v2dat
 
 
 # 添加自定义软件包
-
 echo "
-
 # 额外组件
 CONFIG_GRUB_IMAGES=y
-CONFIG_QCOW2_IMAGES=y
 CONFIG_VMDK_IMAGES=y
 
 # 固件大小
-CONFIG_TARGET_KERNEL_PARTSIZE=256
+CONFIG_TARGET_KERNEL_PARTSIZE=128
 CONFIG_TARGET_ROOTFS_PARTSIZE=512
 
 # ipv6
 CONFIG_PACKAGE_ipv6helper=y
-
 
 # 自动重启
 CONFIG_PACKAGE_luci-app-autoreboot=y
@@ -133,7 +125,6 @@ CONFIG_PACKAGE_luci-i18n-openclash-zh-cn=y
 
 # adguardhome
 CONFIG_PACKAGE_luci-app-adguardhome=y
-CONFIG_PACKAGE_luci-app-adguardhome_INCLUDE_binary=y
 CONFIG_PACKAGE_luci-i18n-adguardhome-zh-cn=y
 
 # mosdns
@@ -169,10 +160,6 @@ CONFIG_PACKAGE_luci-app-store=y
 CONFIG_PACKAGE_luci-app-ttyd=y
 CONFIG_PACKAGE_luci-i18n-ttyd-zh-cn=y
 
-CONFIG_PACKAGE_luci-app-unblockmusic=y
-CONFIG_PACKAGE_luci-app-unblockmusic_INCLUDE_UnblockNeteaseMusic_Go=y
-CONFIG_PACKAGE_luci-i18n-unblockmusic-zh-cn=y
-
 # luci-app-uugamebooster=y
 CONFIG_PACKAGE_luci-app-uugamebooster=y
 CONFIG_PACKAGE_luci-i18n-uugamebooster-zh-cn=y
@@ -183,21 +170,21 @@ CONFIG_PACKAGE_luci-app-webadmin=y
 CONFIG_PACKAGE_luci-i18n-webadmin-zh-cn=y
 
 # rclone
-CONFIG_PACKAGE_rclone=y
-CONFIG_PACKAGE_fuse3-utils=y
+# CONFIG_PACKAGE_rclone=y
+# CONFIG_PACKAGE_fuse3-utils=y
 
 # 删除不用的插件
-CONFIG_PACKAGE_autosamba=y
-CONFIG_PACKAGE_luci-app-accesscontrol=y
-CONFIG_PACKAGE_luci-i18n-accesscontrol-zh-cn=y
-CONFIG_PACKAGE_luci-app-upnp=y
-CONFIG_PACKAGE_luci-i18n-upnp-zh-cn=y
-CONFIG_PACKAGE_luci-app-vlmcsd=y
-CONFIG_PACKAGE_luci-i18n-vlmcsd-zh-cn=y
-CONFIG_PACKAGE_luci-app-vsftpd=y
-CONFIG_PACKAGE_luci-i18n-vsftpd-zh-cn=y
-CONFIG_PACKAGE_luci-app-samba4=y
-CONFIG_PACKAGE_luci-i18n-samba4-zh-cn=y
+# CONFIG_PACKAGE_autosamba is not set
+# CONFIG_PACKAGE_luci-app-accesscontrol is not set
+# CONFIG_PACKAGE_luci-i18n-accesscontrol-zh-cn=y
+# CONFIG_PACKAGE_luci-app-upnp is not set
+# CONFIG_PACKAGE_luci-i18n-upnp-zh-cn is not set
+# CONFIG_PACKAGE_luci-app-vlmcsd is not set
+# CONFIG_PACKAGE_luci-i18n-vlmcsd-zh-cn is not set
+# CONFIG_PACKAGE_luci-app-vsftpd is not set
+# CONFIG_PACKAGE_luci-i18n-vsftpd-zh-cn is not set
+# CONFIG_PACKAGE_luci-app-samba4 is not set
+# CONFIG_PACKAGE_luci-i18n-samba4-zh-cn is not set
 
 " >> .config
 

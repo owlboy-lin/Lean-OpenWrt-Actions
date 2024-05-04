@@ -240,6 +240,7 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}   
 
       - name: 编译固件
+        id: compile
         run: |
           cd openwrt
           echo -e "$(nproc) thread compile"
