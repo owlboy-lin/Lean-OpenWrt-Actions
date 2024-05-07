@@ -141,10 +141,6 @@ CONFIG_PACKAGE_luci-app-ttyd=y
 CONFIG_PACKAGE_luci-i18n-ttyd-zh-cn=y
 
 
-# luci-app-webadmin=y
-CONFIG_PACKAGE_luci-app-webadmin=y
-CONFIG_PACKAGE_luci-i18n-webadmin-zh-cn=y
-
 # 删除的插件
 # CONFIG_PACKAGE_luci-app-vlmcsd is not set
 # CONFIG_PACKAGE_luci-app-ssr-plus is not set
