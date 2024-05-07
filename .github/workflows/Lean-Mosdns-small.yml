@@ -38,7 +38,7 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: OpenWrt-CI.info
+  CONFIG_FILE: Lean-small.info
   Firmware_Name: Lean-small
   DIY_P1_SH: smpackage/smpackage-1-small.sh
   DIY_P2_SH: smpackage/smpackage-2-small.sh
@@ -277,6 +277,7 @@ jobs:
           cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
           cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
           cp -rf ./.config ./artifact/buildinfo/
+          cp -rf ./.config ./artifact/firmware/
           cp -rf ./feeds.conf.default ./artifact/buildinfo/ 
   
         
