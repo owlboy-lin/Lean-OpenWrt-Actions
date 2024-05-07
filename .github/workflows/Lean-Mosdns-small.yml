@@ -277,6 +277,7 @@ jobs:
           cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
           cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
           cp -rf ./.config ./artifact/buildinfo/
+          cp -rf ./.config ./artifact/firmware/
           cp -rf ./feeds.conf.default ./artifact/buildinfo/ 
   
         
