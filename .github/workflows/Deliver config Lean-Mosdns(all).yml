@@ -29,7 +29,7 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede.git
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: Lean-Mosdns-all.info
+  CONFIG_FILE: Lean-small.info
   Firmware_Name: Lean-Mosdns-all
   DIY_P1_SH: smpackage/smpackage-1-all.sh
   DIY_P2_SH: smpackage/smpackage-2-all-1.sh
