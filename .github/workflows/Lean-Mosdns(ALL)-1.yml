@@ -9,8 +9,8 @@
 name: Lean-Mosdns(ALL)-1
 
 on:
-  schedule:
-    - cron: 0 22 * * *
+  # schedule:
+  #   - cron: 0 22 * * *
 
   release:
     types: [published]
@@ -43,12 +43,12 @@ env:
   DIY_P1_SH: smpackage/smpackage-1.sh
   DIY_P2_SH: smpackage/smpackage-2-all-1.sh
   UPLOAD_BIN_DIR: false
-  UPLOAD_FIRMWARE: true
+  UPLOAD_FIRMWARE: false
   UPLOAD_BUILDINFO: true
   UPLOAD_PACKAGE: true
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: false
-  UPLOAD_RELEASE: true
+  UPLOAD_RELEASE: false
   GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
   TZ: Asia/Shanghai  
 
