@@ -38,12 +38,12 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: Lean-Mosdns-all.info
-  Firmware_Name: Lean--all
-  DIY_P1_SH: smpackage/smpackage-1.sh
+  CONFIG_FILE: Lean-all.info
+  Firmware_Name: Lean-all
+  DIY_P1_SH: smpackage/smpackage-1-p.sh
   DIY_P2_SH: smpackage/smpackage-2-all-1.sh
   UPLOAD_BIN_DIR: false
-  UPLOAD_FIRMWARE: false
+  UPLOAD_FIRMWARE: true
   UPLOAD_BUILDINFO: true
   UPLOAD_PACKAGE: true
   UPLOAD_COWTRANSFER: false
@@ -130,11 +130,12 @@ jobs:
       - name: 更新源 #Update feeds
         run: |
           cd openwrt 
-          ./scripts/feeds update -a 
-          rm -rf feeds/luci/applications/luci-app-mosdns
-          rm -rf feeds/packages/net/{alist,adguardhome,xray*,v2ray*,v2ray*,sing*,smartdns}
-          rm -rf feeds/packages/lang/golang
-          git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
+          ./scripts/feeds clean 
+          ./scripts/feeds update -a
+          # rm -rf feeds/smpackage/{base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd-alt,miniupnpd-iptables,wireless-regdb}
+          # rm -rf feeds/luci/applications/luci-app-mosdns && rm -rf feeds/packages/net/{alist,adguardhome,mosdns,smartdns}
+          # rm -rf feeds/packages/lang/golang
+          # git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
 
       - name: 安装源 #Install feeds
         if: (!cancelled())
@@ -268,6 +269,7 @@ jobs:
           cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
           cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
           cp -rf ./.config ./artifact/buildinfo/
+          cp -rf ./.config ./artifact/firmware/
           cp -rf ./feeds.conf.default ./artifact/buildinfo/ 
   
         
