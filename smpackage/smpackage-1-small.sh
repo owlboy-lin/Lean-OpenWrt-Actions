@@ -11,7 +11,7 @@
 # =================================================================
 
 # Uncomment a feed source
-# sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
+sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
 
 # Add a feed source
 # echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
@@ -56,7 +56,7 @@
 
 #  下载源码
 ## adguardhome
-git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app-adguardhome
+# git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app-adguardhome
 
 ## autoreboot
 git clone https://github.com/f8q8/luci-app-autoreboot package/luci-app-autoreboot
@@ -74,10 +74,10 @@ echo 'src-git netspeedtest https://github.com/sirpdboy/netspeedtest' >>feeds.con
 
 echo 'src-git passwall_packages https://github.com/xiaorouji/openwrt-passwall-packages.git' >>feeds.conf.default
 ## passwall
-# echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
+echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
 
 ## passwall2
-# echo 'src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2' >>feeds.conf.default
+echo 'src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2' >>feeds.conf.default
 
 
 ## poweroff
