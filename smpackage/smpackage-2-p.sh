@@ -148,12 +148,6 @@ CONFIG_PACKAGE_luci-i18n-passwall-zh-cn=y
 CONFIG_PACKAGE_luci-app-passwall2=y
 CONFIG_PACKAGE_luci-i18n-passwall2-zh-cn=y
 
-# VPN
-CONFIG_PACKAGE_luci-app-ipsec-vpnd=y
-CONFIG_PACKAGE_luci-i18n-ipsec-vpnd-zh-cn=y
-
-CONFIG_PACKAGE_luci-app-openvpn=y
-CONFIG_PACKAGE_luci-i18n-openvpn-zh-cn=y
 
 # quickstart
 CONFIG_PACKAGE_luci-app-quickstart=y
@@ -175,9 +169,6 @@ CONFIG_PACKAGE_luci-i18n-uugamebooster-zh-cn=y
 CONFIG_PACKAGE_luci-app-webadmin=y
 CONFIG_PACKAGE_luci-i18n-webadmin-zh-cn=y
 
-# rclone
-# CONFIG_PACKAGE_rclone=y
-# CONFIG_PACKAGE_fuse3-utils=y
 
 # 删除不用的插件
 # # CONFIG_PACKAGE_autosamba is not set
