@@ -168,27 +168,27 @@ jobs:
         if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
         env:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}   
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }} 
 
       - name: 输出编译信息
         run: |
           cd openwrt
           echo " 系统空间      类型   总数  已用  可用 使用率"
           df -hT $PWD
-            
+          
           echo
           echo "=========================================="
           echo
-
+  
           ZZZ="package/lean/default-settings/files/zzz-default-settings"
           echo "DISTRIB_REVISION=$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')" >> $GITHUB_ENV
-          echo "KERNEL_PATCHVER=$(cat target/linux/ipq40xx/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')" >> $GITHUB_ENV
+          echo "KERNEL_PATCHVER=$(cat target/linux/x86/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')" >> $GITHUB_ENV
           echo "	    当前编译版本：$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')"
-          echo "	    内核版本：$(cat target/linux/ipq40xx/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')"
-
+          echo "	    内核版本：$(cat target/linux/x86/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')"
+  
           echo
           echo "=========================================="
-
+  
           grep -i CONFIG_PACKAGE_luci-app .config | grep  -v \# > Plug-in
           grep -i CONFIG_PACKAGE_luci-theme .config | grep  -v \# >> Plug-in
           sed -i '/INCLUDE/d' Plug-in > /dev/null 2>&1
@@ -198,16 +198,16 @@ jobs:
           sed -i 's/=y/\ /g' Plug-in
           awk '$0=NR$0' Plug-in > Plug-2
           awk '{print "	" $0}' Plug-2 > Plug-in
-
+  
           echo
           echo
           echo "	      已选插件列表"
           cat Plug-in
           rm -rf {Plug-in,Plug-2}
-
+  
           echo
           echo "=========================================="
-
+  
           echo
           echo
           echo "输出完整插件信息..."

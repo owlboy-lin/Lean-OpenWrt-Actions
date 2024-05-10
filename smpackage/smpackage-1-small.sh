@@ -11,7 +11,7 @@
 # =================================================================
 
 # Uncomment a feed source
-# sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
+sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
 
 # Add a feed source
 # echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
@@ -59,7 +59,7 @@
 git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app-adguardhome
 
 ## autoreboot
-git clone https://github.com/f8q8/luci-app-autoreboot package/luci-app-autoreboot
+# git clone https://github.com/f8q8/luci-app-autoreboot package/luci-app-autoreboot
 
 ## mosdns
 # echo 'src-git mosdns https://github.com/sbwml/luci-app-mosdns' >>feeds.conf.default
