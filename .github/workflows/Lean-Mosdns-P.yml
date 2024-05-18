@@ -9,8 +9,8 @@
 name: Lean-Mosdns-P
 
 on:
-  # schedule:
-    # - cron: 0 20 * * *
+  schedule:
+    - cron: 0 22 * * *
 
   # release:
   #   types: [published]
@@ -62,20 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      # - name: 释放Ubuntu磁盘空间
-      #   uses: jlumbroso/free-disk-space@main
-      #   with:
-      #     # this might remove tools that are actually needed,
-      #     # if set to "true" but frees about 6 GB
-      #     tool-cache: true
-      #     # all of these default to true, but feel free to set to
-      #     # "false" if necessary for your workflow
-      #     android: true
-      #     dotnet: true
-      #     haskell: true
-      #     large-packages: true
-      #     swap-storage: true 
-      
+    
       - name: CPU检测
         run: |
           echo "警告⚠"
