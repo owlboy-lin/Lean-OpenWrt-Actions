@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 修改默认ip
-sed -i 's/192.168.1.1/10.10.20.20/g' package/base-files/files/bin/config_generate
+sed -i 's/192.168.1.1/192.168.24.1/g' package/base-files/files/bin/config_generate
 
 # 添加额外的插件和主题
 cd package
