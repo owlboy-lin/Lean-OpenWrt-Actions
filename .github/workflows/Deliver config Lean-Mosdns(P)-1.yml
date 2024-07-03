@@ -33,9 +33,9 @@ env:
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: Lean--p.info
-  Firmware_Name: Lean--p
-  DIY_P1_SH: smpackage/smpackage-1.sh
-  DIY_P2_SH: smpackage/smpackage-2.sh
+  Firmware_Name: Lean-p-1
+  DIY_P1_SH: smpackage/smpackage-1-all.sh
+  DIY_P2_SH: smpackage/smpackage-2-p.sh
   UPLOAD_ORGANIZE: false
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
