@@ -34,10 +34,10 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: Lean--p.info
+  CONFIG_FILE: OpenWrt-CI.info
   Firmware_Name: OpenWrt-CI-test
-  DIY_P1_SH: smpackage/test-1-p.sh
-  DIY_P2_SH: smpackage/test-2-p.sh
+  DIY_P1_SH: 
+  DIY_P2_SH: 
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: false
