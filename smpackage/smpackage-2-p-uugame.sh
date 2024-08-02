@@ -161,8 +161,7 @@ CONFIG_PACKAGE_luci-app-ttyd=y
 CONFIG_PACKAGE_luci-i18n-ttyd-zh-cn=y
 
 # luci-app-uugamebooster=y
-CONFIG_PACKAGE_luci-app-uugamebooster=y
-CONFIG_PACKAGE_luci-i18n-uugamebooster-zh-cn=y
+
 
 # luci-app-webadmin=y
 CONFIG_PACKAGE_luci-app-webadmin=y
@@ -170,6 +169,8 @@ CONFIG_PACKAGE_luci-i18n-webadmin-zh-cn=y
 
 
 # 删除不用的插件
+# # CONFIG_PACKAGE_luci-app-uugamebooster is not set
+# # CONFIG_PACKAGE_luci-i18n-uugamebooster-zh-cn is not set
 # # CONFIG_PACKAGE_autosamba is not set
 # # CONFIG_PACKAGE_luci-app-accesscontrol is not set
 # # CONFIG_PACKAGE_luci-i18n-accesscontrol-zh-cn is not set

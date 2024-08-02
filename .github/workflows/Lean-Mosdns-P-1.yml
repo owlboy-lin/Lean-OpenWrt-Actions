@@ -41,7 +41,7 @@ env:
   CONFIG_FILE: Lean-p-1.info
   Firmware_Name: Lean-p
   DIY_P1_SH: smpackage/smpackage-1-all.sh
-  DIY_P2_SH: smpackage/smpackage-2-p.sh
+  DIY_P2_SH: smpackage/smpackage-2-p-uugame.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_BUILDINFO: true
@@ -148,11 +148,11 @@ jobs:
           cd openwrt 
           ./scripts/feeds clean 
           ./scripts/feeds update -a
-          rm -rf feeds/luci/applications/luci-app-mosdns 
+          rm -rf feeds/luci/applications/luci-app-mosdns
+          # rm -rf feeds/luci/applications/luci-app-uugamebooster
           rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,smartdns}
           rm -rf feeds/packages/utils/v2dat
           rm -rf feeds/packages/lang/golang
-          rm -rf feeds/packages/uugamebooster
           git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
 
 
@@ -219,8 +219,8 @@ jobs:
           cd openwrt
           make defconfig
           make download -j$(($(nproc)+1))
-          find dl -size -1024c -exec ls -l {} \;
-          find dl -size -1024c -exec rm -f {} \;
+          # find dl -size -1024c -exec ls -l {} \;
+          # find dl -size -1024c -exec rm -f {} \;
   
       - name: SSH connection to Actions
         uses: P3TERX/ssh2actions@v1.0.0
@@ -252,12 +252,12 @@ jobs:
       #   if: steps.compile.outputs.status == 'success' && !cancelled()
       #   run: df -hT
 
-      - name: SSH connection to Actions
-        uses: P3TERX/ssh2actions@v1.0.0
-        if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
-        env:
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}  
+      # - name: SSH connection to Actions
+      #   uses: P3TERX/ssh2actions@v1.0.0
+      #   if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      #   env:
+      #     TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      #     TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}  
 
       - name: 整理文件
         id: organize
