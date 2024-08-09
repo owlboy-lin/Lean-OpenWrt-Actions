@@ -63,6 +63,9 @@ git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app
 
 ## mosdns
 # echo 'src-git mosdns https://github.com/sbwml/luci-app-mosdns' >>feeds.conf.default
+git clone https://github.com/sbwml/luci-app-mosdns -b v5-lua package/mosdns
+git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
+
 
 ## netspeedtest
 # echo 'src-git netspeedtest https://github.com/sirpdboy/netspeedtest' >>feeds.conf.default
