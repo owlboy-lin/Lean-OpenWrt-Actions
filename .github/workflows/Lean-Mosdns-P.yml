@@ -40,7 +40,7 @@ env:
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: Lean-p.info
   Firmware_Name: Lean-p
-  DIY_P1_SH: smpackage/smpackage-1-p.sh
+  DIY_P1_SH: smpackage/smpackage-1.sh
   DIY_P2_SH: smpackage/smpackage-2-p-uugame.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
@@ -148,9 +148,8 @@ jobs:
           cd openwrt 
           ./scripts/feeds clean 
           ./scripts/feeds update -a
-          # rm -rf feeds/luci/applications/luci-app-mosdns
-          # rm -rf feeds/luci/applications/luci-app-uugamebooster
-          rm -rf feeds/packages/net/{alist,adguardhome,xray*,v2ray*,v2ray*,sing*,smartdns}
+          rm -rf feeds/luci/applications/luci-app-mosdns
+          rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,smartdns}
           rm -rf feeds/packages/utils/v2dat
           rm -rf feeds/packages/lang/golang
           git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
