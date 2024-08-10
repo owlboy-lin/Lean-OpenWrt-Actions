@@ -27,7 +27,7 @@
 # git clone https://github.com/kenzok8/small.git package/small
 
 # Modify default IP
-#sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
+sed -i 's/192.168.1.1/192.168.24.1/g' package/base-files/files/bin/config_generate
 
 # Import external feeds
 # git clone https://github.com/Lienol/openwrt-package.git package/lienol
@@ -63,8 +63,8 @@ git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app
 
 ## mosdns
 # echo 'src-git mosdns https://github.com/sbwml/luci-app-mosdns' >>feeds.conf.default
-git clone https://github.com/sbwml/luci-app-mosdns -b v5-lua package/mosdns
-git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
+# git clone https://github.com/sbwml/luci-app-mosdns -b v5-lua package/mosdns
+# git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 
 
 ## netspeedtest

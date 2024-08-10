@@ -39,7 +39,7 @@ env:
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: Lean-p.info
-  Firmware_Name: Lean-p
+  Firmware_Name: Lean-p-1
   DIY_P1_SH: smpackage/smpackage-1-1.sh
   DIY_P2_SH: smpackage/smpackage-2-p-uugame.sh
   UPLOAD_BIN_DIR: false
@@ -148,13 +148,17 @@ jobs:
           cd openwrt 
           ./scripts/feeds clean 
           ./scripts/feeds update -a
-          rm -rf feeds/small/luci-app-mosdns
-          rm -rf feeds/small/mosdns
-          # rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,smartdns}
-          # rm -rf feeds/packages/utils/v2dat
+          # rm -rf feeds/small/luci-app-mosdns
+          # rm -rf feeds/small/mosdns
+          rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,smartdns}
+          rm -rf feeds/packages/utils/v2dat
           rm -rf feeds/packages/lang/golang
-          git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
 
+          rm -rf feeds/luci/applications/luci-app-mosdns
+          rm -rf feeds/packages/net/v2ray-geodata
+          git clone https://github.com/sbwml/luci-app-mosdns -b v5-lua package/mosdns
+          git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
+          git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
 
       - name: 安装源 #Install feeds
         run: cd openwrt && ./scripts/feeds install -a
