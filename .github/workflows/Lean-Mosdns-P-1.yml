@@ -6,7 +6,7 @@
 # Copyright (C) 2020 KFERMercer
 # chmod +x /etc/init.d/netspeedtest
 
-name: Lean-Mosdns-P-1
+name: Lean-Mosdns-P
 
 on:
   schedule:
@@ -39,7 +39,7 @@ env:
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: Lean-p.info
-  Firmware_Name: Lean-p-1
+  Firmware_Name: Lean-p
   DIY_P1_SH: smpackage/smpackage-1-1.sh
   DIY_P2_SH: smpackage/smpackage-2-p-uugame.sh
   UPLOAD_BIN_DIR: false
@@ -57,7 +57,7 @@ jobs:
   build_openwrt:
 
 
-    name: Lean-Mosdns-P-1
+    name: Lean-Mosdns-P
 
     runs-on: ubuntu-latest
     
@@ -129,7 +129,7 @@ jobs:
         if: env.CACHE_BUILD == 'true' || (github.event.inputs.CACHE_BUILD == 'true')
         with:
           ccache: 'true'
-          mixkey: 'Lean-Mosdns-P-1'
+          mixkey: 'Lean-Mosdns-P'
           prefix: ${{ github.workspace }}/openwrt
 
       - name: patch1补丁和自定义设置
@@ -322,7 +322,7 @@ jobs:
         id: tag
         if: steps.compile.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
         run: |
-          echo "release_tag=$(date +"%Y.%m.%d.%H.%M")-Lean-Mosdns-P-1" >> $GITHUB_OUTPUT
+          echo "release_tag=$(date +"%Y.%m.%d.%H.%M")-Lean-Mosdns-P" >> $GITHUB_OUTPUT
           echo "release_date=$(date +"%Y.%m.%d.%H.%M")" >> $GITHUB_OUTPUT
           touch release.txt
           echo "
@@ -336,7 +336,7 @@ jobs:
           
           🎉 编译版本：${{ env.DISTRIB_REVISION }}
           
-          🖥 管理地址：192.168.1.1 
+          🖥 管理地址：192.168.24.1 
           
           🌴 名称：root
           
@@ -349,7 +349,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
         with:
-          name: ${{ steps.tag.outputs.release_date }} Lean-Mosdns-P-1 ${{ env.name }}
+          name: ${{ steps.tag.outputs.release_date }} Lean-Mosdns-P ${{ env.name }}
           tag_name: ${{ steps.tag.outputs.release_tag }}
           body_path: release.txt
           files: openwrt/artifact/firmware/*
