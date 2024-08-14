@@ -40,7 +40,7 @@ env:
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: Lean-p.info
   Firmware_Name: Lean-p-1
-  DIY_P1_SH: smpackage/smpackage-1-1.sh
+  DIY_P1_SH: smpackage/smpackage-1-p.sh
   DIY_P2_SH: smpackage/smpackage-2-p-uugame.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
@@ -57,7 +57,7 @@ jobs:
   build_openwrt:
 
 
-    name: Lean-Mosdns-P-1
+    name: Lean-Mosdns-P
 
     runs-on: ubuntu-latest
     
@@ -148,17 +148,11 @@ jobs:
           cd openwrt 
           ./scripts/feeds clean 
           ./scripts/feeds update -a
-          # rm -rf feeds/small/luci-app-mosdns
-          # rm -rf feeds/small/mosdns
-          rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,smartdns}
-          rm -rf feeds/packages/utils/v2dat
-          rm -rf feeds/packages/lang/golang
-
           rm -rf feeds/luci/applications/luci-app-mosdns
           rm -rf feeds/packages/net/v2ray-geodata
           git clone https://github.com/sbwml/luci-app-mosdns -b v5-lua package/mosdns
           git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
-          git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
+
 
       - name: 安装源 #Install feeds
         run: cd openwrt && ./scripts/feeds install -a
@@ -177,7 +171,7 @@ jobs:
         if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
         env:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}   
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}             
 
       - name: 输出编译信息
         run: |
@@ -230,8 +224,8 @@ jobs:
           cd openwrt
           make defconfig
           make download -j$(($(nproc)+1))
-          # find dl -size -1024c -exec ls -l {} \;
-          # find dl -size -1024c -exec rm -f {} \;
+          find dl -size -1024c -exec ls -l {} \;
+          find dl -size -1024c -exec rm -f {} \;
   
 
       - name: 编译固件
@@ -336,7 +330,7 @@ jobs:
           
           🎉 编译版本：${{ env.DISTRIB_REVISION }}
           
-          🖥 管理地址：192.168.1.1 
+          🖥 管理地址：192.168.24.1 
           
           🌴 名称：root
           
