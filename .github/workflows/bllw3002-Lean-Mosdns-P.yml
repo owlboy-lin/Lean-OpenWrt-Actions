@@ -40,7 +40,7 @@ env:
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: Lean-p.info
   Firmware_Name: Lean-p
-  DIY_P1_SH: smpackage/bllw3002 - smpackage-1-1.sh
+  DIY_P1_SH: smpackage/bllw3002-smpackage-1-1.sh
   DIY_P2_SH: smpackage/smpackage-2-p-uugame.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
