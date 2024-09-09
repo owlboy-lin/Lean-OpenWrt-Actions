@@ -9,8 +9,8 @@
 name: bllw3002-Lean-Mosdns-P
 
 on:
-  schedule:
-    - cron: 0 23 * * *
+  # schedule:
+  #   - cron: 0 23 * * *
 
   # release:
   #   types: [published]
