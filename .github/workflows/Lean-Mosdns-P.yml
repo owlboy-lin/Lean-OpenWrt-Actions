@@ -294,7 +294,7 @@ jobs:
           cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
           cp -rf ./.config ./artifact/buildinfo/
           cp -rf ./.config ./artifact/firmware/
-          cp -rf ./feeds.conf.default ./artifact/buildinfo/ 
+          cp -rf ./feeds.conf.default ./artifact/buildinfo/
   
         
       - name: 上传固件
