@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: OpenWrt-FastRhino-r66s
+name: OpenWrt-FastRhino-r66s-6.1
 
 on:
 
@@ -43,9 +43,9 @@ env:
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: r66s/6.1/r66s-6.1-all.info
-  Firmware_Name: OpenWrt-FastRhino-r66s    
-  DIY_P1_SH: r66s/6.1/r66s-1.sh
-  DIY_P2_SH: r66s/6.1/r66s-2.sh
+  Firmware_Name: OpenWrt-FastRhino-r66s-6.1    
+  DIY_P1_SH: smpackage/bllw3002-smpackage-1-1.sh
+  DIY_P2_SH: smpackage/smpackage-2-p-uugame.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_BUILDINFO: true
@@ -54,43 +54,58 @@ env:
   UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: true
   GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
-  TZ: Asia/Shanghai 
+  TZ: Asia/Shanghai
 
 jobs:
-  build:
-    name: OpenWrt-FastRhino-r66s
+
+  build_openwrt:
+
+
+    name: OpenWrt-FastRhino-r66s-6.1
 
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: 释放Ubuntu磁盘空间
-        uses: jlumbroso/free-disk-space@main
-        with:
-          # this might remove tools that are actually needed,
-          # if set to "true" but frees about 6 GB
-          tool-cache: true
-          # all of these default to true, but feel free to set to
-          # "false" if necessary for your workflow
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          swap-storage: true 
-      
+    
+      - name: CPU检测
+        run: |
+          echo "警告⚠"
+          echo "分配的服务器性能有限，若选择的插件过多，务必注意CPU性能！"
+          echo -e "已知CPU型号(降序): 7763，8370C，8272CL，8171M，E5-2673\n"
+          echo "--------------------------CPU信息--------------------------"
+          echo "CPU物理数量: $(cat /proc/cpuinfo | grep "physical id" | sort | uniq | wc -l)"
+          echo "CPU核心数量: $(nproc)"
+          echo -e "CPU型号信息:$(cat /proc/cpuinfo | grep -m1 name | awk -F: '{print $2}')\n"
+          echo "--------------------------内存信息--------------------------"
+          echo "已安装内存详细信息:"
+          echo -e "$(sudo lshw -short -C memory | grep GiB)\n"
+          echo "--------------------------硬盘信息--------------------------"
+          echo "硬盘数量: $(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT
+
+       
       - name: 初始化系统环境
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          # ( sudo -E apt-get -qq update
+          # sudo -E apt-get -qq install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev patch python3 python2.7 unzip zlib1g-dev lib32gcc-s1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx-ucl libelf-dev autoconf automake libtool autopoint device-tree-compiler ccache xsltproc rename antlr3 gperf wget curl swig rsync
+          # sudo -E apt-get -qq purge azure-cli ghc* zulu* hhvm llvm* firefox powershell openjdk* dotnet* google* mysql* php* android*
+          # sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          # sudo -E apt-get -qq autoremove --purge
+          # sudo -E apt-get -qq clean ) &
+          # sudo timedatectl set-timezone "$TZ"
+          # sudo mkdir -p /workdir
+          # sudo chown $USER:$GROUPS /workdir
+          sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force
           sudo -E apt-get -qq update
-          sudo -E apt-get -qq install $(curl -fsSL https://github.com/popeyema/OpenWrt-R66s/raw/main/depends-ubuntu-latest)
-          sudo apt install clang
+          sudo -E apt-get -qq install ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential bzip2 ccache cmake cpio curl device-tree-compiler fastjar flex gawk gettext gcc-multilib g++-multilib git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libfuse-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libpython3-dev libreadline-dev libssl-dev libtool lrzsz mkisofs msmtp ninja-build p7zip p7zip-full patch pkgconf python2.7 python3 python3-pyelftools python3-setuptools qemu-utils rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev rename
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
           sudo timedatectl set-timezone "$TZ"
           sudo mkdir -p /workdir
-          sudo chown $USER:$GROUPS /workdir
-          
+          sudo chown $USER:$GROUPS /workdir     
+
       - name: 更新时区、编译时间
         id: date
         run: |
@@ -105,7 +120,7 @@ jobs:
 
       - name: 准备完成
         uses: actions/checkout@v4
-          
+            
       - name: 下载源代码
         working-directory: /workdir
         run: |
@@ -118,27 +133,42 @@ jobs:
         if: env.CACHE_BUILD == 'true' || (github.event.inputs.CACHE_BUILD == 'true')
         with:
           ccache: 'true'
-          mixkey: 'OpenWrt-FastRhino-r66s'
+          mixkey: 'OpenWrt-FastRhino-r66s-6.1'
           prefix: ${{ github.workspace }}/openwrt
 
       - name: patch1补丁和自定义设置
-        if: (!cancelled())
         run: |
           [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
           chmod +x $DIY_P1_SH
           cd openwrt
           $GITHUB_WORKSPACE/$DIY_P1_SH
 
+
+      # - name: 更新源 #Update feeds
+      #   run: cd openwrt && ./scripts/feeds update -a
+      
       - name: 更新源 #Update feeds
-        if: (!cancelled())
-        run: cd openwrt && ./scripts/feeds clean && ./scripts/feeds update -a
+        run: |
+          cd openwrt 
+          ./scripts/feeds clean 
+          ./scripts/feeds update -a
+          # rm -rf feeds/small/luci-app-mosdns
+          # rm -rf feeds/small/mosdns
+          rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,smartdns}
+          rm -rf feeds/packages/utils/v2dat
+          rm -rf feeds/packages/lang/golang
+
+          rm -rf feeds/luci/applications/luci-app-mosdns
+          rm -rf feeds/packages/net/v2ray-geodata
+          git clone https://github.com/sbwml/luci-app-mosdns -b v5-lua package/mosdns
+          git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
+          git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
 
       - name: 安装源 #Install feeds
-        if: (!cancelled())
-        run: cd openwrt && ./scripts/feeds install -a && ./scripts/feeds install -a
+        run: cd openwrt && ./scripts/feeds install -a
+
 
       - name: patch2补丁和自定义设置
-        if: (!cancelled())
         run: |
           [ -e files ] && mv files openwrt/files
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
@@ -151,8 +181,8 @@ jobs:
         if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
         env:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}   
+
       - name: 输出编译信息
         run: |
           cd openwrt
@@ -162,16 +192,16 @@ jobs:
           echo
           echo "=========================================="
           echo
-
+  
           ZZZ="package/lean/default-settings/files/zzz-default-settings"
           echo "DISTRIB_REVISION=$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')" >> $GITHUB_ENV
-          echo "KERNEL_PATCHVER=$(cat target/linux/rockchip/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')" >> $GITHUB_ENV
+          echo "KERNEL_PATCHVER=$(cat target/linux/x86/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')" >> $GITHUB_ENV
           echo "	    当前编译版本：$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')"
-          echo "	    内核版本：$(cat target/linux/rockchip/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')"
-
+          echo "	    内核版本：$(cat target/linux/x86/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')"
+  
           echo
           echo "=========================================="
-
+  
           grep -i CONFIG_PACKAGE_luci-app .config | grep  -v \# > Plug-in
           grep -i CONFIG_PACKAGE_luci-theme .config | grep  -v \# >> Plug-in
           sed -i '/INCLUDE/d' Plug-in > /dev/null 2>&1
@@ -181,16 +211,16 @@ jobs:
           sed -i 's/=y/\ /g' Plug-in
           awk '$0=NR$0' Plug-in > Plug-2
           awk '{print "	" $0}' Plug-2 > Plug-in
-
+  
           echo
           echo
           echo "	      已选插件列表"
           cat Plug-in
           rm -rf {Plug-in,Plug-2}
-
+  
           echo
           echo "=========================================="
-
+  
           echo
           echo
           echo "输出完整插件信息..."
@@ -204,8 +234,9 @@ jobs:
           cd openwrt
           make defconfig
           make download -j$(($(nproc)+1))
-          find dl -size -1024c -exec ls -l {} \;
-          find dl -size -1024c -exec rm -f {} \;
+          # find dl -size -1024c -exec ls -l {} \;
+          # find dl -size -1024c -exec rm -f {} \;
+  
 
       - name: 编译固件
         id: compile
@@ -226,16 +257,16 @@ jobs:
           [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
           echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
         
-      - name: Check space usage
-        if: (!cancelled())
-        run: df -hT
+      # - name: 检查空间使用情况
+      #   if: steps.compile.outputs.status == 'success' && !cancelled()
+      #   run: df -hT
 
-      - name: SSH connection to Actions
-        uses: P3TERX/ssh2actions@v1.0.0
-        if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
-        env:
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}  
+      # - name: SSH connection to Actions
+      #   uses: P3TERX/ssh2actions@v1.0.0
+      #   if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      #   env:
+      #     TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      #     TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}  
 
       - name: 整理文件
         id: organize
@@ -255,7 +286,7 @@ jobs:
           
       - name: 整理固件文件
         id: artifact
-        if: (!cancelled())
+        if: steps.compile.outputs.status == 'success' && !cancelled()
         run: |
           cd openwrt
           mkdir -p ./artifact/firmware
@@ -265,26 +296,29 @@ jobs:
           cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
           cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
           cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
-          cp -rf ./.config ./artifact/buildinfo/
+          cp -rf ./.config ./artifact/buildinfo/${{ env.Firmware_Name }}.info
+          cp -rf ./.config ./artifact/firmware/${{ env.Firmware_Name }}.info
           cp -rf ./feeds.conf.default ./artifact/buildinfo/ 
-  
+          cd artifact/firmware/
+          rename "s/openwrt/${{ env.Firmware_Name }}/" *
+         
         
       - name: 上传固件
-        if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_firmware_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
           path: openwrt/artifact/firmware/
 
       - name: 上传配置文件
-        if: env.UPLOAD_BUILDINFO == 'true' && !cancelled()
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_BUILDINFO == 'true' && !cancelled()
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_buildinfo${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
           path: openwrt/artifact/buildinfo/
 
       - name: 上传插件
-        if: env.UPLOAD_PACKAGE == 'true' && !cancelled()
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_PACKAGE == 'true' && !cancelled()
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_package${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
@@ -294,7 +328,7 @@ jobs:
         id: tag
         if: steps.compile.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
         run: |
-          echo "release_tag=$(date +"%Y.%m.%d.%H.%M")-OpenWrt-FastRhino-r66s" >> $GITHUB_OUTPUT
+          echo "release_tag=$(date +"%Y.%m.%d.%H.%M")-OpenWrt-FastRhino-r66s-6.1" >> $GITHUB_OUTPUT
           echo "release_date=$(date +"%Y.%m.%d.%H.%M")" >> $GITHUB_OUTPUT
           touch release.txt
           echo "
@@ -308,7 +342,7 @@ jobs:
           
           🎉 编译版本：${{ env.DISTRIB_REVISION }}
           
-          🖥 管理地址：192.168.1.1 
+          🖥 管理地址：192.168.89.1 
           
           🌴 名称：root
           
@@ -321,7 +355,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
         with:
-          name: ${{ steps.tag.outputs.release_date }} OpenWrt-FastRhino-r66s ${{ env.name }}
+          name: ${{ steps.tag.outputs.release_date }} OpenWrt-FastRhino-r66s-6.1 ${{ env.name }}
           tag_name: ${{ steps.tag.outputs.release_tag }}
           body_path: release.txt
           files: openwrt/artifact/firmware/*
@@ -343,3 +377,5 @@ jobs:
           delete_tags: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+      
