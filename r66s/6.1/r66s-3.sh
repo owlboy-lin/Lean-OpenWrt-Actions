@@ -142,6 +142,12 @@ CONFIG_PACKAGE_luci-i18n-passwall-zh-cn=y
 CONFIG_PACKAGE_luci-app-passwall2=y
 CONFIG_PACKAGE_luci-i18n-passwall2-zh-cn=y
 
+# VPN
+CONFIG_PACKAGE_luci-app-ipsec-vpnd=y
+CONFIG_PACKAGE_luci-i18n-ipsec-vpnd-zh-cn=y
+
+CONFIG_PACKAGE_luci-app-openvpn=y
+CONFIG_PACKAGE_luci-i18n-openvpn-zh-cn=y
 
 # quickstart
 CONFIG_PACKAGE_luci-app-quickstart=y
