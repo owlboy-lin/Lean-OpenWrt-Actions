@@ -11,14 +11,12 @@
 # =================================================================
 
 # Uncomment a feed source
- sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
+# sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
 
 # Add a feed source
 # echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
 
 # echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
-
-# sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default
 
 # echo 'src-git kenzo https://github.com/kenzok8/openwrt-packages;master' >>feeds.conf.default
 
@@ -27,7 +25,7 @@
 # git clone https://github.com/kenzok8/small.git package/small
 
 # Modify default IP
-#sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
+sed -i 's/192.168.1.1/192.168.89.249/g' package/base-files/files/bin/config_generate
 
 # Import external feeds
 # git clone https://github.com/Lienol/openwrt-package.git package/lienol
@@ -51,12 +49,24 @@
 
 # git clone https://github.com/tzxiaozhen88/luci-app-koolproxyR package/koolproxyR
 
+# git clone https://github.com/kenzok78/luci-app-argone-config.git package/argone-config
+
 # git clone 其他github插件源码地址 package/文件夹名称
+
+
+# Add a feed source
+#echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
+#echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
+
+
+# echo 'src-git openclash https://github.com/vernesong/OpenClash' >>feeds.conf.default
+# echo 'src-git adguardhome https://github.com/rufengsuixing/luci-app-adguardhome' >>feeds.conf.default
+# echo 'src-git mosdns https://github.com/sbwml/luci-app-mosdns' >>feeds.conf.default
 
 
 #  下载源码
 ## adguardhome
-git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app-adguardhome
+# git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app-adguardhome
 
 ## autoreboot
 # git clone https://github.com/f8q8/luci-app-autoreboot package/luci-app-autoreboot
@@ -65,36 +75,33 @@ git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app
 # echo 'src-git mosdns https://github.com/sbwml/luci-app-mosdns' >>feeds.conf.default
 
 ## netspeedtest
-# echo 'src-git netspeedtest https://github.com/sirpdboy/netspeedtest' >>feeds.conf.default
-
-git clone https://github.com/sirpdboy/netspeedtest.git package/netspeedtest
+ git clone https://github.com/sirpdboy/netspeedtest.git package/netspeedtest
 
 ## OpenClash
-echo 'src-git openclash https://github.com/vernesong/OpenClash' >>feeds.conf.default
+# echo 'src-git openclash https://github.com/vernesong/OpenClash' >>feeds.conf.default
 
+
+# echo 'src-git passwall_packages https://github.com/xiaorouji/openwrt-passwall-packages.git' >>feeds.conf.default
 ## passwall
-echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
+# echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
 
 ## passwall2
-echo 'src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2' >>feeds.conf.default
+# echo 'src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2' >>feeds.conf.default
+
 
 ## poweroff
 git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
 
-## istore
-echo 'src-git istore https://github.com/linkease/istore;main' >> feeds.conf.default
-
-
-# git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
-
 # sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
 # sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
 
+# sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default
+
 # sed -i '1i src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default
+
 
 # sed -i '1i src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
 # sed -i '2i src-git small https://github.com/kenzok8/small' feeds.conf.default
 
-
-
-
+sed -i '1i src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
+sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default

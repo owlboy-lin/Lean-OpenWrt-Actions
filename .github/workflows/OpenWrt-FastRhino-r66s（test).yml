@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: OpenWrt-FastRhino-r66s-6.1
+name: OpenWrt-FastRhino-r66s-test
 
 on:
 
@@ -43,25 +43,25 @@ env:
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: r66s/6.1/r66s-6.1-all.info
-  Firmware_Name: OpenWrt-FastRhino-r66s-6.1    
-  DIY_P1_SH: r66s/6.1/r66s-1.sh
-  DIY_P2_SH: r66s/6.1/r66s-2.sh
+  Firmware_Name: OpenWrt-FastRhino-r66s    
+  DIY_P1_SH: smpackage/bllw3002-smpackage-1-1.sh
+  DIY_P2_SH: smpackage/smpackage-2-p-uugame.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_BUILDINFO: true
   UPLOAD_PACKAGE: true
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: false
-  UPLOAD_RELEASE: true
+  UPLOAD_RELEASE: false
   GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
-  TZ: Asia/Shanghai
+  TZ: Asia/Shanghai 
 
 jobs:
 
   build_openwrt:
 
 
-    name: OpenWrt-FastRhino-r66s-6.1
+    name: OpenWrt-FastRhino-r66s-test
 
     runs-on: ubuntu-latest
     
@@ -133,7 +133,7 @@ jobs:
         if: env.CACHE_BUILD == 'true' || (github.event.inputs.CACHE_BUILD == 'true')
         with:
           ccache: 'true'
-          mixkey: 'OpenWrt-FastRhino-r66s-6.1'
+          mixkey: 'OpenWrt-FastRhino-r66s-test'
           prefix: ${{ github.workspace }}/openwrt
 
       - name: patch1补丁和自定义设置
@@ -328,7 +328,7 @@ jobs:
         id: tag
         if: steps.compile.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
         run: |
-          echo "release_tag=$(date +"%Y.%m.%d.%H.%M")-OpenWrt-FastRhino-r66s-6.1" >> $GITHUB_OUTPUT
+          echo "release_tag=$(date +"%Y.%m.%d.%H.%M")-OpenWrt-FastRhino-r66s-test" >> $GITHUB_OUTPUT
           echo "release_date=$(date +"%Y.%m.%d.%H.%M")" >> $GITHUB_OUTPUT
           touch release.txt
           echo "
@@ -355,7 +355,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
         with:
-          name: ${{ steps.tag.outputs.release_date }} OpenWrt-FastRhino-r66s-6.1 ${{ env.name }}
+          name: ${{ steps.tag.outputs.release_date }} OpenWrt-FastRhino-r66s-test ${{ env.name }}
           tag_name: ${{ steps.tag.outputs.release_tag }}
           body_path: release.txt
           files: openwrt/artifact/firmware/*
