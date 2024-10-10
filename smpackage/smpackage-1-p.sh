@@ -56,7 +56,7 @@ sed -i 's/192.168.1.1/192.168.24.1/g' package/base-files/files/bin/config_genera
 
 #  下载源码
 ## adguardhome
-git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app-adguardhome
+# git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app-adguardhome
 
 ## autoreboot
 # git clone https://github.com/f8q8/luci-app-autoreboot package/luci-app-autoreboot
