@@ -42,7 +42,7 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: r66s/6.1/r66s-6.1-all.info
+  CONFIG_FILE: r66s/6.1/OpenWrt-FastRhino-r66s-6.1.info
   Firmware_Name: OpenWrt-FastRhino-r66s-6.1    
   DIY_P1_SH: r66s/6.1/diy-part1.sh
   DIY_P2_SH: r66s/6.1/diy-part2.sh
