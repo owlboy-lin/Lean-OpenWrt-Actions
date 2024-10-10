@@ -89,9 +89,6 @@ echo 'src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2' >>feeds.
 git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
 
 
-# git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
-
-
 # sed -i '1i src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default
 
 # sed -i '1i src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
