@@ -142,12 +142,6 @@ CONFIG_PACKAGE_luci-i18n-passwall-zh-cn=y
 CONFIG_PACKAGE_luci-app-passwall2=y
 CONFIG_PACKAGE_luci-i18n-passwall2-zh-cn=y
 
-# VPN
-CONFIG_PACKAGE_luci-app-ipsec-vpnd=y
-CONFIG_PACKAGE_luci-i18n-ipsec-vpnd-zh-cn=y
-
-CONFIG_PACKAGE_luci-app-openvpn=y
-CONFIG_PACKAGE_luci-i18n-openvpn-zh-cn=y
 
 # quickstart
 CONFIG_PACKAGE_luci-app-quickstart=y
@@ -173,6 +167,21 @@ CONFIG_PACKAGE_luci-i18n-uugamebooster-zh-cn=y
 # luci-app-webadmin=y
 CONFIG_PACKAGE_luci-app-webadmin=y
 CONFIG_PACKAGE_luci-i18n-webadmin-zh-cn=y
+
+# 删除不用的插件
+# # CONFIG_PACKAGE_luci-app-uugamebooster is not set
+# # CONFIG_PACKAGE_luci-i18n-uugamebooster-zh-cn is not set
+# # CONFIG_PACKAGE_autosamba is not set
+# # CONFIG_PACKAGE_luci-app-accesscontrol is not set
+# # CONFIG_PACKAGE_luci-i18n-accesscontrol-zh-cn is not set
+# # CONFIG_PACKAGE_luci-app-upnp is not set
+# # CONFIG_PACKAGE_luci-i18n-upnp-zh-cn is not set
+# # CONFIG_PACKAGE_luci-app-vlmcsd is not set
+# # CONFIG_PACKAGE_luci-i18n-vlmcsd-zh-cn is not set
+# # CONFIG_PACKAGE_luci-app-vsftpd is not set
+# # CONFIG_PACKAGE_luci-i18n-vsftpd-zh-cn is not set
+# # CONFIG_PACKAGE_luci-app-samba4 is not set
+# # CONFIG_PACKAGE_luci-i18n-samba4-zh-cn is not set
 
 
 " >> .config
