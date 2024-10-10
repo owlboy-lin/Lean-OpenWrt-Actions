@@ -249,6 +249,7 @@ jobs:
           du -h --max-depth=1 openwrt/ --exclude=build_dir --exclude=bin
           du -h --max-depth=1 openwrt/build_dir
           du -h --max-depth=1 openwrt/bin
+          
       # - name: 检查空间使用情况
       #   if: steps.compile.outputs.status == 'success' && !cancelled()
       #   run: df -hT
