@@ -211,7 +211,7 @@ jobs:
           find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
   
-      - name: 编译固件
+      - name: 开始编译固件
         run: |
           cd openwrt
           echo -e "$(nproc) thread compile"
