@@ -18,6 +18,12 @@
           description: 'SSH connection to Actions'
           required: false
           default: 'false'
+
+        CACHE_BUILD:
+          description: '缓存加速'
+          required: false
+          default: 'true'
+          type: boolean
           
   # 定时触发编译(每月1日早3点)
     schedule:
@@ -27,20 +33,26 @@
     REPO_URL: https://github.com/coolsnowwolf/lede
     REPO_BRANCH: master
     FEEDS_CONF: feeds.conf.default
-    CONFIG_FILE: r66s/6.1/r66s-6.1.info
-    DIY_P1_SH: r66s/6.1/r66s-1.sh
-    DIY_P2_SH: r66s/6.1/r66s-2.sh
+    CONFIG_FILE: r66s/6.1/config/r66s.config
+    DIY_P1_SH: r66s/6.1/diy-part1.sh
+    DIY_P2_SH: r66s/6.1/diy-part2.sh
     UPLOAD_BIN_DIR: false
     UPLOAD_FIRMWARE: true
+    UPLOAD_BUILDINFO: true
+    UPLOAD_PACKAGE: true
+    UPLOAD_COWTRANSFER: false
+    UPLOAD_WETRANSFER: false
     UPLOAD_RELEASE: false
     GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
-    TZ: Asia/Shanghai
+    TZ: Asia/Shanghai  
+    KERNEL_VERSION: 6.1.79
 
   jobs:
     build:
       runs-on: ubuntu-latest
 
       steps:
+
       - name: 释放Ubuntu磁盘空间
         uses: jlumbroso/free-disk-space@main
         with:
@@ -70,8 +82,6 @@
           echo "--------------------------硬盘信息--------------------------"
           echo "硬盘数量: $(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT
 
-      - name: 准备完成
-        uses: actions/checkout@main
 
       - name: 初始化系统环境
         env:
@@ -87,12 +97,6 @@
           sudo mkdir -p /workdir
           sudo chown $USER:$GROUPS /workdir
 
-      - name: 下载源代码
-        working-directory: /workdir
-        run: |
-          df -hT $PWD
-          git clone $REPO_URL -b $REPO_BRANCH openwrt
-          ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
       - name: 更新时区、编译时间
         id: date
@@ -105,13 +109,31 @@
           START_TIME=`date +'%Y-%m-%d %H:%M:%S'`
           echo "START_SECONDS=$(date --date="$START_TIME" +%s)" >> $GITHUB_ENV
 
+      - name: 准备完成
+        uses: actions/checkout@v4
+
+      - name: 下载源代码
+        working-directory: /workdir
+        run: |
+          df -hT $PWD
+          git clone $REPO_URL -b $REPO_BRANCH openwrt
+          ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+
+      - name: 缓存
+        uses: klever1988/cachewrtbuild@main
+        if: env.CACHE_BUILD == 'true' || (github.event.inputs.CACHE_BUILD == 'true')
+        with:
+          ccache: 'true'
+          mixkey: 'Lean-Mosdns(ALL)-1'
+          prefix: ${{ github.workspace }}/openwrt
+
       - name: patch1补丁和自定义设置
         run: |
           [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
           chmod +x $DIY_P1_SH
           cd openwrt
           $GITHUB_WORKSPACE/$DIY_P1_SH
-
+      
       - name: 更新源 #Update feeds
         run: cd openwrt && ./scripts/feeds update -a
 
@@ -200,11 +222,12 @@
           
       - name: 检查空间使用情况
         run: |
-          echo "======================="
-          echo "Space usage:"
-          echo "======================="
+          echo "=========================================="
+          echo "----------------空间使用-------------------"
+          echo "=========================================="
+          echo " 系统空间      类型   总数  已用  可用 使用率"
           df -hT
-          echo "======================="
+          echo "=========================================="
           du -h --max-depth=1 openwrt/ --exclude=build_dir --exclude=bin
           du -h --max-depth=1 openwrt/build_dir
           du -h --max-depth=1 openwrt/bin

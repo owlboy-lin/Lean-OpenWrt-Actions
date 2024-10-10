@@ -13,6 +13,9 @@
 # 执行命令来切换内核
 sed -i 's/PATCHVER:=5.15/PATCHVER:=6.1/g' target/linux/rockchip/Makefile
 
+# Modify default IP
+sed -i 's/192.168.1.1/192.168.89.249/g' package/base-files/files/bin/config_generate
+
 # 添加软件源
 # Uncomment a feed source
  sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
@@ -66,7 +69,7 @@ git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app
 # git clone https://github.com/f8q8/luci-app-autoreboot package/luci-app-autoreboot
 
 ## mosdns
-echo 'src-git mosdns https://github.com/sbwml/luci-app-mosdns' >>feeds.conf.default
+# echo 'src-git mosdns https://github.com/sbwml/luci-app-mosdns' >>feeds.conf.default
 
 ## netspeedtest
 # echo 'src-git netspeedtest https://github.com/sirpdboy/netspeedtest' >>feeds.conf.default
@@ -84,9 +87,6 @@ echo 'src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2' >>feeds.
 
 ## poweroff
 git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
-
-
-# git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
 
 
 # sed -i '1i src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default

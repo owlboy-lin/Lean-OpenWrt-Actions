@@ -68,7 +68,7 @@
 
 
 # openclash
-svn export https://github.com/kenzok8/openwrt-packages/trunk/luci-app-openclash  package/luci-app-openclash
+svn export https://github.com/kenzok8/openwrt-packages/luci-app-openclash  package/luci-app-openclash
 # svn export https://github.com/kiddin9/openwrt-packages/trunk/luci-app-openclash  package/luci-app-openclash
 # 加入OpenClash核心
 # chmod -R a+x $GITHUB_WORKSPACE/preset-clash-core.sh
@@ -81,15 +81,15 @@ svn export https://github.com/kenzok8/openwrt-packages/trunk/luci-app-openclash 
 # fi
 
 # adguardhome
-svn export https://github.com/kenzok8/openwrt-packages/trunk/luci-app-adguardhome package/luci-app-adguardhome
-svn export https://github.com/kenzok8/openwrt-packages/trunk/adguardhome package/adguardhome
+svn export https://github.com/kenzok8/openwrt-packages/luci-app-adguardhome package/luci-app-adguardhome
+svn export https://github.com/kenzok8/openwrt-packages/adguardhome package/adguardhome
 # svn export https://github.com/kiddin9/openwrt-packages/trunk/luci-app-adguardhome package/luci-app-adguardhome
 # svn export https://github.com/kiddin9/openwrt-packages/trunk/adguardhome package/adguardhome
 
 # mosdns
-svn export https://github.com/kenzok8/openwrt-packages/trunk/luci-app-mosdns package/luci-app-mosdns
-svn export https://github.com/kenzok8/openwrt-packages/trunk/mosdns package/mosdns
-svn export https://github.com/kenzok8/openwrt-packages/trunk/v2dat package/v2dat
+svn export https://github.com/kenzok8/openwrt-packages/luci-app-mosdns package/luci-app-mosdns
+svn export https://github.com/kenzok8/openwrt-packages/mosdns package/mosdns
+svn export https://github.com/kenzok8/openwrt-packages/v2dat package/v2dat
 # svn export https://github.com/kiddin9/openwrt-packages/trunk/luci-app-mosdns package/luci-app-mosdns
 # svn export https://github.com/kiddin9/openwrt-packages/trunk/mosdns package/mosdns
 # svn export https://github.com/kiddin9/openwrt-packages/trunk/v2dat package/v2dat
