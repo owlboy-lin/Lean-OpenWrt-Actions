@@ -18,6 +18,12 @@
           description: 'SSH connection to Actions'
           required: false
           default: 'false'
+
+        CACHE_BUILD:
+          description: '缓存加速'
+          required: false
+          default: 'true'
+          type: boolean
           
   # 定时触发编译(每月1日早3点)
     schedule:
@@ -32,9 +38,13 @@
     DIY_P2_SH: r66s/6.1/diy-part2.sh
     UPLOAD_BIN_DIR: false
     UPLOAD_FIRMWARE: true
+    UPLOAD_BUILDINFO: true
+    UPLOAD_PACKAGE: true
+    UPLOAD_COWTRANSFER: false
+    UPLOAD_WETRANSFER: false
     UPLOAD_RELEASE: false
     GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
-    TZ: Asia/Shanghai
+    TZ: Asia/Shanghai  
 
   jobs:
     build:
