@@ -44,15 +44,15 @@ env:
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: Lean-p-1.info
   Firmware_Name: Lean--p
-  DIY_P1_SH: smpackage/smpackage-1-p.sh
-  DIY_P2_SH: smpackage/smpackage-2-p.sh
+  DIY_P1_SH: smpackage/smpackage-1-1.sh
+  DIY_P2_SH: smpackage/smpackage-2-p-uugame.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_BUILDINFO: true
   UPLOAD_PACKAGE: true
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: false
-  UPLOAD_RELEASE: false
+  UPLOAD_RELEASE: true
   GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
   TZ: Asia/Shanghai 
 
