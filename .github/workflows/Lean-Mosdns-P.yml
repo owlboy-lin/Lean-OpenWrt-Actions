@@ -150,14 +150,15 @@ jobs:
           ./scripts/feeds update -a
           # rm -rf feeds/small/luci-app-mosdns
           # rm -rf feeds/small/mosdns
+          rm -rf feeds/luci/applications/luci-app-mosdns
           rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,smartdns}
           rm -rf feeds/packages/utils/v2dat
           rm -rf feeds/packages/lang/golang
 
-          rm -rf feeds/luci/applications/luci-app-mosdns
-          rm -rf feeds/packages/net/v2ray-geodata
-          git clone https://github.com/sbwml/luci-app-mosdns -b v5-lua package/mosdns
-          git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
+          
+          # rm -rf feeds/packages/net/v2ray-geodata
+          # git clone https://github.com/sbwml/luci-app-mosdns -b v5-lua package/mosdns
+          # git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
           git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
 
       - name: 安装源 #Install feeds
