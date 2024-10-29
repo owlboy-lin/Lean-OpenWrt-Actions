@@ -39,7 +39,7 @@ env:
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: Lean-all.info
-  Firmware_Name: Lean-Mosdns-netspeed-uugame-netdate-ALL
+  Firmware_Name: Lean-Mosdns-ALL
   DIY_P1_SH: smpackage/smpackage-1.sh
   DIY_P2_SH: smpackage/smpackage-2-all-1.sh
   UPLOAD_BIN_DIR: false
