@@ -10,9 +10,6 @@
 # Description: OpenWrt DIY script part 1 (Before Update feeds)
 # =================================================================
 
-# Modify default IP
-sed -i 's/192.168.1.1/192.168.24.1/g' package/base-files/files/bin/config_generate
-
 # Uncomment a feed source
 # sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
 
@@ -26,6 +23,9 @@ sed -i 's/192.168.1.1/192.168.24.1/g' package/base-files/files/bin/config_genera
 # git clone https://github.com/kenzok8/openwrt-packages.git package/openwrt-packages
 
 # git clone https://github.com/kenzok8/small.git package/small
+
+# Modify default IP
+sed -i 's/192.168.1.1/192.168.89.249/g' package/base-files/files/bin/config_generate
 
 # Import external feeds
 # git clone https://github.com/Lienol/openwrt-package.git package/lienol
@@ -75,7 +75,7 @@ sed -i 's/192.168.1.1/192.168.24.1/g' package/base-files/files/bin/config_genera
 # echo 'src-git mosdns https://github.com/sbwml/luci-app-mosdns' >>feeds.conf.default
 
 ## netspeedtest
-git clone https://github.com/sirpdboy/netspeedtest.git package/netspeedtest
+ git clone https://github.com/sirpdboy/netspeedtest.git package/netspeedtest
 
 ## OpenClash
 # echo 'src-git openclash https://github.com/vernesong/OpenClash' >>feeds.conf.default
@@ -100,8 +100,8 @@ git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-p
 # sed -i '1i src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default
 
 
-sed -i '1i src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
-sed -i '2i src-git small https://github.com/kenzok8/small' feeds.conf.default
+# sed -i '1i src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
+# sed -i '2i src-git small https://github.com/kenzok8/small' feeds.conf.default
 
-# sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
-# sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
+sed -i '1i src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
+sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
