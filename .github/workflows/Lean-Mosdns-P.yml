@@ -295,7 +295,7 @@ jobs:
           cp -rf ./.config ./artifact/firmware/${{ env.Firmware_Name }}.info
           cp -rf ./feeds.conf.default ./artifact/buildinfo/
           cd artifact/firmware/
-          rename "s/openwrt/${{ env.Firmware_Name }}/" *
+          # rename "s/openwrt/${{ env.Firmware_Name }}/" *
 
 
       - name: SSH connection to Actions
