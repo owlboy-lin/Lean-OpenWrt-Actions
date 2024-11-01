@@ -115,7 +115,7 @@ jobs:
           sudo -E apt clean
           sudo -E timedatectl set-timezone "Asia/Shanghai"
           sudo mkdir -p /workdir
-          sudo chown $USER:$GROUPS /workdir  
+          sudo chown $USER:$GROUPS /workdir 
 
       - name: 更新时区、编译时间
         id: date
