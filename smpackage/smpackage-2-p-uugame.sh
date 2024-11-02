@@ -11,7 +11,7 @@
 #
 
 # 修改openwrt登陆地址,把下面的 10.0.0.1 修改成你想要的就可以了
-sed -i 's/192.168.1.1/192.168.24.1/g' package/base-files/files/bin/config_generate
+# sed -i 's/192.168.1.1/192.168.24.1/g' package/base-files/files/bin/config_generate
 # 修改 子网掩码
 # sed -i 's/255.255.255.0/255.255.0.0/g' package/base-files/files/bin/config_generate
 
@@ -113,13 +113,6 @@ CONFIG_PACKAGE_ipv6helper=y
 # 自动重启
 CONFIG_PACKAGE_luci-app-autoreboot=y
 CONFIG_PACKAGE_luci-i18n-autoreboot-zh-cn=y
-
-# # Themes
-CONFIG_PACKAGE_luci-app-argon-config=y
-CONFIG_PACKAGE_luci-app-argone-config=y
-CONFIG_PACKAGE_luci-i18n-argon-config-zh-cn=y
-CONFIG_PACKAGE_luci-i18n-argone-config-zh-cn=y
-CONFIG_PACKAGE_luci-theme-argone=y
 
 # 关机
 CONFIG_PACKAGE_luci-app-poweroff=y
