@@ -73,13 +73,13 @@ sed -i 's/192.168.1.1/192.168.24.1/g' package/base-files/files/bin/config_genera
 git clone https://github.com/sirpdboy/netspeedtest.git package/netspeedtest
 
 ## OpenClash
-echo 'src-git openclash https://github.com/vernesong/OpenClash' >>feeds.conf.default
+# echo 'src-git openclash https://github.com/vernesong/OpenClash' >>feeds.conf.default
 
 ## passwall
-echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
+# echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
 
 ## passwall2
-echo 'src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2' >>feeds.conf.default
+# echo 'src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2' >>feeds.conf.default
 
 ## poweroff
 git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff

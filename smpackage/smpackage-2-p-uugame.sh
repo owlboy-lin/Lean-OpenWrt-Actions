@@ -114,13 +114,6 @@ CONFIG_PACKAGE_ipv6helper=y
 CONFIG_PACKAGE_luci-app-autoreboot=y
 CONFIG_PACKAGE_luci-i18n-autoreboot-zh-cn=y
 
-# # Themes
-CONFIG_PACKAGE_luci-app-argon-config=y
-CONFIG_PACKAGE_luci-app-argone-config=y
-CONFIG_PACKAGE_luci-i18n-argon-config-zh-cn=y
-CONFIG_PACKAGE_luci-i18n-argone-config-zh-cn=y
-CONFIG_PACKAGE_luci-theme-argone=y
-
 # 关机
 CONFIG_PACKAGE_luci-app-poweroff=y
 CONFIG_PACKAGE_luci-i18n-poweroff-zh-cn=y
