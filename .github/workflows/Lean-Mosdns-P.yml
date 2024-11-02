@@ -38,7 +38,7 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: Lean-p.info
+  CONFIG_FILE: Lean-Mosdns-P.info
   Firmware_Name: Lean-Mosdns-P
   DIY_P1_SH: smpackage/smpackage-1-1.sh
   DIY_P2_SH: smpackage/smpackage-2-p-uugame.sh
@@ -96,7 +96,7 @@ jobs:
           sudo -E apt clean
           sudo -E timedatectl set-timezone "Asia/Shanghai"
           sudo mkdir -p /workdir
-          sudo chown $USER:$GROUPS /workdir 
+          sudo chown $USER:$GROUPS /workdir
 
       - name: 更新时区、编译时间
         id: date
