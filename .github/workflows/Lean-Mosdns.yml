@@ -41,7 +41,7 @@ env:
   CONFIG_FILE: Lean-p.info
   Firmware_Name: Lean-Mosdns
   DIY_P1_SH: smpackage/smpackage-1-p.sh
-  DIY_P2_SH: smpackage/smpackage-p-2.sh
+  DIY_P2_SH: smpackage/smpackage-2-p.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_BUILDINFO: true
