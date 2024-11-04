@@ -6,7 +6,7 @@
 # Copyright (C) 2020 KFERMercer
 # chmod +x /etc/init.d/netspeedtest
 
-name: bllw3002-Lean-Mosdns-P
+name: bllw3002-Lean-Mosdns
 
 on:
   schedule:
@@ -39,9 +39,9 @@ env:
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: Lean-p.info
-  Firmware_Name: bllw3002-Lean-Mosdns-P
-  DIY_P1_SH: smpackage/bllw3002-smpackage-p-1.sh
-  DIY_P2_SH: smpackage/bllw3002-smpackage-p-2.sh
+  Firmware_Name: bllw3002-Lean-Mosdns
+  DIY_P1_SH: smpackage/bllw3002-smpackage-1.sh
+  DIY_P2_SH: smpackage/bllw3002-smpackage-2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_BUILDINFO: true
@@ -57,7 +57,7 @@ jobs:
   build_openwrt:
 
 
-    name: bllw3002-Lean-Mosdns-P
+    name: bllw3002-Lean-Mosdns
 
     runs-on: ubuntu-latest
     
@@ -156,26 +156,18 @@ jobs:
           $GITHUB_WORKSPACE/$DIY_P1_SH
 
 
-      # - name: 更新源 #Update feeds
-      #   run: cd openwrt && ./scripts/feeds update -a
-      
       - name: 更新源 #Update feeds
-        run: |
-          cd openwrt 
-          ./scripts/feeds clean 
-          ./scripts/feeds update -a
-          # rm -rf feeds/small/luci-app-mosdns
-          # rm -rf feeds/small/mosdns
-          rm -rf feeds/luci/applications/luci-app-mosdns
-          rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,smartdns}
-          rm -rf feeds/packages/utils/v2dat
-          rm -rf feeds/packages/lang/golang
-
-          
-          # rm -rf feeds/packages/net/v2ray-geodata
-          # git clone https://github.com/sbwml/luci-app-mosdns -b v5-lua package/mosdns
-          # git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
-          git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
+        run: cd openwrt && ./scripts/feeds update -a
+      
+    #   - name: 更新源 #Update feeds
+    #     run: |
+    #       cd openwrt 
+    #       ./scripts/feeds clean 
+    #       ./scripts/feeds update -a
+    #       rm -rf feeds/smpackage/{base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd-alt,miniupnpd-iptables,wireless-regdb}
+    #       rm -rf feeds/luci/applications/luci-app-mosdns && rm -rf feeds/packages/net/{alist,adguardhome,mosdns,smartdns}
+    #       rm -rf feeds/packages/lang/golang
+    #       git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
 
       - name: 安装源 #Install feeds
         run: cd openwrt && ./scripts/feeds install -a
