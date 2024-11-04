@@ -101,8 +101,8 @@ jobs:
           # sudo -E apt-get -qq clean
           # sudo timedatectl set-timezone "$TZ"
           # sudo mkdir -p /workdir
-          # sudo chown $USER:$GROUPS /workdir     
-
+          # sudo chown $USER:$GROUPS /workdir
+          
           docker rmi `docker images -q`
           sudo -E rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
           sudo -E apt-mark hold grub-efi-amd64-signed
@@ -116,7 +116,7 @@ jobs:
           sudo -E apt clean
           sudo -E timedatectl set-timezone "Asia/Shanghai"
           sudo mkdir -p /workdir
-          sudo chown $USER:$GROUPS /workdir 
+          sudo chown $USER:$GROUPS /workdir
 
       - name: 更新时区、编译时间
         id: date
