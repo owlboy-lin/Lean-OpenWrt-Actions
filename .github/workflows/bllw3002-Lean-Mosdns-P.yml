@@ -38,7 +38,7 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: Lean-Mosdns-P.info
+  CONFIG_FILE: Lean-p.info
   Firmware_Name: bllw3002-Lean-Mosdns-P
   DIY_P1_SH: smpackage/smpackage-p-3002.sh
   DIY_P2_SH: smpackage/smpackage-p-2-3002.sh
