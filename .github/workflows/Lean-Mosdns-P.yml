@@ -172,7 +172,7 @@ jobs:
       - name: 安装源 #Install feeds
         run: |
           cd openwrt && ./scripts/feeds install -a
-          rm -rf ./tmp && rm -rf .config
+          # rm -rf ./tmp && rm -rf .config
           
 
 
