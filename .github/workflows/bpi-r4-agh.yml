@@ -40,8 +40,8 @@ env:
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: bpi-r4/bpi-r4-agh.info
   Firmware_Name: bpi-r4-agh
-  DIY_P1_SH: bpi-r4/agh-1.sh
-  DIY_P2_SH: bpi-r4/agh-2.sh
+  DIY_P1_SH: bpi-r4/PACKAGE-1.sh
+  DIY_P2_SH: bpi-r4/PACKAGE-2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: false
   UPLOAD_BUILDINFO: false
