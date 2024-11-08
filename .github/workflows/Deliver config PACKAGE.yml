@@ -27,7 +27,7 @@
       REPO_URL: https://github.com/coolsnowwolf/lede.git
       REPO_BRANCH: master
       FEEDS_CONF: feeds.conf.default
-      CONFIG_FILE: bpi-r4/bpi-r4-agh.info
+      CONFIG_FILE: bpi-r4/PACKAGE.info
       Firmware_Name: PACKAGE
       DIY_P1_SH: bpi-r4/PACKAGE-1.sh
       DIY_P2_SH: bpi-r4/PACKAGE-2.sh
