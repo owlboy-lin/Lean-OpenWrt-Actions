@@ -11,7 +11,7 @@
 # =================================================================
 
 # Uncomment a feed source
-sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
+# sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
 
 # Add a feed source
 # echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
@@ -77,7 +77,7 @@ sed -i 's/192.168.1.1/192.168.24.1/g' package/base-files/files/bin/config_genera
 # echo 'src-git mosdns https://github.com/sbwml/luci-app-mosdns' >>feeds.conf.default
 
 ## netspeedtest
-echo 'src-git netspeedtest https://github.com/sirpdboy/netspeedtest' >>feeds.conf.default
+# echo 'src-git netspeedtest https://github.com/sirpdboy/netspeedtest' >>feeds.conf.default
 
 ## OpenClash
 # echo 'src-git openclash https://github.com/vernesong/OpenClash' >>feeds.conf.default
@@ -92,8 +92,8 @@ echo 'src-git netspeedtest https://github.com/sirpdboy/netspeedtest' >>feeds.con
 
 
 ## poweroff
-git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
+# git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
 
 
-sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
+# sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
 # sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
