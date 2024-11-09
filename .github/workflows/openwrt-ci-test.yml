@@ -14,9 +14,7 @@ on:
 
   watch:
     types: [started]
- 
-# permissions:
-#   contents: read
+
   repository_dispatch:
     workflow_dispatch:
       inputs:
