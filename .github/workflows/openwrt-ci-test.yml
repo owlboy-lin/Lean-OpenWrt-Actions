@@ -10,24 +10,27 @@ name: OpenWrt-CI-test
 
 on:
   schedule:
-    - cron: 0 20 * * *
+    - cron: 0 22 * * *
 
+  # release:
+  #   types: [published]
+  
   watch:
     types: [started]
 
   repository_dispatch:
-    workflow_dispatch:
-      inputs:
-        ssh:
-          description: 'SSH connection to Actions'
-          required: false
-          default: 'false'
-          
-        CACHE_BUILD:
-          description: '缓存加速'
-          required: false
-          default: 'true'
-          type: boolean
+  workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
+        
+      CACHE_BUILD:
+        description: '缓存加速'
+        required: false
+        default: 'true'
+        type: boolean
 
     
 env:
