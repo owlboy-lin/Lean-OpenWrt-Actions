@@ -42,7 +42,7 @@ env:
   DIY_P1_SH: smpackage/test-p.sh
   DIY_P2_SH: smpackage/test-p-2.sh
   UPLOAD_BIN_DIR: false
-  UPLOAD_FIRMWARE: true
+  UPLOAD_FIRMWARE: false
   UPLOAD_BUILDINFO: true
   UPLOAD_PACKAGE: true
   UPLOAD_COWTRANSFER: false
