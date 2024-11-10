@@ -37,7 +37,7 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: OpenWrt-CI-small.info
+  CONFIG_FILE: OpenWrt-CI-all.info
   Firmware_Name: OpenWrt-CI-test
   DIY_P1_SH: smpackage/test-p.sh
   DIY_P2_SH: smpackage/test-p-2.sh
