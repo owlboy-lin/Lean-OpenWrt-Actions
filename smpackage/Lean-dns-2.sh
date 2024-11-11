@@ -48,3 +48,47 @@ sed -i 's/192.168.1.1/192.168.24.1/g' package/base-files/files/bin/config_genera
 #uci set network.wan.password='yourpassword'
 
 
+
+echo "
+
+# 额外组件
+CONFIG_GRUB_IMAGES=y
+CONFIG_VMDK_IMAGES=y
+
+# 固件大小
+CONFIG_TARGET_KERNEL_PARTSIZE=512
+CONFIG_TARGET_ROOTFS_PARTSIZE=1024
+
+# 自动重启
+CONFIG_PACKAGE_luci-app-autoreboot=y
+CONFIG_PACKAGE_luci-i18n-autoreboot-zh-cn=y
+
+# 关机
+CONFIG_PACKAGE_luci-app-poweroff=y
+CONFIG_PACKAGE_luci-i18n-poweroff-zh-cn=y
+
+# adguardhome
+CONFIG_PACKAGE_luci-app-adguardhome=y
+CONFIG_PACKAGE_luci-i18n-adguardhome-zh-cn=y
+
+# mosdns
+CONFIG_PACKAGE_luci-app-mosdns=y
+CONFIG_PACKAGE_luci-i18n-mosdns-zh-cn=y
+
+# netspeedtest chmod +x /etc/init.d/netspeedtest
+CONFIG_PACKAGE_luci-app-netspeedtest=y
+CONFIG_PACKAGE_luci-i18n-netspeedtest-zh-cn=y
+
+# quickstart
+CONFIG_PACKAGE_luci-app-quickstart=y
+CONFIG_PACKAGE_luci-i18n-quickstart-zh-cn=y
+
+# luci-app-ttyd=y
+CONFIG_PACKAGE_luci-app-ttyd=y
+CONFIG_PACKAGE_luci-i18n-ttyd-zh-cn=y
+
+# luci-app-webadmin=y
+CONFIG_PACKAGE_luci-app-webadmin=y
+CONFIG_PACKAGE_luci-i18n-webadmin-zh-cn=y
+
+" >> .config
