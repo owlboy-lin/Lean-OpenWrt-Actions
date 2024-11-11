@@ -6,7 +6,7 @@
 # Copyright (C) 2020 KFERMercer
 # chmod +x /etc/init.d/netspeedtest
 
-name: Lean-Mosdns-small-P
+name: Lean-all-small
 
 on:
   schedule:
@@ -38,10 +38,10 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: Lean-p-1.info
+  CONFIG_FILE: OpenWrt-CI-all.info
   Firmware_Name: Lean-all-small
-  DIY_P1_SH: smpackage/smpackage-1.sh
-  DIY_P2_SH: smpackage/smpackage-2-p.sh
+  DIY_P1_SH: smpackage/Lean-all-small-1.sh
+  DIY_P2_SH: smpackage/Lean-all-small-2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_BUILDINFO: true
@@ -57,7 +57,7 @@ jobs:
   build_openwrt:
 
 
-    name: Lean-Mosdns-small-P
+    name: Lean-all-small
 
     runs-on: ubuntu-latest
     
