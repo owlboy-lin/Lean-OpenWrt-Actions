@@ -57,7 +57,7 @@ jobs:
   build_openwrt:
 
 
-    name: Lean-small
+    name: Lean-dns
 
     runs-on: ubuntu-latest
     
