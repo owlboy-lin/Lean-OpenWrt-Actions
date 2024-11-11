@@ -6,7 +6,7 @@
 # Copyright (C) 2020 KFERMercer
 # chmod +x /etc/init.d/netspeedtest
 
-name: Lean-small
+name: Lean-dns
 
 on:
   schedule:
@@ -39,9 +39,9 @@ env:
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: OpenWrt-CI-small.info
-  Firmware_Name: Lean-small
-  DIY_P1_SH: smpackage/Lean-small-1.sh
-  DIY_P2_SH: smpackage/Lean-small-2.sh
+  Firmware_Name: Lean-dns
+  DIY_P1_SH: smpackage/Lean-dns-1.sh
+  DIY_P2_SH: smpackage/Lean-dns-2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_BUILDINFO: true
