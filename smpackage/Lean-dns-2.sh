@@ -90,3 +90,5 @@ CONFIG_PACKAGE_luci-i18n-ttyd-zh-cn=y
 # luci-app-webadmin=y
 CONFIG_PACKAGE_luci-app-webadmin=y
 CONFIG_PACKAGE_luci-i18n-webadmin-zh-cn=y
+
+" >> .config
