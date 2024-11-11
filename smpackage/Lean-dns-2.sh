@@ -47,55 +47,7 @@ sed -i 's/192.168.1.1/192.168.24.1/g' package/base-files/files/bin/config_genera
 #uci set network.wan.username='yougotthisfromyour@isp.su'
 #uci set network.wan.password='yourpassword'
 
-# 移除重复软件包
-# rm -rf feeds/luci/themes/luci-theme-argon
 
-# Themes
-# git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git package/lean/luci-theme-argon
-# git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git lpackage/uci-theme-argon
-# echo 'src-git argon https://github.com/jerrykuku/luci-theme-argon' >>feeds.conf.default
-# git clone -b 18.06 https://github.com/jerrykuku/luci-app-argon-config.git package/luci-app-argon-config
-# echo 'src-git argon-config https://github.com/jerrykuku/luci-app-argon-config' >>feeds.conf.default
-
-# 添加额外软件包
-
-
-# 科学上网插件
-
-
-# 科学上网插件依赖
-
-
-
-# openclash
-# svn export https://github.com/kenzok8/openwrt-packages/luci-app-openclash  package/luci-app-openclash
-# svn export https://github.com/kiddin9/openwrt-packages/trunk/luci-app-openclash  package/luci-app-openclash
-# 加入OpenClash核心
-# chmod -R a+x $GITHUB_WORKSPACE/preset-clash-core.sh
-# if [ "$1" = "rk33xx" ]; then
-#     $GITHUB_WORKSPACE/preset-clash-core.sh arm64
-# elif [ "$1" = "rk35xx" ]; then
-#     $GITHUB_WORKSPACE/preset-clash-core.sh arm64
-# elif [ "$1" = "x86" ]; then
-#     $GITHUB_WORKSPACE/preset-clash-core.sh amd64
-# fi
-
-# adguardhome
-# svn export https://github.com/kenzok8/openwrt-packages/luci-app-adguardhome package/luci-app-adguardhome
-# svn export https://github.com/kenzok8/openwrt-packages/adguardhome package/adguardhome
-# svn export https://github.com/kiddin9/openwrt-packages/trunk/luci-app-adguardhome package/luci-app-adguardhome
-# svn export https://github.com/kiddin9/openwrt-packages/trunk/adguardhome package/adguardhome
-
-# mosdns
-# svn export https://github.com/kenzok8/openwrt-packages/luci-app-mosdns package/luci-app-mosdns
-# svn export https://github.com/kenzok8/openwrt-packages/mosdns package/mosdns
-# svn export https://github.com/kenzok8/openwrt-packages/v2dat package/v2dat
-# svn export https://github.com/kiddin9/openwrt-packages/trunk/luci-app-mosdns package/luci-app-mosdns
-# svn export https://github.com/kiddin9/openwrt-packages/trunk/mosdns package/mosdns
-# svn export https://github.com/kiddin9/openwrt-packages/trunk/v2dat package/v2dat
-
-
-# 添加自定义软件包
 
 echo "
 
@@ -127,22 +79,14 @@ CONFIG_PACKAGE_luci-i18n-mosdns-zh-cn=y
 CONFIG_PACKAGE_luci-app-netspeedtest=y
 CONFIG_PACKAGE_luci-i18n-netspeedtest-zh-cn=y
 
-
-
-
 # quickstart
 CONFIG_PACKAGE_luci-app-quickstart=y
 CONFIG_PACKAGE_luci-i18n-quickstart-zh-cn=y
-
-
 
 # luci-app-ttyd=y
 CONFIG_PACKAGE_luci-app-ttyd=y
 CONFIG_PACKAGE_luci-i18n-ttyd-zh-cn=y
 
-
-
 # luci-app-webadmin=y
 CONFIG_PACKAGE_luci-app-webadmin=y
 CONFIG_PACKAGE_luci-i18n-webadmin-zh-cn=y
-
