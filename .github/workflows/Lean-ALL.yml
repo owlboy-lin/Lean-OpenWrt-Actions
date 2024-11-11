@@ -6,7 +6,7 @@
 # Copyright (C) 2020 KFERMercer
 # chmod +x /etc/init.d/netspeedtest
 
-name: Lean-ALL
+name: Lean-all
 
 on:
   schedule:
@@ -39,7 +39,7 @@ env:
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: OpenWrt-CI-all.info
-  Firmware_Name: Lean-ALL
+  Firmware_Name: Lean-all
   DIY_P1_SH: smpackage/Lean-all-1.sh
   DIY_P2_SH: smpackage/Lean-all-2.sh
   UPLOAD_BIN_DIR: false
@@ -57,7 +57,7 @@ jobs:
   build_openwrt:
 
 
-    name: Lean-ALL
+    name: Lean-all
 
     runs-on: ubuntu-latest
     
