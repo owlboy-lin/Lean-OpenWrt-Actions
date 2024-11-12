@@ -108,8 +108,7 @@ CONFIG_TARGET_KERNEL_PARTSIZE=512
 CONFIG_TARGET_ROOTFS_PARTSIZE=1024
 
 # # Themes
-CONFIG_PACKAGE_luci-app-argon-config=y
-CONFIG_PACKAGE_luci-app-argone-config=y
+CONFIG_PACKAGE_luci-theme-argone=y
 
 
 # 自动重启
