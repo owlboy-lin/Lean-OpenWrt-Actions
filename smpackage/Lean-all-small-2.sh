@@ -155,9 +155,6 @@ CONFIG_PACKAGE_luci-app-store=y
 CONFIG_PACKAGE_luci-app-ttyd=y
 CONFIG_PACKAGE_luci-i18n-ttyd-zh-cn=y
 
-# luci-app-uugamebooster=y
-CONFIG_PACKAGE_luci-app-uugamebooster=y
-CONFIG_PACKAGE_luci-i18n-uugamebooster-zh-cn=y
 
 # luci-app-webadmin=y
 CONFIG_PACKAGE_luci-app-webadmin=y
