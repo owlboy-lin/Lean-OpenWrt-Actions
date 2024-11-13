@@ -38,7 +38,7 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: OpenWrt-CI-all.info
+  CONFIG_FILE: OpenWrt-CI.info
   Firmware_Name: Lean-all
   DIY_P1_SH: smpackage/Lean-all-1.sh
   DIY_P2_SH: smpackage/Lean-all-2.sh
