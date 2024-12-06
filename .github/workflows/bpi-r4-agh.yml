@@ -35,8 +35,8 @@ on:
 
     
 env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
-  REPO_BRANCH: master
+  REPO_URL: https://github.com/hanwckf/immortalwrt-mt798x
+  REPO_BRANCH: openwrt-21.02
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: bpi-r4/bpi-r4.info
   Firmware_Name: bpi-r4-agh
