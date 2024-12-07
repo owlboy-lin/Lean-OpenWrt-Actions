@@ -43,12 +43,12 @@ env:
   DIY_P1_SH: bpi-r4/PACKAGE-1.sh
   DIY_P2_SH: bpi-r4/PACKAGE-2.sh
   UPLOAD_BIN_DIR: false
-  UPLOAD_FIRMWARE: false
-  UPLOAD_BUILDINFO: false
+  UPLOAD_FIRMWARE: true
+  UPLOAD_BUILDINFO: true
   UPLOAD_PACKAGE: true
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: false
-  UPLOAD_RELEASE: true
+  UPLOAD_RELEASE: false
   GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
   TZ: Asia/Shanghai 
 
@@ -57,7 +57,7 @@ jobs:
   build_openwrt:
 
 
-    name: bpi-r4-agh
+    name: Banana Pi BPI-R4
 
     runs-on: Ubuntu-20.04
     
