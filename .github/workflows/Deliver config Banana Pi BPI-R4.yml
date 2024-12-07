@@ -27,10 +27,10 @@
       REPO_URL: https://github.com/hanwckf/immortalwrt-mt798x
       REPO_BRANCH: openwrt-21.02
       FEEDS_CONF: feeds.conf.default
-      CONFIG_FILE: Lean-p.info
+      CONFIG_FILE: bpi-r4/bpi-r4.info
       Firmware_Name: Banana Pi BPI-R4
-      DIY_P1_SH: smpackage/smpackage-1.sh
-      DIY_P2_SH: smpackage/smpackage-2-p.sh
+      DIY_P1_SH: bpi-r4/PACKAGE-1.sh
+      DIY_P2_SH: bpi-r4/PACKAGE-2.sh
       UPLOAD_BIN_DIR: false
       UPLOAD_FIRMWARE: true
       UPLOAD_BUILDINFO: true
