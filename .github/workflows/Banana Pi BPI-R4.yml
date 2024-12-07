@@ -35,8 +35,8 @@ on:
 
     
 env:
-  REPO_URL: https://github.com/hanwckf/immortalwrt-mt798x
-  REPO_BRANCH: openwrt-21.02
+  REPO_URL: https://github.com/padavanonly/immortalwrt-mt798x.git
+  REPO_BRANCH: mt7988
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: bpi-r4/bpi-r4.info
   Firmware_Name: Banana Pi BPI-R4
@@ -128,7 +128,7 @@ jobs:
         working-directory: /workdir
         run: |
           df -hT $PWD
-          git clone $REPO_URL -b $REPO_BRANCH openwrt
+          git clone --depth=1 -b $REPO_BRANCH --single-branch $REPO_URL openwrt
           ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
       - name: 缓存
