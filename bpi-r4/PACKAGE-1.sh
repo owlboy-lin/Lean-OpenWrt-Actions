@@ -56,15 +56,15 @@ sed -i 's/192.168.1.1/192.168.24.1/g' package/base-files/files/bin/config_genera
 
 #  下载源码
 ## adguardhome
-# git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app-adguardhome
+git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app-adguardhome
 
 ## autoreboot
 # git clone https://github.com/f8q8/luci-app-autoreboot package/luci-app-autoreboot
 
 ## mosdns
-# echo 'src-git mosdns https://github.com/sbwml/luci-app-mosdns' >>feeds.conf.default
-# git clone https://github.com/sbwml/luci-app-mosdns -b v5-lua package/mosdns
-# git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
+echo 'src-git mosdns https://github.com/sbwml/luci-app-mosdns' >>feeds.conf.default
+git clone https://github.com/sbwml/luci-app-mosdns -b v5-lua package/mosdns
+git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 
 
 ## netspeedtest
@@ -79,7 +79,7 @@ git clone https://github.com/sirpdboy/netspeedtest.git package/netspeedtest
 # echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
 
 ## passwall2
-# echo 'src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2' >>feeds.conf.default
+echo 'src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2' >>feeds.conf.default
 
 ## poweroff
 git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
