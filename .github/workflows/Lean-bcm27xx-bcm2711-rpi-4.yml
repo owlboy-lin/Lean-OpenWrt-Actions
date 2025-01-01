@@ -55,7 +55,7 @@ env:
 jobs:
   build_openwrt:
 
-    runs-on: ubuntu-latest
+    runs-on: Ubuntu-22.04
     
     name: Lean-bcm27xx-bcm2711-rpi-4B
 

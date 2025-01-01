@@ -63,7 +63,7 @@ jobs:
 
     name: OpenWrt-FastRhino-r66s-test
 
-    runs-on: ubuntu-latest
+    runs-on: Ubuntu-22.04
     
     steps:
     

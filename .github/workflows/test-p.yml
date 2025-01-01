@@ -59,7 +59,7 @@ jobs:
 
     name: test-p
 
-    runs-on: ubuntu-latest
+    runs-on: Ubuntu-22.04
     
     steps:
     

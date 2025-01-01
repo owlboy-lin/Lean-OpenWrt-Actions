@@ -59,7 +59,7 @@ jobs:
 
     name: OpenWrt-CI-test
 
-    runs-on: ubuntu-latest
+    runs-on: Ubuntu-22.04
     
     steps:
       - name: 释放Ubuntu磁盘空间
