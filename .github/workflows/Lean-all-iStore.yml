@@ -59,7 +59,7 @@ jobs:
 
     name: Lean-all-iStore
     
-    runs-on: Ubuntu-20.04
+    runs-on: Ubuntu-22.04
     
     steps:
 
