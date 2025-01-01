@@ -52,7 +52,7 @@ jobs:
 
     name: Lean-small-package-p
 
-    runs-on: ubuntu-latest
+    runs-on: Ubuntu-22.04
     
     steps:
       - name: Space cleanup and Initialization environment
