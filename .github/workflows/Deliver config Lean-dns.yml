@@ -11,24 +11,24 @@
     name: Deliver config Lean-dns
 
     on:
-    schedule:
+      schedule:
         - cron: 0 22 * * *
 
-    release:
+      release:
         types: [published]
-    
-    watch:
+        
+      watch:
         types: [started]
 
-    repository_dispatch:
-    workflow_dispatch:
+      repository_dispatch:
+      workflow_dispatch:
         inputs:
-        ssh:
+          ssh:
             description: 'SSH connection to Actions'
             required: false
             default: 'false'
-            
-        CACHE_BUILD:
+                
+          CACHE_BUILD:
             description: '缓存加速'
             required: false
             default: 'true'
