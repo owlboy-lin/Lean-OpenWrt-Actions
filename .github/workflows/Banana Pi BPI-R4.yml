@@ -128,7 +128,7 @@ jobs:
         working-directory: /workdir
         run: |
           df -hT $PWD
-          git clone --depth=1 -b $REPO_BRANCH --single-branch $REPO_URL openwrt
+          git clone --depth=1 $REPO_URL openwrt
           ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
       - name: 缓存
@@ -138,6 +138,13 @@ jobs:
           ccache: 'true'
           mixkey: '${{ env.Firmware_Name }}'
           prefix: ${{ github.workspace }}/openwrt
+
+      - name: SSH connection to Actions
+        uses: P3TERX/ssh2actions@v1.0.0
+        if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+        env:
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}  
 
       - name: patch1补丁和自定义设置
         run: |
