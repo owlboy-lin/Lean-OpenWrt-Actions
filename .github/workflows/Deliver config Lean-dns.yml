@@ -8,19 +8,20 @@
     # <https://github.com/KFERMercer/OpenWrt-CI>
     # 
 
-    name: Deliver config Lean-dns
+    name: Deliver config Lean
 
-    
+
+
     on:
       schedule:
         - cron: 0 22 * * *
-
+    
       release:
         types: [published]
         
       watch:
         types: [started]
-
+    
       repository_dispatch:
       workflow_dispatch:
         inputs:
@@ -28,12 +29,13 @@
             description: 'SSH connection to Actions'
             required: false
             default: 'false'
-                
+            
           CACHE_BUILD:
             description: '缓存加速'
             required: false
             default: 'true'
             type: boolean
+
 
             
           
@@ -63,7 +65,7 @@
      #   container: node:16.16.0
      
      
-        name: Deliver config Lean-dns
+        name: Deliver config Lean
         
         if: github.event.repository.owner.id == github.event.sender.id
         
