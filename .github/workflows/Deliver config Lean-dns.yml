@@ -8,7 +8,7 @@
     # <https://github.com/KFERMercer/OpenWrt-CI>
     # 
 
-    name: Deliver config Lean
+    name: Deliver config Lean-dns
 
 
 
@@ -62,7 +62,7 @@
      #   container: node:16.16.0
      
      
-        name: Deliver config Lean
+        name: Deliver config Lean-dns
         
         if: github.event.repository.owner.id == github.event.sender.id
         
