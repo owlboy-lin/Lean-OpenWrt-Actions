@@ -129,15 +129,15 @@ jobs:
         run: |
           df -hT $PWD
           git clone --depth=1 $REPO_URL 
-          # ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+          ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
-      # - name: 缓存
-      #   uses: klever1988/cachewrtbuild@main
-      #   if: env.CACHE_BUILD == 'true' || (github.event.inputs.CACHE_BUILD == 'true')
-      #   with:
-      #     ccache: 'true'
-      #     mixkey: '${{ env.Firmware_Name }}'
-      #     prefix: ${{ github.workspace }}/openwrt
+      - name: 缓存
+        uses: klever1988/cachewrtbuild@main
+        if: env.CACHE_BUILD == 'true' || (github.event.inputs.CACHE_BUILD == 'true')
+        with:
+          ccache: 'true'
+          mixkey: '${{ env.Firmware_Name }}'
+          prefix: ${{ github.workspace }}/openwrt
 
       - name: SSH connection to Actions
         uses: P3TERX/ssh2actions@v1.0.0
