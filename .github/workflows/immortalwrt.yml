@@ -35,7 +35,7 @@ on:
 
     
 env:
-  REPO_URL: https://github.com/immortalwrt
+  REPO_URL: https://github.com/immortalwrt/immortalwrt
   REPO_BRANCH: openwrt-24.10
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: OpenWrt-CI.info
