@@ -72,7 +72,7 @@ git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app
 # git clone https://github.com/f8q8/luci-app-autoreboot package/luci-app-autoreboot
 
 ## mosdns
-# echo 'src-git mosdns https://github.com/sbwml/luci-app-mosdns' >>feeds.conf.default
+echo 'src-git mosdns https://github.com/sbwml/luci-app-mosdns' >>feeds.conf.default
 
 ## netspeedtest
 # echo 'src-git netspeedtest https://github.com/sirpdboy/netspeedtest' >>feeds.conf.default
