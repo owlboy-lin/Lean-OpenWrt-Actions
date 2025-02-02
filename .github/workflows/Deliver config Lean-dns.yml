@@ -40,7 +40,7 @@
       REPO_URL: https://github.com/coolsnowwolf/lede
       REPO_BRANCH: master
       FEEDS_CONF: feeds.conf.default
-      CONFIG_FILE: OpenWrt-CI-small.info
+      CONFIG_FILE: Lean-dns.info
       Firmware_Name: Lean-dns
       DIY_P1_SH: smpackage/Lean-dns-1.sh
       DIY_P2_SH: smpackage/Lean-dns-2.sh
