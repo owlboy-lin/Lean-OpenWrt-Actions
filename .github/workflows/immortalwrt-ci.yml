@@ -10,10 +10,14 @@ name: immortalwrt-CI
 
 on:
   schedule:
-    - cron: 0 20 * * *
+    - cron: 0 22 * * *
+
   release:
     types: [published]
-    
+
+  watch:
+    types: [started]
+
   repository_dispatch:
   workflow_dispatch:
     inputs:
@@ -21,12 +25,12 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
-  watch:
-    types: [started]
-    
-
-permissions:
-  contents: read
+            
+      CACHE_BUILD:
+        description: '缓存加速'
+        required: false
+        default: 'true'
+        type: boolean
 
 
     
@@ -39,10 +43,13 @@ env:
   DIY_P2_SH: 
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
+  UPLOAD_BUILDINFO: true
+  UPLOAD_PACKAGE: true
   UPLOAD_COWTRANSFER: false
-  UPLOAD_WETRANSFER: true
-  UPLOAD_RELEASE: false
-  TZ: Asia/Shanghai 
+  UPLOAD_WETRANSFER: false
+  UPLOAD_RELEASE: true
+  GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
+  TZ: Asia/Shanghai  
 
 jobs:
 
