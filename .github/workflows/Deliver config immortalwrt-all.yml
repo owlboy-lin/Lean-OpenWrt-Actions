@@ -39,7 +39,7 @@
       REPO_URL: https://github.com/immortalwrt/immortalwrt
       REPO_BRANCH: openwrt-24.10
       FEEDS_CONF: feeds.conf.default
-      CONFIG_FILE: .config
+      CONFIG_FILE: immortalwrt.config
       Firmware_Name: immortalwrt-all
       DIY_P1_SH: 
       DIY_P2_SH: 
