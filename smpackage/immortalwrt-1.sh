@@ -143,7 +143,7 @@ git clone -b 2023.10 --depth 1 https://github.com/XiaoBinin/luci-app-adguardhome
 # git clone -b master --depth 1 https://github.com/pymumu/smartdns.git
 
 # #ssrp
-# git clone -b master --depth 1 https://github.com/fw876/helloworld.git
+git clone -b master --depth 1 https://github.com/fw876/helloworld.git
 
 # #passwall
 # git clone -b main --depth 1 https://github.com/xiaorouji/openwrt-passwall.git
@@ -157,14 +157,11 @@ git clone -b v5 --depth 1 https://github.com/sbwml/luci-app-mosdns.git
 # #openclash
 git clone -b master --depth 1 https://github.com/vernesong/OpenClash.git
 
-## helloworld
-git clone https://github.com/fw876/helloworld.git
-
 ## poweroff
-git clone https://github.com/esirplayground/luci-app-poweroff.git
+git clone -b master https://github.com/esirplayground/luci-app-poweroff.git
 
 ## iStore
-git clone https://github.com/linkease/istore.git
+git clone -b main https://github.com/linkease/istore.git
 
 
 
