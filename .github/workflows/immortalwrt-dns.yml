@@ -6,7 +6,7 @@
 # Copyright (C) 2020 KFERMercer
 # chmod +x /etc/init.d/netspeedtest
 
-name: immortalwrt-all
+name: immortalwrt-dns
 
 on:
   schedule:
@@ -57,7 +57,7 @@ jobs:
   build_openwrt:
 
 
-    name: immortalwrt-all
+    name: immortalwrt-dns
     
     runs-on: Ubuntu-22.04
     
