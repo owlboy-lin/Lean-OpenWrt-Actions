@@ -59,7 +59,7 @@ jobs:
 
     name: Banana Pi BPI-R4
 
-    runs-on: Ubuntu-20.04
+    runs-on: Ubuntu-22.04
     
     steps:
     
@@ -128,7 +128,7 @@ jobs:
         working-directory: /workdir
         run: |
           df -hT $PWD
-          git clone --depth=1 $REPO_URL openwrt
+          git clone --depth=1 -b $REPO_BRANCH $REPO_URL openwrt
           ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
       - name: 缓存
