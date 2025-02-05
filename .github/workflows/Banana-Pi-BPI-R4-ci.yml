@@ -38,7 +38,7 @@ env:
   REPO_URL: https://github.com/padavanonly/immortalwrt-mt798x
   REPO_BRANCH: mt7988
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: bpi-r4/bpi-r4.info
+  CONFIG_FILE: 
   DIY_P1_SH: 
   DIY_P2_SH: 
   UPLOAD_BIN_DIR: false
