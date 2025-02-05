@@ -27,7 +27,7 @@
       REPO_URL: https://github.com/coolsnowwolf/lede.git
       REPO_BRANCH: master
       FEEDS_CONF: feeds.conf.default
-      CONFIG_FILE: Lean-p.info
+      CONFIG_FILE: config/Lean-p.info
       Firmware_Name: Lean-P
       DIY_P1_SH: smpackage/smpackage-1.sh
       DIY_P2_SH: smpackage/smpackage-2-p.sh
