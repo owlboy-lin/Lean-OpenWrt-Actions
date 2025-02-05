@@ -29,7 +29,7 @@
       REPO_URL: https://github.com/istoreos/istoreos.git
       REPO_BRANCH: istoreos-22.03
       FEEDS_CONF: feeds.conf
-      CONFIG_FILE: istoreos.info
+      CONFIG_FILE: config/istoreos.info
       Firmware_Name: istoreos
       DIY_P1_SH: istoreos/istoreos-1.sh
       DIY_P2_SH: istoreos/istoreos-2.sh

@@ -29,7 +29,7 @@
       REPO_URL: https://github.com/coolsnowwolf/lede.git
       REPO_BRANCH: master
       FEEDS_CONF: feeds.conf.default
-      CONFIG_FILE: Lean-istoreos-P.info
+      CONFIG_FILE: config/Lean-istoreos-P.info
       Firmware_Name: Lean-istoreos-P
       DIY_P1_SH: smpackage-1.sh
       DIY_P2_SH: smpackage-2.sh
