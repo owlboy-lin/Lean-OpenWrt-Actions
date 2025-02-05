@@ -8,7 +8,7 @@
     # <https://github.com/KFERMercer/OpenWrt-CI>
     # 
 
-    name: Deliver config Banana-Pi-BPI-R4
+    name: Deliver config Banana-Pi-BPI-R4-ci
 
 
     on:
@@ -61,7 +61,7 @@
      #   container: node:16.16.0
      
      
-        name: Deliver config Banana-Pi-BPI-R4
+        name: Deliver config Banana-Pi-BPI-R4-ci
         
         if: github.event.repository.owner.id == github.event.sender.id
         
@@ -71,31 +71,31 @@
           env:
             DEBIAN_FRONTEND: noninteractive
           run: |
-            docker rmi `docker images -q`
-            sudo -E rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
-            sudo -E apt-mark hold grub-efi-amd64-signed
-            sudo -E apt update
-            sudo -E apt -y purge azure-cli* docker* ghc* zulu* llvm* firefox google* dotnet* powershell* openjdk* mysql* php* mongodb* dotnet* snap*
-            sudo -E apt -y full-upgrade
-            sudo -E apt -y install ack antlr3 aria2 asciidoc autoconf automake autopoint binutils bison build-essential bzip2 ccache cmake cpio curl device-tree-compiler fastjar flex gawk gettext gcc-multilib g++-multilib git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libreadline-dev libssl-dev libtool lrzsz mkisofs msmtp nano ninja-build p7zip p7zip-full patch pkgconf python3 python3-pip libpython3-dev qemu-utils rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev
-            sudo -E apt -y install rename
-            sudo -E systemctl daemon-reload
-            sudo -E apt -y autoremove --purge
-            sudo -E apt clean
-            sudo -E timedatectl set-timezone "Asia/Shanghai"
-            sudo mkdir -p /workdir
-            sudo chown $USER:$GROUPS /workdir  
+            # docker rmi `docker images -q`
+            # sudo -E rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
+            # sudo -E apt-mark hold grub-efi-amd64-signed
+            # sudo -E apt update
+            # sudo -E apt -y purge azure-cli* docker* ghc* zulu* llvm* firefox google* dotnet* powershell* openjdk* mysql* php* mongodb* dotnet* snap*
+            # sudo -E apt -y full-upgrade
+            # sudo -E apt -y install ack antlr3 aria2 asciidoc autoconf automake autopoint binutils bison build-essential bzip2 ccache cmake cpio curl device-tree-compiler fastjar flex gawk gettext gcc-multilib g++-multilib git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libreadline-dev libssl-dev libtool lrzsz mkisofs msmtp nano ninja-build p7zip p7zip-full patch pkgconf python3 python3-pip libpython3-dev qemu-utils rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev
+            # sudo -E apt -y install rename
+            # sudo -E systemctl daemon-reload
+            # sudo -E apt -y autoremove --purge
+            # sudo -E apt clean
+            # sudo -E timedatectl set-timezone "Asia/Shanghai"
+            # sudo mkdir -p /workdir
+            # sudo chown $USER:$GROUPS /workdir  
             
-            #   sudo -E apt-get -qq update
-            #   sudo bash -c 'bash <(curl -sL https://build-scripts.immortalwrt.eu.org/init_build_environment.sh)'
-            #   sudo -E apt -y install rename
-            #   sudo -E apt-get -qq autoremove --purge
-            #   sudo -E apt-get -qq clean
-            #   sudo rm -rf /etc/apt/sources.list.d/* /usr/local/lib/android /opt/ghc /usr/share/dotnet /usr/local/graalvm /usr/local/.ghcup \
-            #   /usr/local/share/powershell /usr/local/share/chromium /usr/local/lib/node_modules
-            #   sudo timedatectl set-timezone "$TZ"
-            #   sudo mkdir -p /workdir
-            #   sudo chown $USER:$GROUPS $GITHUB_WORKSPACE /workdir
+            sudo -E apt-get -qq update
+            sudo bash -c 'bash <(curl -sL https://build-scripts.immortalwrt.eu.org/init_build_environment.sh)'
+            sudo -E apt -y install rename
+            sudo -E apt-get -qq autoremove --purge
+            sudo -E apt-get -qq clean
+            sudo rm -rf /etc/apt/sources.list.d/* /usr/local/lib/android /opt/ghc /usr/share/dotnet /usr/local/graalvm /usr/local/.ghcup \
+            /usr/local/share/powershell /usr/local/share/chromium /usr/local/lib/node_modules
+            sudo timedatectl set-timezone "$TZ"
+            sudo mkdir -p /workdir
+            sudo chown $USER:$GROUPS $GITHUB_WORKSPACE /workdir
 
         - name: 更新时区、编译时间
           id: date
@@ -121,12 +121,12 @@
             ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
          
           
-        - name: patch1补丁和自定义设置
-          run: |
-            [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
-            chmod +x $DIY_P1_SH
-            cd openwrt
-            $GITHUB_WORKSPACE/$DIY_P1_SH
+        # - name: patch1补丁和自定义设置
+        #   run: |
+        #     [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
+        #     chmod +x $DIY_P1_SH
+        #     cd openwrt
+        #     $GITHUB_WORKSPACE/$DIY_P1_SH
             
 
         - name: 更新源 #Update feeds
@@ -135,13 +135,13 @@
         - name: 安装源 #Install feeds
           run: cd openwrt && ./scripts/feeds install -a
 
-        - name: patch2补丁和自定义设置
-          run: |
-            [ -e files ] && mv files openwrt/files
-            [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
-            chmod +x $DIY_P2_SH
-            cd openwrt
-            $GITHUB_WORKSPACE/$DIY_P2_SH
+        # - name: patch2补丁和自定义设置
+        #   run: |
+        #     [ -e files ] && mv files openwrt/files
+        #     [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+        #     chmod +x $DIY_P2_SH
+        #     cd openwrt
+        #     $GITHUB_WORKSPACE/$DIY_P2_SH
             
         - name: Generate configuration file
           run: |
