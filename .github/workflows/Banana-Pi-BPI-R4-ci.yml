@@ -35,10 +35,11 @@ on:
 
     
 env:
-  REPO_URL: https://github.com/padavanonly/immortalwrt-mt798x
+  REPO_URL: https://github.com/padavanonly/immortalwrt-mt798x.git
   REPO_BRANCH: mt7988
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: config/Banana-Pi-BPI-R4.info
+  Firmware_Name: Banana-Pi-BPI-R4
   DIY_P1_SH: smpackage/Banana-Pi-BPI-R4-1.sh
   DIY_P2_SH: smpackage/Banana-Pi-BPI-R4-2.sh
   UPLOAD_BIN_DIR: false
@@ -134,7 +135,6 @@ jobs:
       - name: 更新源
         run: |
           cd openwrt
-          sed -i 's/#src-git helloworld/src-git helloworld/g' ./feeds.conf.default
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
