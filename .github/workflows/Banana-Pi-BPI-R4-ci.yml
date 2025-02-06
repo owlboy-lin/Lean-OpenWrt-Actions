@@ -36,7 +36,7 @@ env:
   REPO_BRANCH: mt7988
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: Banana-Pi-BPI-R4.info
-  Firmware_Name: Banana-Pi-BPI-R4
+  Firmware_Name: Banana-Pi-BPI-R4-CI
   DIY_P1_SH: smpackage/Banana-Pi-BPI-R4-1.sh
   DIY_P2_SH: smpackage/Banana-Pi-BPI-R4-2.sh
   UPLOAD_BIN_DIR: false
