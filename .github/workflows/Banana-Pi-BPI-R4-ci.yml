@@ -57,7 +57,7 @@ jobs:
   build_openwrt:
 
 
-    name: Build Banana-Pi-BPI-R4 firmware
+    name: Banana-Pi-BPI-R4-CI
 
     runs-on: Ubuntu-22.04
     
