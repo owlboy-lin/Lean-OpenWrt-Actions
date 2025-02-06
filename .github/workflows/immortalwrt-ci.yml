@@ -171,7 +171,8 @@ jobs:
           echo "status=success" >> $GITHUB_OUTPUT
           grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
           [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
-          echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+
+
       - name: 整理固件文件
         id: artifact
         if: steps.compile.outputs.status == 'success' && !cancelled()
@@ -191,23 +192,26 @@ jobs:
           rename "s/openwrt/${{ env.Firmware_Name }}/" *
 
          
-      - name: Deliver buildinfo
+      - name: 上传固件
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
         uses: actions/upload-artifact@v4
         with:
-          name: OpenWrt_buildinfo
+          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_firmware_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+          path: openwrt/artifact/firmware/
+
+      - name: 上传配置文件
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_BUILDINFO == 'true' && !cancelled()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_buildinfo${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
           path: openwrt/artifact/buildinfo/
 
-      - name: Deliver package
+      - name: 上传插件
+        if: steps.compile.outputs.status == 'success' && env.UPLOAD_PACKAGE == 'true' && !cancelled()
         uses: actions/upload-artifact@v4
         with:
-          name: OpenWrt_package
+          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_package${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
           path: openwrt/artifact/package/
-
-      - name: Deliver firmware
-        uses: actions/upload-artifact@v4
-        with:
-          name: OpenWrt_firmware
-          path: openwrt/bin/targets/
   
 
 #      - name: Upload release asset
