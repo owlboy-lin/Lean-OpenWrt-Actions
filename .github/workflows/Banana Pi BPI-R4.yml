@@ -11,10 +11,7 @@ name: Banana Pi BPI-R4
 on:
   schedule:
     - cron: 0 22 * * *
-
-  # release:
-  #   types: [published]
-  
+ 
   watch:
     types: [started]
 
