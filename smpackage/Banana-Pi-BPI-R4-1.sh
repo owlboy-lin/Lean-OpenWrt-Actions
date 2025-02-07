@@ -163,6 +163,7 @@ git clone -b master https://github.com/esirplayground/luci-app-poweroff.git
 ## iStore
 git clone -b main https://github.com/linkease/istore.git
 
+
 ## netspeedtest
 git clone -b master https://github.com/sirpdboy/netspeedtest.git
 
