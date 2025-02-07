@@ -139,10 +139,10 @@ jobs:
           ./scripts/feeds install -a
           
 
-      - name: patch2补丁和自定义设置
-        run: |
-          [ -e files ] && mv files openwrt/files
-          [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+      # - name: patch2补丁和自定义设置
+      #   run: |
+      #     [ -e files ] && mv files openwrt/files
+      #     [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
 
       - name: SSH connection to Actions
         uses: P3TERX/ssh2actions@v1.0.0
