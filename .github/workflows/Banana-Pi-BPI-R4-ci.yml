@@ -38,7 +38,7 @@ env:
   REPO_URL: https://github.com/padavanonly/immortalwrt-mt798x.git
   REPO_BRANCH: mt7988
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: config/Banana-Pi-BPI-R4.info
+  CONFIG_FILE: 
   Firmware_Name: Banana-Pi-BPI-R4-CI
   DIY_P1_SH: 
   DIY_P2_SH: 
