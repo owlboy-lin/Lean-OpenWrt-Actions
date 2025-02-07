@@ -12,6 +12,9 @@ on:
   schedule:
     - cron: 0 23 * * *
 
+  release:
+    types: [published]
+
   watch:
     types: [started]
 
@@ -35,10 +38,10 @@ env:
   REPO_URL: https://github.com/padavanonly/immortalwrt-mt798x.git
   REPO_BRANCH: mt7988
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: Banana-Pi-BPI-R4.info
+  CONFIG_FILE: config/Banana-Pi-BPI-R4.info
   Firmware_Name: Banana-Pi-BPI-R4-CI
-  DIY_P1_SH: smpackage/Banana-Pi-BPI-R4-1.sh
-  DIY_P2_SH: smpackage/Banana-Pi-BPI-R4-2.sh
+  DIY_P1_SH: 
+  DIY_P2_SH: 
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_BUILDINFO: true
@@ -128,12 +131,26 @@ jobs:
           mixkey: '${{ env.Firmware_Name }}'
           prefix: ${{ github.workspace }}/openwrt
 
-
+      - name: patch1补丁和自定义设置
+        run: |
+          [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
+          chmod +x $DIY_P1_SH
+          cd openwrt
+          $GITHUB_WORKSPACE/$DIY_P1_SH
+    
       - name: 更新源
         run: |
           cd openwrt
           ./scripts/feeds update -a
           ./scripts/feeds install -a
+
+      - name: patch2补丁和自定义设置
+        run: |
+          [ -e files ] && mv files openwrt/files
+          [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+          chmod +x $DIY_P2_SH
+          cd openwrt
+          $GITHUB_WORKSPACE/$DIY_P2_SH
 
       - name: SSH connection to Actions
         uses: P3TERX/ssh2actions@v1.0.0
@@ -142,50 +159,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }} 
 
-      - name: 输出编译信息
-        run: |
-          cd openwrt
-          echo " 系统空间      类型   总数  已用  可用 使用率"
-          df -hT $PWD
-            
-          # echo
-          # echo "=========================================="
-          # echo
 
-          # ZZZ="package/lean/default-settings/files/zzz-default-settings"
-          # echo "DISTRIB_REVISION=$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')" >> $GITHUB_ENV
-          # echo "KERNEL_PATCHVER=$(cat target/linux/ipq40xx/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')" >> $GITHUB_ENV
-          # echo "	    当前编译版本：$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')"
-          # echo "	    内核版本：$(cat target/linux/ipq40xx/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')"
-
-          echo
-          echo "=========================================="
-
-          grep -i CONFIG_PACKAGE_luci-app .config | grep  -v \# > Plug-in
-          grep -i CONFIG_PACKAGE_luci-theme .config | grep  -v \# >> Plug-in
-          sed -i '/INCLUDE/d' Plug-in > /dev/null 2>&1
-          sed -i 's/CONFIG_PACKAGE_/、/g' Plug-in
-          sed -i '/Transparent_Proxy/d' Plug-in > /dev/null 2>&1 #排除 luci-app-passwall_Transparent_Proxy
-          sed -i '/qbittorrent-simple_dynamic/d' Plug-in > /dev/null 2>&1 #排除 luci-app-qbittorrent-simple_dynamic
-          sed -i 's/=y/\ /g' Plug-in
-          awk '$0=NR$0' Plug-in > Plug-2
-          awk '{print "	" $0}' Plug-2 > Plug-in
-
-          echo
-          echo
-          echo "	      已选插件列表"
-          cat Plug-in
-          rm -rf {Plug-in,Plug-2}
-
-          echo
-          echo "=========================================="
-
-          echo
-          echo
-          echo "输出完整插件信息..."
-          echo
-          echo
-          cat .config
 
       - name: 下载固件包
         id: package
@@ -226,9 +200,6 @@ jobs:
         if: steps.compile.outputs.status == 'success' && !cancelled()
         run: |
           cd openwrt
-          echo "status=success" >> $GITHUB_OUTPUT
-          grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
-          [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
           mkdir -p ./artifact/firmware
           mkdir -p ./artifact/package
           mkdir -p ./artifact/buildinfo
