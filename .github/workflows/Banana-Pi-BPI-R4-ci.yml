@@ -137,6 +137,7 @@ jobs:
           cd openwrt
           ./scripts/feeds update -a
           ./scripts/feeds install -a
+          
 
       - name: patch2补丁和自定义设置
         run: |
