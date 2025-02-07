@@ -183,11 +183,7 @@ jobs:
           du -h --max-depth=1 ./bin
 
 
-
-
       - name: 整理固件文件
-        id: artifact
-        if: steps.compile.outputs.status == 'success' && !cancelled()
         run: |
           cd openwrt
           mkdir -p ./artifact/firmware
