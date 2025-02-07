@@ -161,7 +161,7 @@ git clone -b v5 --depth 1 https://github.com/sbwml/luci-app-mosdns.git
 git clone -b master https://github.com/esirplayground/luci-app-poweroff.git
 
 ## iStore
-git clone -b main https://github.com/linkease/istore.git
+# git clone -b main https://github.com/linkease/istore.git
 
 
 ## netspeedtest
