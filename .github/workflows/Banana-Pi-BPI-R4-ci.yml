@@ -158,6 +158,7 @@ jobs:
         if: (!cancelled())
         run: |
           cd openwrt
+          make defconfig
           make download -j16
   
       # - name: SSH connection to Actions
