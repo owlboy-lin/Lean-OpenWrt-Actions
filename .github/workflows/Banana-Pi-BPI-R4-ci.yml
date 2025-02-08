@@ -160,7 +160,7 @@ jobs:
         run: |
           cd openwrt
           make defconfig
-          make download -j16
+          make download -j8
   
       # - name: SSH connection to Actions
       #   uses: P3TERX/ssh2actions@v1.0.0
