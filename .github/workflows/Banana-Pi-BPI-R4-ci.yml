@@ -157,7 +157,7 @@ jobs:
         run: |
           cd openwrt
           echo -e "$(nproc) thread compile"
-          make -j$(nproc) || make -j1 V=s
+          make -j$(nproc) || make -j1 V=sc
           echo "release_tag=mt7988-padavanonly-OpenWrt-mini-$(date +%Y.%m.%d)" >> $GITHUB_ENV
           echo "release_name=mt7988-padavanonly-OpenWrt-mini" >> $GITHUB_ENV
           echo "status=success" >> $GITHUB_OUTPUT
