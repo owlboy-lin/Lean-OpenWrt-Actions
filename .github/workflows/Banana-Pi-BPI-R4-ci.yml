@@ -124,10 +124,14 @@ jobs:
           prefix: ${{ github.workspace }}/openwrt
 
     
-      - name: 更新源
+      - name: 更新源 #Update feeds
+        run: |
+          cd openwrt 
+          ./scripts/feeds update -a
+          
+      - name: 安装源 #Install feeds
         run: |
           cd openwrt
-          ./scripts/feeds update -a
           ./scripts/feeds install -a
           
 
