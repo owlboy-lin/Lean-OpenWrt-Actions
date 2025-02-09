@@ -72,7 +72,7 @@ jobs:
           sudo apt install -y \
           build-essential clang flex bison g++ gawk \
           gcc-multilib g++-multilib gettext git libncurses-dev libssl-dev \
-          python3-setuptools rsync swig unzip zlib1g-dev \
+          python3-setuptools rsync swig unzip zlib1g-dev rename\
           file wget curl zstd bash coreutils
           sudo apt full-upgrade -y
           sudo bash -c 'bash <(curl -sL https://build-scripts.immortalwrt.eu.org/init_build_environment.sh)'
