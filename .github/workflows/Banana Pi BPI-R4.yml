@@ -39,7 +39,7 @@ env:
   REPO_BRANCH: mt7988
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: config/Banana-Pi-BPI-R4-CI.info
-  Firmware_Name: Banana-Pi-BPI-R4
+  Firmware_Name: immortalwrt-mt798x-Banana-Pi-BPI-R4
   DIY_P1_SH: smpackage/Banana-Pi-BPI-R4-1.sh
   DIY_P2_SH: smpackage/Banana-Pi-BPI-R4-2-1.sh
   UPLOAD_BIN_DIR: false
@@ -281,8 +281,8 @@ jobs:
           echo "release_date=$(date +"%Y.%m.%d.%H.%M")" >> $GITHUB_OUTPUT
           touch release.txt
           echo "
-          ★ 源码 : https://github.com/padavanonly/immortalwrt-mt798x.git
-          ★ 分支 : mt7988
+          ★ 源码 : ${{ env.REPO_URL }}
+          ★ 分支 : ${{ env.REPO_BRANCH }}
           ★ 感谢源码作者无私分享！
           
           ⏰ 编译时间：${{ env.FILE_TIME1 }}
