@@ -39,7 +39,7 @@ env:
   REPO_BRANCH: mt7988
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: config/Banana-Pi-BPI-R4-CI.info
-  Firmware_Name: Banana-Pi-BPI-R4-CI
+  Firmware_Name: immortalwrt-mt798x-Banana-Pi-BPI-R4-CI
   DIY_P1_SH: 
   DIY_P2_SH: 
   UPLOAD_BIN_DIR: false
