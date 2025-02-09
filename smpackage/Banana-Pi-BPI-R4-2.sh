@@ -122,6 +122,7 @@ echo "
 # CONFIG_TARGET_ROOTFS_PARTSIZE=1024
 
 # # Themes
+CONFIG_PACKAGE_luci-app-argon-config=y
 CONFIG_PACKAGE_luci-theme-argon=y
 
 
@@ -134,7 +135,7 @@ CONFIG_PACKAGE_luci-app-poweroff=y
 
 
 # openclash
-CONFIG_PACKAGE_luci-app-openclash=y
+# CONFIG_PACKAGE_luci-app-openclash=y
 
 
 # adguardhome
@@ -153,9 +154,10 @@ CONFIG_PACKAGE_luci-app-netspeedtest=y
 CONFIG_PACKAGE_luci-app-passwall=y
 
 
-CONFIG_PACKAGE_luci-app-passwall2=y
+# CONFIG_PACKAGE_luci-app-passwall2=y
 
-
+# ssr-plus
+CONFIG_PACKAGE_luci-app-ssr-plus=y
 
 # quickstart
 CONFIG_PACKAGE_luci-app-quickstart=y
@@ -166,6 +168,8 @@ CONFIG_PACKAGE_luci-app-store=y
 # luci-app-ttyd=y
 CONFIG_PACKAGE_luci-app-ttyd=y
 
+# turboacc
+CONFIG_PACKAGE_luci-app-turboacc=y
 
 # luci-app-uugamebooster=y
 
