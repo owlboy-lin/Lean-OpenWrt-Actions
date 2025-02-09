@@ -38,10 +38,10 @@ env:
   REPO_URL: https://github.com/padavanonly/immortalwrt-mt798x.git
   REPO_BRANCH: mt7988
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: config/Banana-Pi-BPI-R4-1.info
+  CONFIG_FILE: config/immortalwrt-mt798x-Banana-Pi-BPI-R4-CI.info
   Firmware_Name: Banana-Pi-BPI-R4-CI-1
-  DIY_P1_SH: 
-  DIY_P2_SH: 
+  DIY_P1_SH: smpackage/Banana-Pi-BPI-R4-1.sh
+  DIY_P2_SH: smpackage/Banana-Pi-BPI-R4-2-1.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_BUILDINFO: true
@@ -67,6 +67,7 @@ jobs:
           DEBIAN_FRONTEND: noninteractive
         run: |
           sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          sudo -E apt -y install rename
           sudo timedatectl set-timezone "$TZ"
           sudo mkdir -p /workdir
           sudo chown $USER:$GROUPS /workdir
@@ -111,17 +112,33 @@ jobs:
           prefix: ${{ github.workspace }}/openwrt
 
     
-      - name: 更新源
+      - name: patch1补丁和自定义设置
+        run: |
+          [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
+          chmod +x $DIY_P1_SH
+          cd openwrt
+          $GITHUB_WORKSPACE/$DIY_P1_SH
+
+      - name: 更新源 #Update feeds
         run: |
           cd openwrt
           ./scripts/feeds update -a
-          ./scripts/feeds install -a
           
+      - name: 安装源 #Install feeds
+        run: |
+          cd openwrt 
+          ./scripts/feeds install -a 
+          # ./scripts/feeds update istore
+          # ./scripts/feeds install -d y -p istore luci-app-store
+           
 
       - name: patch2补丁和自定义设置
         run: |
           [ -e files ] && mv files openwrt/files
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+          chmod +x $DIY_P2_SH
+          cd openwrt
+          $GITHUB_WORKSPACE/$DIY_P2_SH
 
 
       - name: SSH connection to Actions
@@ -139,7 +156,7 @@ jobs:
         run: |
           cd openwrt
           make defconfig
-          make download -j8
+          make download -j$(($(nproc)+1))
           find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
   
@@ -158,7 +175,17 @@ jobs:
         run: |
           cd openwrt
           echo -e "$(nproc) thread compile"
-          make -j$(nproc) || make -j1 V=sc
+          make -j$(nproc) || make -j1 || make -j1 V=s
+          echo "======================="
+          echo "Space usage:"
+          echo "======================="
+          df -h
+          echo "======================="
+          du -h --max-depth=1 ./ --exclude=build_dir --exclude=bin
+          du -h --max-depth=1 ./build_dir
+          du -h --max-depth=1 ./bin
+          echo "status=success" >> $GITHUB_OUTPUT
+          echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
 
       - name: 整理固件文件
@@ -176,24 +203,25 @@ jobs:
           cp -rf ./feeds.conf.default ./artifact/buildinfo/
           cd artifact/firmware/
           rename "s/openwrt/${{ env.Firmware_Name }}/" *
+          
 
          
       - name: 上传固件
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_firmware_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_firmware_${{ env.FILE_DATE }}
           path: openwrt/artifact/firmware/
 
       - name: 上传配置文件
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_buildinfo${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_buildinfo_${{ env.FILE_DATE }}
           path: openwrt/artifact/buildinfo/
 
       - name: 上传插件
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_package${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_package_${{ env.FILE_DATE }}
           path: openwrt/artifact/package/
   
 

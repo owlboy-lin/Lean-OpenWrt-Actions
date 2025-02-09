@@ -38,8 +38,8 @@ env:
   REPO_URL: https://github.com/padavanonly/immortalwrt-mt798x.git
   REPO_BRANCH: mt7988
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: config/Banana-Pi-BPI-R4.info
-  Firmware_Name: Banana-Pi-BPI-R4-CI
+  CONFIG_FILE: config/immortalwrt-mt798x-Banana-Pi-BPI-R4-CI.info
+  Firmware_Name: immortalwrt-mt798x-Banana-Pi-BPI-R4-CI
   DIY_P1_SH: 
   DIY_P2_SH: 
   UPLOAD_BIN_DIR: false
@@ -72,7 +72,7 @@ jobs:
           sudo apt install -y \
           build-essential clang flex bison g++ gawk \
           gcc-multilib g++-multilib gettext git libncurses-dev libssl-dev \
-          python3-setuptools rsync swig unzip zlib1g-dev \
+          python3-setuptools rsync swig unzip zlib1g-dev rename \
           file wget curl zstd bash coreutils
           sudo apt full-upgrade -y
           sudo bash -c 'bash <(curl -sL https://build-scripts.immortalwrt.eu.org/init_build_environment.sh)'
@@ -156,7 +156,7 @@ jobs:
         run: |
           cd openwrt
           make defconfig
-          make -j8 download V=s
+          make download -j$(($(nproc)+1))
           find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
   
@@ -172,7 +172,7 @@ jobs:
         run: |
           cd openwrt
           echo -e "$(nproc) thread compile"
-          make -j1 V=s
+          make -j$(nproc) || make -j1 || make -j1 V=s
           echo "======================="
           echo "Space usage:"
           echo "======================="
@@ -181,7 +181,8 @@ jobs:
           du -h --max-depth=1 ./ --exclude=build_dir --exclude=bin
           du -h --max-depth=1 ./build_dir
           du -h --max-depth=1 ./bin
-
+          echo "status=success" >> $GITHUB_OUTPUT
+          echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
 
       - name: 整理固件文件
@@ -204,19 +205,19 @@ jobs:
       - name: 上传固件
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_firmware_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_firmware_${{ env.FILE_DATE }}
           path: openwrt/artifact/firmware/
 
       - name: 上传配置文件
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_buildinfo${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_buildinfo_${{ env.FILE_DATE }}
           path: openwrt/artifact/buildinfo/
 
       - name: 上传插件
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_package${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+          name: ${{ env.Firmware_Name }}_${{ env.REPO_BRANCH }}_package_${{ env.FILE_DATE }}
           path: openwrt/artifact/package/
   
 
