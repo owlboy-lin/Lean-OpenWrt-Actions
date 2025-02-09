@@ -111,17 +111,33 @@ jobs:
           prefix: ${{ github.workspace }}/openwrt
 
     
-      - name: 更新源
+      - name: patch1补丁和自定义设置
+        run: |
+          [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
+          chmod +x $DIY_P1_SH
+          cd openwrt
+          $GITHUB_WORKSPACE/$DIY_P1_SH
+
+      - name: 更新源 #Update feeds
         run: |
           cd openwrt
           ./scripts/feeds update -a
-          ./scripts/feeds install -a
           
+      - name: 安装源 #Install feeds
+        run: |
+          cd openwrt 
+          ./scripts/feeds install -a 
+          # ./scripts/feeds update istore
+          # ./scripts/feeds install -d y -p istore luci-app-store
+           
 
       - name: patch2补丁和自定义设置
         run: |
           [ -e files ] && mv files openwrt/files
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+          chmod +x $DIY_P2_SH
+          cd openwrt
+          $GITHUB_WORKSPACE/$DIY_P2_SH
 
 
       - name: SSH connection to Actions
