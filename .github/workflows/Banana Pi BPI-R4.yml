@@ -178,7 +178,9 @@ jobs:
         run: |
           cd openwrt
           make defconfig
-          make download -j8
+          make download -j$(($(nproc)+1))
+          find dl -size -1024c -exec ls -l {} \;
+          find dl -size -1024c -exec rm -f {} \;
 
       - name: 编译固件
         id: compile
