@@ -95,6 +95,203 @@ sed -i 's/192.168.1.1/192.168.89.1/g' package/base-files/files/bin/config_genera
 # svn export https://github.com/kiddin9/openwrt-packages/trunk/mosdns package/mosdns
 # svn export https://github.com/kiddin9/openwrt-packages/trunk/v2dat package/v2dat
 
+#!/bin/bash
+
+#删除feeds中的插件
+# rm -rf ./feeds/packages/net/mosdns
+# rm -rf ./feeds/packages/net/v2ray-geodata
+# rm -rf ./feeds/packages/net/geoview
+# rm -rf ./feeds/packages/net/shadowsocks-libev
+# rm -rf ./feeds/packages/net/chinadns-ng
+
+
+#克隆依赖插件
+# git clone https://github.com/xiaorouji/openwrt-passwall-packages.git package/pwpage
+
+
+#克隆的源码放在small文件夹
+mkdir package/small
+pushd package/small
+
+
+#adguardhome
+git clone -b 2023.10 --depth 1 https://github.com/XiaoBinin/luci-app-adguardhome.git
+
+#lucky
+# git clone -b main --depth 1 https://github.com/sirpdboy/luci-app-lucky.git
+
+# #smartdns
+# git clone -b lede --depth 1 https://github.com/pymumu/luci-app-smartdns.git
+# git clone -b master --depth 1 https://github.com/pymumu/smartdns.git
+
+# #ssrp
+# git clone -b master --depth 1 https://github.com/fw876/helloworld.git
+
+# #passwall
+# git clone -b main --depth 1 https://github.com/xiaorouji/openwrt-passwall.git
+
+#passwall2
+# git clone -b main --depth 1 https://github.com/xiaorouji/openwrt-passwall2.git
+
+# #mosdns
+git clone -b v5 https://github.com/sbwml/luci-app-mosdns.git
+git clone -b master https://github.com/sbwml/v2ray-geodata 
+
+# #openclash
+# git clone -b master --depth 1 https://github.com/vernesong/OpenClash.git
+
+## poweroff
+git clone -b master https://github.com/esirplayground/luci-app-poweroff.git
+
+## iStore
+# git clone -b main https://github.com/linkease/istore.git
+
+
+## netspeedtest
+git clone -b master https://github.com/sirpdboy/netspeedtest.git
+
+
+
+popd
+
+echo "packages executed successfully!"
 
 # 添加自定义软件包
+
+echo "
+
+# 额外组件
+#
+# Root filesystem images
+#
+# CONFIG_TARGET_ROOTFS_EXT4FS=y
+# CONFIG_TARGET_EXT4_RESERVED_PCT=0
+# CONFIG_TARGET_EXT4_BLOCKSIZE_4K=y
+# # CONFIG_TARGET_EXT4_BLOCKSIZE_2K is not set
+# # CONFIG_TARGET_EXT4_BLOCKSIZE_1K is not set
+# CONFIG_TARGET_EXT4_BLOCKSIZE=4096
+# # CONFIG_TARGET_EXT4_JOURNAL is not set
+# CONFIG_GRUB_IMAGES=y
+# CONFIG_VMDK_IMAGES=y
+
+# 固件大小
+#
+# Image Options
+#
+# CONFIG_TARGET_KERNEL_PARTSIZE=512
+# CONFIG_TARGET_ROOTFS_PARTSIZE=1024
+
+# # Themes
+CONFIG_PACKAGE_luci-app-argon-config=y
+CONFIG_PACKAGE_luci-theme-argon=y
+
+
+# 自动重启
+CONFIG_PACKAGE_luci-app-autoreboot=y
+
+
+# 关机
+CONFIG_PACKAGE_luci-app-poweroff=y
+
+
+# openclash
+# CONFIG_PACKAGE_luci-app-openclash=y
+
+
+# adguardhome
+CONFIG_PACKAGE_luci-app-adguardhome=y
+
+
+# mosdns
+# CONFIG_PACKAGE_luci-app-mosdns=y
+
+
+# netspeedtest chmod +x /etc/init.d/netspeedtest
+CONFIG_PACKAGE_luci-app-netspeedtest=y
+
+
+# passwall
+CONFIG_PACKAGE_luci-app-passwall=y
+
+
+# CONFIG_PACKAGE_luci-app-passwall2=y
+
+# ssr-plus
+CONFIG_PACKAGE_luci-app-ssr-plus=y
+
+# quickstart
+# CONFIG_PACKAGE_luci-app-quickstart=y
+
+# store
+# CONFIG_PACKAGE_luci-app-store=y
+
+# luci-app-ttyd=y
+CONFIG_PACKAGE_luci-app-ttyd=y
+
+# turboacc
+CONFIG_PACKAGE_luci-app-turboacc=y
+
+# luci-app-uugamebooster=y
+
+
+# luci-app-webadmin=y
+CONFIG_PACKAGE_luci-app-webadmin=y
+
+
+
+" >> .config
+
+# 移除 ddns 和 ddnsto
+# sed -i 's/CONFIG_PACKAGE_ddns-scripts=y/CONFIG_PACKAGE_ddns-scripts=n/' .config
+# sed -i 's/CONFIG_PACKAGE_ddns-scripts-cloudflare=y/CONFIG_PACKAGE_ddns-scripts-cloudflare=n/' .config
+# sed -i 's/CONFIG_PACKAGE_ddns-scripts-dnspod=y/CONFIG_PACKAGE_ddns-scripts-dnspod=n/' .config
+# sed -i 's/CONFIG_PACKAGE_ddns-scripts-services=y/CONFIG_PACKAGE_ddns-scripts-services=n/' .config
+# sed -i 's/CONFIG_PACKAGE_ddns-scripts_aliyun=y/CONFIG_PACKAGE_ddns-scripts_aliyun=n/' .config
+# sed -i 's/CONFIG_PACKAGE_luci-app-ddns=y/CONFIG_PACKAGE_luci-app-ddns=n/' .config
+# sed -i 's/CONFIG_PACKAGE_luci-i18n-ddns-zh-cn=y/CONFIG_PACKAGE_luci-i18n-ddns-zh-cn=n/' .config
+
+# sed -i 's/CONFIG_PACKAGE_ddnsto=y/CONFIG_PACKAGE_ddnsto=n/' .config
+# sed -i 's/CONFIG_PACKAGE_luci-app-ddnsto=y/CONFIG_PACKAGE_luci-app-ddnsto=n/' .config
+# sed -i 's/CONFIG_PACKAGE_luci-i18n-ddnsto-zh-cn=y/CONFIG_PACKAGE_luci-i18n-ddnsto-zh-cn=n/' .config
+
+# 移除 bootstrap 主题
+# sed -i 's/CONFIG_PACKAGE_luci-theme-bootstrap=y/CONFIG_PACKAGE_luci-theme-bootstrap=n/' .config
+
+# 移除网卡驱动
+# sed -i 's/CONFIG_PACKAGE_kmod-ath=y/CONFIG_PACKAGE_kmod-ath=n/' .config
+# sed -i 's/CONFIG_PACKAGE_kmod-ath10k=y/CONFIG_PACKAGE_kmod-ath10k=n/' .config
+# sed -i 's/CONFIG_PACKAGE_ath10k-board-qca9888=y/CONFIG_PACKAGE_ath10k-board-qca9888=n/' .config
+# sed -i 's/CONFIG_PACKAGE_ath10k-board-qca988x=y/CONFIG_PACKAGE_ath10k-board-qca988x=n/' .config
+# sed -i 's/CONFIG_PACKAGE_ath10k-board-qca9984=y/CONFIG_PACKAGE_ath10k-board-qca9984=n/' .config
+# sed -i 's/CONFIG_PACKAGE_ath10k-firmware-qca9888=y/CONFIG_PACKAGE_ath10k-firmware-qca9888=n/' .config
+# sed -i 's/CONFIG_PACKAGE_ath10k-firmware-qca988x=y/CONFIG_PACKAGE_ath10k-firmware-qca988x=n/' .config
+# sed -i 's/CONFIG_PACKAGE_ath10k-firmware-qca9984=y/CONFIG_PACKAGE_ath10k-firmware-qca9984=n/' .config
+
+# sed -i 's/CONFIG_PACKAGE_iw=y/CONFIG_PACKAGE_iw=n/' .config
+# sed -i 's/CONFIG_PACKAGE_iwinfo=y/CONFIG_PACKAGE_iwinfo=n/' .config
+# sed -i 's/CONFIG_PACKAGE_kmod-iwlwifi=y/CONFIG_PACKAGE_kmod-iwlwifi=n/' .config
+# sed -i 's/CONFIG_PACKAGE_iwlwifi-firmware-ax101=y/CONFIG_PACKAGE_iwlwifi-firmware-ax101=n/' .config
+# sed -i 's/CONFIG_PACKAGE_iwlwifi-firmware-ax200=y/CONFIG_PACKAGE_iwlwifi-firmware-ax200=n/' .config
+# sed -i 's/CONFIG_PACKAGE_iwlwifi-firmware-ax201=y/CONFIG_PACKAGE_iwlwifi-firmware-ax201=n/' .config
+# sed -i 's/CONFIG_PACKAGE_iwlwifi-firmware-ax210=y/CONFIG_PACKAGE_iwlwifi-firmware-ax210=n/' .config
+# sed -i 's/CONFIG_PACKAGE_kmod-rtl8192c-common=y/CONFIG_PACKAGE_kmod-rtl8192c-common=n/' .config
+# sed -i 's/CONFIG_PACKAGE_kmod-rtl8192cu=y/CONFIG_PACKAGE_kmod-rtl8192cu=n/' .config
+# sed -i 's/CONFIG_PACKAGE_kmod-rtl8192de=y/CONFIG_PACKAGE_kmod-rtl8192de=n/' .config
+# sed -i 's/CONFIG_PACKAGE_kmod-rtl8192se=y/CONFIG_PACKAGE_kmod-rtl8192se=n/' .config
+# sed -i 's/CONFIG_PACKAGE_kmod-rtl8812au-ct=y/CONFIG_PACKAGE_kmod-rtl8812au-ct=n/' .config
+# sed -i 's/CONFIG_PACKAGE_kmod-rtl8821ae=y/CONFIG_PACKAGE_kmod-rtl8821ae=n/' .config
+# sed -i 's/CONFIG_PACKAGE_kmod-rtl8xxxu=y/CONFIG_PACKAGE_kmod-rtl8xxxu=n/' .config
+# sed -i 's/CONFIG_PACKAGE_kmod-rtlwifi=y/CONFIG_PACKAGE_kmod-rtlwifi=n/' .config
+# sed -i 's/CONFIG_PACKAGE_kmod-rtlwifi-btcoexist=y/CONFIG_PACKAGE_kmod-rtlwifi-btcoexist=n/' .config
+# sed -i 's/CONFIG_PACKAGE_kmod-rtlwifi-pci=y/CONFIG_PACKAGE_kmod-rtlwifi-pci=n/' .config
+# sed -i 's/CONFIG_PACKAGE_kmod-rtlwifi-usb=y/CONFIG_PACKAGE_kmod-rtlwifi-usb=n/' .config
+# sed -i 's/CONFIG_PACKAGE_kmod-rtw88=y/CONFIG_PACKAGE_kmod-rtw88=n/' .config
+
+# sed -i 's/CONFIG_PACKAGE_kmod-mt7915e=y/CONFIG_PACKAGE_kmod-mt7915e=n/' .config
+
+# sed -i 's/CONFIG_PACKAGE_kmod-mt7921-common=y/CONFIG_PACKAGE_kmod-mt7921-common=n/' .config
+# sed -i 's/CONFIG_PACKAGE_kmod-mt7921-firmware=y/CONFIG_PACKAGE_kmod-mt7921-firmware=n/' .config
+# sed -i 's/CONFIG_PACKAGE_kmod-mt7921e=y/CONFIG_PACKAGE_kmod-mt7921e=n/' .config
+# sed -i 's/CONFIG_PACKAGE_kmod-mt7921u=y/CONFIG_PACKAGE_kmod-mt7921u=n/' .config
+
 
