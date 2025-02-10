@@ -41,7 +41,7 @@ env:
   CONFIG_FILE: config/immortalwrt-mt798x-Banana-Pi-BPI-R4-CI.info
   Firmware_Name: Banana-Pi-BPI-R4-CI-1
   DIY_P1_SH: smpackage/Banana-Pi-BPI-R4-1.sh
-  DIY_P2_SH: smpackage/Banana-Pi-BPI-R4-2-1.sh
+  DIY_P2_SH: smpackage/Banana-Pi-BPI-R4-2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_BUILDINFO: true
