@@ -203,7 +203,7 @@ CONFIG_PACKAGE_luci-app-adguardhome=y
 
 
 # mosdns
-# CONFIG_PACKAGE_luci-app-mosdns=y
+CONFIG_PACKAGE_luci-app-mosdns=y
 
 
 # netspeedtest chmod +x /etc/init.d/netspeedtest
@@ -223,7 +223,7 @@ CONFIG_PACKAGE_luci-app-ssr-plus=y
 # CONFIG_PACKAGE_luci-app-quickstart=y
 
 # store
-# CONFIG_PACKAGE_luci-app-store=y
+CONFIG_PACKAGE_luci-app-store=y
 
 # luci-app-ttyd=y
 CONFIG_PACKAGE_luci-app-ttyd=y
