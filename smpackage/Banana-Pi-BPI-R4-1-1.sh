@@ -74,8 +74,10 @@ git clone -b 2023.10 --depth 1 https://github.com/XiaoBinin/luci-app-adguardhome
 # git clone https://github.com/f8q8/luci-app-autoreboot package/luci-app-autoreboot
 
 ## mosdns
-git clone -b v5 https://github.com/sbwml/luci-app-mosdns.git
-git clone -b master https://github.com/sbwml/v2ray-geodata 
+git clone -b v5 https://github.com/sbwml/luci-app-mosdns.git package/mosdns
+
+git clone -b master https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
+
 
 ## netspeedtest
 # echo 'src-git netspeedtest https://github.com/sirpdboy/netspeedtest' >>feeds.conf.default
