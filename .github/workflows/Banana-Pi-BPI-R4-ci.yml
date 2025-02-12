@@ -40,8 +40,8 @@ env:
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: config/immortalwrt-mt798x-Banana-Pi-BPI-R4-CI-1.info
   Firmware_Name: immortalwrt-mt798x-Banana-Pi-BPI-R4-CI
-  DIY_P1_SH: 
-  DIY_P2_SH: 
+  DIY_P1_SH: smpackage/Banana-Pi-BPI-R4-1-1.sh
+  DIY_P2_SH: smpackage/Banana-Pi-BPI-R4-2-1.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_BUILDINFO: true
@@ -123,6 +123,12 @@ jobs:
           mixkey: '${{ env.Firmware_Name }}'
           prefix: ${{ github.workspace }}/openwrt
 
+      - name: patch1补丁和自定义设置
+        run: |
+          [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
+          chmod +x $DIY_P1_SH
+          cd openwrt
+          $GITHUB_WORKSPACE/$DIY_P1_SH
     
       - name: 更新源 #Update feeds
         run: |
@@ -139,6 +145,9 @@ jobs:
         run: |
           [ -e files ] && mv files openwrt/files
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+          chmod +x $DIY_P2_SH
+          cd openwrt
+          $GITHUB_WORKSPACE/$DIY_P2_SH
 
 
       - name: SSH connection to Actions
