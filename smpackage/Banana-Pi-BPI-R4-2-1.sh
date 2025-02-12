@@ -114,30 +114,30 @@ mkdir package/small
 pushd package/small
 
 
-#adguardhome
+## adguardhome
 git clone -b 2023.10 --depth 1 https://github.com/XiaoBinin/luci-app-adguardhome.git
 
-#lucky
+## lucky
 # git clone -b main --depth 1 https://github.com/sirpdboy/luci-app-lucky.git
 
-# #smartdns
+## smartdns
 # git clone -b lede --depth 1 https://github.com/pymumu/luci-app-smartdns.git
 # git clone -b master --depth 1 https://github.com/pymumu/smartdns.git
 
-# #ssrp
+## ssrp
 # git clone -b master --depth 1 https://github.com/fw876/helloworld.git
 
-# #passwall
+## passwall
 # git clone -b main --depth 1 https://github.com/xiaorouji/openwrt-passwall.git
 
-#passwall2
+## passwall2
 # git clone -b main --depth 1 https://github.com/xiaorouji/openwrt-passwall2.git
 
-# #mosdns
+## #mosdns
 git clone -b v5 https://github.com/sbwml/luci-app-mosdns.git
 git clone -b master https://github.com/sbwml/v2ray-geodata 
 
-# #openclash
+## openclash
 # git clone -b master --depth 1 https://github.com/vernesong/OpenClash.git
 
 ## poweroff
@@ -223,7 +223,7 @@ CONFIG_PACKAGE_luci-app-ssr-plus=y
 # CONFIG_PACKAGE_luci-app-quickstart=y
 
 # store
-CONFIG_PACKAGE_luci-app-store=y
+# CONFIG_PACKAGE_luci-app-store=y
 
 # luci-app-ttyd=y
 CONFIG_PACKAGE_luci-app-ttyd=y

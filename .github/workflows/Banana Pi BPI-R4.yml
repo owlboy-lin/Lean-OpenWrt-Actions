@@ -40,8 +40,8 @@ env:
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: config/immortalwrt-mt798x-Banana-Pi-BPI-R4.info
   Firmware_Name: immortalwrt-mt798x-Banana-Pi-BPI-R4
-  DIY_P1_SH: smpackage/Banana-Pi-BPI-R4-1.sh
-  DIY_P2_SH: smpackage/Banana-Pi-BPI-R4-2.sh
+  DIY_P1_SH: smpackage/Banana-Pi-BPI-R4-1-1.sh
+  DIY_P2_SH: smpackage/Banana-Pi-BPI-R4-2-1.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_BUILDINFO: true
