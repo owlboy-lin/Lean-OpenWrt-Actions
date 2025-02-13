@@ -13,6 +13,7 @@
 # 修改openwrt登陆地址,把下面的 10.0.0.1 修改成你想要的就可以了
 sed -i 's/192.168.1.1/192.168.89.1/g' package/base-files/files/bin/config_generate
 
+
 # 修改 子网掩码
 # sed -i 's/255.255.255.0/255.255.0.0/g' package/base-files/files/bin/config_generate
 
@@ -147,7 +148,7 @@ CONFIG_PACKAGE_luci-app-adguardhome=y
 
 
 # netspeedtest chmod +x /etc/init.d/netspeedtest
-CONFIG_PACKAGE_luci-app-netspeedtest=y
+# CONFIG_PACKAGE_luci-app-netspeedtest=y
 
 
 # passwall
