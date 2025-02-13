@@ -81,8 +81,8 @@ git clone -b master https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 
 
 ## netspeedtest
-echo 'src-git netspeedtest https://github.com/sirpdboy/netspeedtest' >>feeds.conf.default
-# git clone https://github.com/sirpdboy/netspeedtest.git package/netspeedtest
+# echo 'src-git netspeedtest https://github.com/sirpdboy/netspeedtest' >>feeds.conf.default
+git clone https://github.com/sirpdboy/netspeedtest.git package/netspeedtest
 
 ## OpenClash
 # echo 'src-git openclash https://github.com/vernesong/OpenClash' >>feeds.conf.default
