@@ -68,7 +68,7 @@
 ## adguardhome
 # git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app-adguardhome
 
-git clone -b 2023.10 --depth 1 https://github.com/XiaoBinin/luci-app-adguardhome.git
+# git clone -b 2023.10 --depth 1 https://github.com/XiaoBinin/luci-app-adguardhome.git
 
 ## autoreboot
 # git clone https://github.com/f8q8/luci-app-autoreboot package/luci-app-autoreboot
