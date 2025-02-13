@@ -38,7 +38,7 @@ env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
   REPO_BRANCH: openwrt-24.10
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: config/immortalwrt-dns.info
+  CONFIG_FILE: config/immortalwrt.info
   Firmware_Name: immortalwrt-dns
   DIY_P1_SH: smpackage/immortalwrt-1.sh
   DIY_P2_SH: smpackage/Lean-dns-2.sh
