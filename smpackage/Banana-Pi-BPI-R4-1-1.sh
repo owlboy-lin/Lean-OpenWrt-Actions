@@ -74,15 +74,15 @@
 # git clone https://github.com/f8q8/luci-app-autoreboot package/luci-app-autoreboot
 
 ## mosdns
+# echo 'src-git mosdns https://github.com/sbwml/luci-app-mosdns' >>feeds.conf.default
 git clone -b v5 https://github.com/sbwml/luci-app-mosdns.git package/mosdns
 
 git clone -b master https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 
 
 ## netspeedtest
-# echo 'src-git netspeedtest https://github.com/sirpdboy/netspeedtest' >>feeds.conf.default
-# 
-git clone https://github.com/sirpdboy/netspeedtest.git package/netspeedtest
+echo 'src-git netspeedtest https://github.com/sirpdboy/netspeedtest' >>feeds.conf.default
+# git clone https://github.com/sirpdboy/netspeedtest.git package/netspeedtest
 
 ## OpenClash
 # echo 'src-git openclash https://github.com/vernesong/OpenClash' >>feeds.conf.default
@@ -97,9 +97,9 @@ git clone https://github.com/sirpdboy/netspeedtest.git package/netspeedtest
 
 
 ## poweroff
-# echo 'src-git poweroff https://github.com/esirplayground/luci-app-poweroff' >>feeds.conf.default
+echo 'src-git poweroff https://github.com/esirplayground/luci-app-poweroff' >>feeds.conf.default
 
-git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
+# git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
 
 # sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
 # sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
