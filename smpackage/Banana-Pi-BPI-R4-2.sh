@@ -147,7 +147,7 @@ CONFIG_PACKAGE_luci-app-adguardhome=y
 
 
 # netspeedtest chmod +x /etc/init.d/netspeedtest
-CONFIG_PACKAGE_luci-app-netspeedtest=y
+# CONFIG_PACKAGE_luci-app-netspeedtest=y
 
 
 # passwall
