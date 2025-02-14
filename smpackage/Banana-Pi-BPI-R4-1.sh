@@ -94,7 +94,7 @@
 
 
 ## poweroff
-echo 'src-git poweroff https://github.com/esirplayground/luci-app-poweroff' >>feeds.conf.default
+# echo 'src-git poweroff https://github.com/esirplayground/luci-app-poweroff' >>feeds.conf.default
 
 # git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
 
