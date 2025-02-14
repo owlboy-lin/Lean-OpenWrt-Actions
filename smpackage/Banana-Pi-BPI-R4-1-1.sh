@@ -68,7 +68,7 @@
 ## adguardhome
 # git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app-adguardhome
 
-# git clone -b 2023.10 --depth 1 https://github.com/XiaoBinin/luci-app-adguardhome.git
+git clone -b 2023.10 --depth 1 https://github.com/XiaoBinin/luci-app-adguardhome.git
 
 ## autoreboot
 # git clone https://github.com/f8q8/luci-app-autoreboot package/luci-app-autoreboot
@@ -97,9 +97,9 @@ echo 'src-git netspeedtest https://github.com/sirpdboy/netspeedtest' >>feeds.con
 
 
 ## poweroff
-echo 'src-git poweroff https://github.com/esirplayground/luci-app-poweroff' >>feeds.conf.default
+# echo 'src-git poweroff https://github.com/esirplayground/luci-app-poweroff' >>feeds.conf.default
 
-# git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
+git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
 
 # sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
 # sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
