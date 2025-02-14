@@ -194,16 +194,12 @@ CONFIG_PACKAGE_luci-app-autoreboot=y
 CONFIG_PACKAGE_luci-app-poweroff=y
 
 
-# openclash
-# CONFIG_PACKAGE_luci-app-openclash=y
-
-
 # adguardhome
 CONFIG_PACKAGE_luci-app-adguardhome=y
 
 
 # mosdns
-CONFIG_PACKAGE_luci-app-mosdns=y
+# CONFIG_PACKAGE_luci-app-mosdns=y
 
 
 # netspeedtest chmod +x /etc/init.d/netspeedtest
@@ -213,8 +209,6 @@ CONFIG_PACKAGE_luci-app-netspeedtest=y
 # passwall
 CONFIG_PACKAGE_luci-app-passwall=y
 
-
-# CONFIG_PACKAGE_luci-app-passwall2=y
 
 # ssr-plus
 CONFIG_PACKAGE_luci-app-ssr-plus=y
