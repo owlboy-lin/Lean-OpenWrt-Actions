@@ -36,13 +36,13 @@
             
           
     env:
-      REPO_URL: https://github.com/padavanonly/immortalwrt-mt798x
-      REPO_BRANCH: mt7988
+      REPO_URL: https://github.com/immortalwrt/immortalwrt
+      REPO_BRANCH: openwrt-24.10
       FEEDS_CONF: feeds.conf.default
       CONFIG_FILE: 
-      Firmware_Name: Banana-Pi-BPI-R4
-      DIY_P1_SH: 
-      DIY_P2_SH: 
+      Firmware_Name: immortalwrt-Banana-Pi-BPI-R4
+      DIY_P1_SH: smpackage/Banana-Pi-BPI-R4-1-1.sh
+      DIY_P2_SH: smpackage/Banana-Pi-BPI-R4-2-2.sh
       UPLOAD_BIN_DIR: false
       UPLOAD_FIRMWARE: true
       UPLOAD_BUILDINFO: true
