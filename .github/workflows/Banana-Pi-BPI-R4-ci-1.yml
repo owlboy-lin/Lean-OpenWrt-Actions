@@ -6,7 +6,7 @@
 # Copyright (C) 2020 KFERMercer
 #
 
-name: Banana-Pi-BPI-R4-CI-1
+name: immortalwrt-mt798x-Banana-Pi-BPI-R4-CI-1
 
 on:
   schedule:
@@ -39,7 +39,7 @@ env:
   REPO_BRANCH: mt7988
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: config/immortalwrt-mt798x-Banana-Pi-BPI-R4.info
-  Firmware_Name: Banana-Pi-BPI-R4-CI-1
+  Firmware_Name: immortalwrt-mt798x-Banana-Pi-BPI-R4-CI-1
   DIY_P1_SH: smpackage/Banana-Pi-BPI-R4-1.sh
   DIY_P2_SH: smpackage/Banana-Pi-BPI-R4-2-1.sh
   UPLOAD_BIN_DIR: false
@@ -57,7 +57,7 @@ jobs:
   build_openwrt:
 
 
-    name: Banana-Pi-BPI-R4-CI-1
+    name: immortalwrt-mt798x-Banana-Pi-BPI-R4-CI-1
 
     runs-on: Ubuntu-22.04
     
