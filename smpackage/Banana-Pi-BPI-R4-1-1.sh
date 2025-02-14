@@ -68,9 +68,9 @@
 ## adguardhome
 # git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app-adguardhome
 
-git clone -b 2023.10 --depth 1 https://github.com/XiaoBinin/luci-app-adguardhome.git package/luci-app-adguardhome
+# git clone -b 2023.10 --depth 1 https://github.com/XiaoBinin/luci-app-adguardhome.git package/luci-app-adguardhome
 
-# echo 'src-git adguardhome https://github.com/XiaoBinin/luci-app-adguardhome' >>feeds.conf.default
+echo 'src-git adguardhome https://github.com/XiaoBinin/luci-app-adguardhome' >>feeds.conf.default
 
 
 ## autoreboot
