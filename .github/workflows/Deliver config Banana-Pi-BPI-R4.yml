@@ -39,7 +39,7 @@
       REPO_URL: https://github.com/immortalwrt/immortalwrt
       REPO_BRANCH: openwrt-24.10
       FEEDS_CONF: feeds.conf.default
-      CONFIG_FILE: 
+      CONFIG_FILE: config/immortalwrt.info
       Firmware_Name: immortalwrt-Banana-Pi-BPI-R4
       DIY_P1_SH: smpackage/Banana-Pi-BPI-R4-1-1.sh
       DIY_P2_SH: smpackage/Banana-Pi-BPI-R4-2-2.sh
