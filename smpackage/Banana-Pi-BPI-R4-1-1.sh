@@ -100,9 +100,9 @@ echo 'src-git netspeedtest https://github.com/sirpdboy/netspeedtest' >>feeds.con
 
 
 ## poweroff
-# echo 'src-git poweroff https://github.com/esirplayground/luci-app-poweroff' >>feeds.conf.default
+echo 'src-git poweroff https://github.com/esirplayground/luci-app-poweroff' >>feeds.conf.default
 
-git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
+# git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
 
 # sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
 # sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
