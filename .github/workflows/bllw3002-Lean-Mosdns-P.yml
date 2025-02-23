@@ -6,7 +6,7 @@
 # Copyright (C) 2020 KFERMercer
 # chmod +x /etc/init.d/netspeedtest
 
-name: bllw3002-Lean-Mosdns-P
+name: bllw3002-Lean-Mosdns-all
 
 on:
   schedule:
@@ -39,7 +39,7 @@ env:
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: config/Lean-p.info
-  Firmware_Name: bllw3002-Lean-Mosdns-P
+  Firmware_Name: bllw3002-Lean-Mosdns-all
   DIY_P1_SH: smpackage/bllw3002-smpackage-p-1.sh
   DIY_P2_SH: smpackage/bllw3002-smpackage-p-2.sh
   UPLOAD_BIN_DIR: false

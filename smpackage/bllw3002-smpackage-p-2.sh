@@ -11,7 +11,7 @@
 #
 
 # 修改openwrt登陆地址,把下面的 10.0.0.1 修改成你想要的就可以了
-sed -i 's/192.168.1.1/192.168.24.1/g' package/base-files/files/bin/config_generate
+sed -i 's/192.168.1.1/192.168.89.249/g' package/base-files/files/bin/config_generate
 # 修改 子网掩码
 # sed -i 's/255.255.255.0/255.255.0.0/g' package/base-files/files/bin/config_generate
 
@@ -103,82 +103,72 @@ echo "
 CONFIG_GRUB_IMAGES=y
 CONFIG_VMDK_IMAGES=y
 
+CONFIG_TARGET_ROOTFS_EXT4FS=y
+CONFIG_TARGET_EXT4_RESERVED_PCT=0
+CONFIG_TARGET_EXT4_BLOCKSIZE_4K=y
+# CONFIG_TARGET_EXT4_BLOCKSIZE_2K is not set
+# CONFIG_TARGET_EXT4_BLOCKSIZE_1K is not set
+CONFIG_TARGET_EXT4_BLOCKSIZE=4096
+# CONFIG_TARGET_EXT4_JOURNAL is not set
+
 # 固件大小
 CONFIG_TARGET_KERNEL_PARTSIZE=512
 CONFIG_TARGET_ROOTFS_PARTSIZE=1024
 
-CONFIG_TARGET_PREINIT_IP="192.168.89.249"
-CONFIG_TARGET_PREINIT_NETMASK="255.255.255.0"
-CONFIG_TARGET_PREINIT_BROADCAST="192.168.89.255"
 
 # ipv6
 CONFIG_PACKAGE_ipv6helper=y
 
 # 自动重启
 CONFIG_PACKAGE_luci-app-autoreboot=y
-CONFIG_PACKAGE_luci-i18n-autoreboot-zh-cn=y
+
 
 # 关机
 CONFIG_PACKAGE_luci-app-poweroff=y
-CONFIG_PACKAGE_luci-i18n-poweroff-zh-cn=y
+
 
 # openclash
 CONFIG_PACKAGE_luci-app-openclash=y
-CONFIG_PACKAGE_luci-i18n-openclash-zh-cn=y
+
 
 # adguardhome
 CONFIG_PACKAGE_luci-app-adguardhome=y
-CONFIG_PACKAGE_luci-i18n-adguardhome-zh-cn=y
+
 
 # mosdns
 CONFIG_PACKAGE_luci-app-mosdns=y
-CONFIG_PACKAGE_luci-i18n-mosdns-zh-cn=y
+
 
 # netspeedtest chmod +x /etc/init.d/netspeedtest
 CONFIG_PACKAGE_luci-app-netspeedtest=y
-CONFIG_PACKAGE_luci-i18n-netspeedtest-zh-cn=y
+y
 
 # passwall
 CONFIG_PACKAGE_luci-app-passwall=y
-CONFIG_PACKAGE_luci-i18n-passwall-zh-cn=y
+
 
 CONFIG_PACKAGE_luci-app-passwall2=y
-CONFIG_PACKAGE_luci-i18n-passwall2-zh-cn=y
+
 
 
 # quickstart
 CONFIG_PACKAGE_luci-app-quickstart=y
-CONFIG_PACKAGE_luci-i18n-quickstart-zh-cn=y
+
 
 # store
 CONFIG_PACKAGE_luci-app-store=y
 
 # luci-app-ttyd=y
 CONFIG_PACKAGE_luci-app-ttyd=y
-CONFIG_PACKAGE_luci-i18n-ttyd-zh-cn=y
+
 
 # luci-app-uugamebooster=y
 
 
 # luci-app-webadmin=y
 CONFIG_PACKAGE_luci-app-webadmin=y
-CONFIG_PACKAGE_luci-i18n-webadmin-zh-cn=y
 
 
-# 删除不用的插件
-# # CONFIG_PACKAGE_luci-app-uugamebooster is not set
-# # CONFIG_PACKAGE_luci-i18n-uugamebooster-zh-cn is not set
-# # CONFIG_PACKAGE_autosamba is not set
-# # CONFIG_PACKAGE_luci-app-accesscontrol is not set
-# # CONFIG_PACKAGE_luci-i18n-accesscontrol-zh-cn is not set
-# # CONFIG_PACKAGE_luci-app-upnp is not set
-# # CONFIG_PACKAGE_luci-i18n-upnp-zh-cn is not set
-# # CONFIG_PACKAGE_luci-app-vlmcsd is not set
-# # CONFIG_PACKAGE_luci-i18n-vlmcsd-zh-cn is not set
-# # CONFIG_PACKAGE_luci-app-vsftpd is not set
-# # CONFIG_PACKAGE_luci-i18n-vsftpd-zh-cn is not set
-# # CONFIG_PACKAGE_luci-app-samba4 is not set
-# # CONFIG_PACKAGE_luci-i18n-samba4-zh-cn is not set
 
 " >> .config
 

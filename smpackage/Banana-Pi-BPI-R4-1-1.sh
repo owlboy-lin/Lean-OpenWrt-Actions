@@ -84,7 +84,7 @@ echo 'src-git adguardhome https://github.com/XiaoBinin/luci-app-adguardhome' >>f
 
 
 ## netspeedtest
-echo 'src-git netspeedtest https://github.com/sirpdboy/netspeedtest' >>feeds.conf.default
+# echo 'src-git netspeedtest https://github.com/sirpdboy/netspeedtest' >>feeds.conf.default
 # git clone https://github.com/sirpdboy/netspeedtest.git package/netspeedtest
 
 ## OpenClash
