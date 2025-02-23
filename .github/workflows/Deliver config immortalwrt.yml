@@ -8,7 +8,7 @@
     # <https://github.com/KFERMercer/OpenWrt-CI>
     # 
 
-    name: Deliver config immortalwrt
+    name: Deliver config immortalwrt-small-package
 
 
     on:
@@ -39,8 +39,8 @@
       REPO_URL: https://github.com/immortalwrt/immortalwrt
       REPO_BRANCH: openwrt-24.10
       FEEDS_CONF: feeds.conf.default
-      CONFIG_FILE: config/immortalwrt.info
-      Firmware_Name: immortalwrt
+      CONFIG_FILE: config/immortalwrt-small-package.info
+      Firmware_Name: immortalwrt-small-package
       DIY_P1_SH: smpackage/immortalwrt-1.sh
       DIY_P2_SH: smpackage/immortalwrt-2.sh
       UPLOAD_BIN_DIR: false
@@ -61,7 +61,7 @@
      #   container: node:16.16.0
      
      
-        name: Deliver config immortalwrt
+        name: Deliver config immortalwrt-small-package
         
         if: github.event.repository.owner.id == github.event.sender.id
         
