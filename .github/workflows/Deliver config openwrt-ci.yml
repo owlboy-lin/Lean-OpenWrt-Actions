@@ -176,50 +176,50 @@ jobs:
           fi
           df -hT  
 
-      - name: 输出编译信息
-        run: |
-          cd openwrt
-          echo " 系统空间      类型   总数  已用  可用 使用率"
-          df -hT $PWD
+      # - name: 输出编译信息
+      #   run: |
+      #     cd openwrt
+      #     echo " 系统空间      类型   总数  已用  可用 使用率"
+      #     df -hT $PWD
           
-          echo
-          echo "=========================================="
-          echo
+      #     echo
+      #     echo "=========================================="
+      #     echo
   
-          ZZZ="package/lean/default-settings/files/zzz-default-settings"
-          echo "DISTRIB_REVISION=$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')" >> $GITHUB_ENV
-          echo "KERNEL_PATCHVER=$(cat target/linux/x86/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')" >> $GITHUB_ENV
-          echo "	    当前编译版本：$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')"
-          echo "	    内核版本：$(cat target/linux/x86/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')"
+      #     ZZZ="package/lean/default-settings/files/zzz-default-settings"
+      #     echo "DISTRIB_REVISION=$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')" >> $GITHUB_ENV
+      #     echo "KERNEL_PATCHVER=$(cat target/linux/x86/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')" >> $GITHUB_ENV
+      #     echo "	    当前编译版本：$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')"
+      #     echo "	    内核版本：$(cat target/linux/x86/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')"
   
-          echo
-          echo "=========================================="
+      #     echo
+      #     echo "=========================================="
   
-          grep -i CONFIG_PACKAGE_luci-app .config | grep  -v \# > Plug-in
-          grep -i CONFIG_PACKAGE_luci-theme .config | grep  -v \# >> Plug-in
-          sed -i '/INCLUDE/d' Plug-in > /dev/null 2>&1
-          sed -i 's/CONFIG_PACKAGE_/、/g' Plug-in
-          sed -i '/Transparent_Proxy/d' Plug-in > /dev/null 2>&1 #排除 luci-app-passwall_Transparent_Proxy
-          sed -i '/qbittorrent-simple_dynamic/d' Plug-in > /dev/null 2>&1 #排除 luci-app-qbittorrent-simple_dynamic
-          sed -i 's/=y/\ /g' Plug-in
-          awk '$0=NR$0' Plug-in > Plug-2
-          awk '{print "	" $0}' Plug-2 > Plug-in
+      #     grep -i CONFIG_PACKAGE_luci-app .config | grep  -v \# > Plug-in
+      #     grep -i CONFIG_PACKAGE_luci-theme .config | grep  -v \# >> Plug-in
+      #     sed -i '/INCLUDE/d' Plug-in > /dev/null 2>&1
+      #     sed -i 's/CONFIG_PACKAGE_/、/g' Plug-in
+      #     sed -i '/Transparent_Proxy/d' Plug-in > /dev/null 2>&1 #排除 luci-app-passwall_Transparent_Proxy
+      #     sed -i '/qbittorrent-simple_dynamic/d' Plug-in > /dev/null 2>&1 #排除 luci-app-qbittorrent-simple_dynamic
+      #     sed -i 's/=y/\ /g' Plug-in
+      #     awk '$0=NR$0' Plug-in > Plug-2
+      #     awk '{print "	" $0}' Plug-2 > Plug-in
   
-          echo
-          echo
-          echo "	      已选插件列表"
-          cat Plug-in
-          rm -rf {Plug-in,Plug-2}
+      #     echo
+      #     echo
+      #     echo "	      已选插件列表"
+      #     cat Plug-in
+      #     rm -rf {Plug-in,Plug-2}
   
-          echo
-          echo "=========================================="
+      #     echo
+      #     echo "=========================================="
   
-          echo
-          echo
-          echo "输出完整插件信息..."
-          echo
-          echo
-          cat .config
+      #     echo
+      #     echo
+      #     echo "输出完整插件信息..."
+      #     echo
+      #     echo
+      #     cat .config
 
       - name: 整理固件文件
         run: |
