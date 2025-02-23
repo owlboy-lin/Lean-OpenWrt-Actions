@@ -41,8 +41,8 @@
       FEEDS_CONF: feeds.conf.default
       CONFIG_FILE: config/immortalwrt.info
       Firmware_Name: immortalwrt-small-package
-      DIY_P1_SH: smpackage/immortalwrt-small-package-1.sh
-      DIY_P2_SH: smpackage/immortalwrt-small-package-2.sh
+      DIY_P1_SH: smpackage/small-package-1.sh
+      DIY_P2_SH: smpackage/openwrt-packages-small-2.sh
       UPLOAD_BIN_DIR: false
       UPLOAD_FIRMWARE: true
       UPLOAD_BUILDINFO: true
