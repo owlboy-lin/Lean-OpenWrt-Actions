@@ -58,7 +58,7 @@ jobs:
 
     name: Deliver config Lean-Mosdns(P)
 
-    runs-on: ubuntu-latest
+    runs-on: Ubuntu-22.04
     
     steps:         
       - name: 初始化系统环境
