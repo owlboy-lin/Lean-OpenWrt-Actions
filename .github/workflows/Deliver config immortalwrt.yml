@@ -8,7 +8,7 @@
     # <https://github.com/KFERMercer/OpenWrt-CI>
     # 
 
-    name: Deliver config immortalwrt-small-package
+    name: Deliver config immortalwrt
 
 
     on:
@@ -39,8 +39,8 @@
       REPO_URL: https://github.com/immortalwrt/immortalwrt
       REPO_BRANCH: openwrt-24.10
       FEEDS_CONF: feeds.conf.default
-      CONFIG_FILE: config/immortalwrt.config
-      Firmware_Name: immortalwrt-small-package
+      CONFIG_FILE: config/immortalwrt.info
+      Firmware_Name: immortalwrt
       DIY_P1_SH: smpackage/immortalwrt-1.sh
       DIY_P2_SH: smpackage/immortalwrt-2.sh
       UPLOAD_BIN_DIR: false
@@ -61,7 +61,7 @@
      #   container: node:16.16.0
      
      
-        name: Deliver config immortalwrt-small-package
+        name: Deliver config immortalwrt
         
         if: github.event.repository.owner.id == github.event.sender.id
         
@@ -110,12 +110,12 @@
             ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
          
           
-        - name: patch1补丁和自定义设置
-          run: |
-            [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
-            chmod +x $DIY_P1_SH
-            cd openwrt
-            $GITHUB_WORKSPACE/$DIY_P1_SH
+        # - name: patch1补丁和自定义设置
+        #   run: |
+        #     [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
+        #     chmod +x $DIY_P1_SH
+        #     cd openwrt
+        #     $GITHUB_WORKSPACE/$DIY_P1_SH
             
 
         - name: 更新源 #Update feeds
@@ -124,13 +124,13 @@
         - name: 安装源 #Install feeds
           run: cd openwrt && ./scripts/feeds install -a
 
-        - name: patch2补丁和自定义设置
-          run: |
-            [ -e files ] && mv files openwrt/files
-            [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
-            chmod +x $DIY_P2_SH
-            cd openwrt
-            $GITHUB_WORKSPACE/$DIY_P2_SH
+        # - name: patch2补丁和自定义设置
+        #   run: |
+        #     [ -e files ] && mv files openwrt/files
+        #     [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+        #     chmod +x $DIY_P2_SH
+        #     cd openwrt
+        #     $GITHUB_WORKSPACE/$DIY_P2_SH
             
         - name: Generate configuration file
           run: |
