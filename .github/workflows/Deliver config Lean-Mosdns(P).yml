@@ -39,9 +39,9 @@ env:
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: config/OpenWrt-CI.info
-  Firmware_Name: Lean-p
-  DIY_P1_SH: smpackage/smpackage-1-all.sh
-  DIY_P2_SH: smpackage/smpackage-2-p.sh
+  Firmware_Name: Lean-all-small
+  DIY_P1_SH: smpackage/Lean-all-small-1.sh
+  DIY_P2_SH: smpackage/Lean-all-small-2.sh
   UPLOAD_ORGANIZE: false
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
