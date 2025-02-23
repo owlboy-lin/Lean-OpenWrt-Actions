@@ -40,8 +40,8 @@ env:
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: config/immortalwrt-all.info
   Firmware_Name: immortalwrt-openwrt-packages-small
-  DIY_P1_SH: smpackage/immortalwrt-openwrt-packages-small-1.sh
-  DIY_P2_SH: smpackage/immortalwrt-openwrt-packages-small-2.sh
+  DIY_P1_SH: smpackage/openwrt-packages-small-1.sh
+  DIY_P2_SH: smpackage/openwrt-packages-small-2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_BUILDINFO: true
