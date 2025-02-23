@@ -6,7 +6,7 @@
 # Copyright (C) 2020 KFERMercer
 # chmod +x /etc/init.d/netspeedtest
 
-name: immortalwrt-small-package
+name: immortalwrt-openwrt-packages-small
 
 on:
   schedule:
@@ -38,10 +38,10 @@ env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
   REPO_BRANCH: openwrt-24.10
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: config/immortalwrt-fly-iStore.info
-  Firmware_Name: immortalwrt-small-package
+  CONFIG_FILE: config/immortalwrt-all.info
+  Firmware_Name: immortalwrt-openwrt-packages-small
   DIY_P1_SH: smpackage/immortalwrt-1.sh
-  DIY_P2_SH: smpackage/Lean-fly-iStore-2.sh
+  DIY_P2_SH: smpackage/immortalwrt-2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_BUILDINFO: true
@@ -57,7 +57,7 @@ jobs:
   build_openwrt:
 
 
-    name: immortalwrt-small-package
+    name: immortalwrt-openwrt-packages-small
     
     runs-on: Ubuntu-22.04
     
