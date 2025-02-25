@@ -10,9 +10,6 @@
 # Description: OpenWrt DIY script part 1 (Before Update feeds)
 # =================================================================
 
-# Modify default IP
-# sed -i 's/192.168.1.1/192.168.24.1/g' package/base-files/files/bin/config_generate
-
 # Uncomment a feed source
 # sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
 
@@ -116,5 +113,5 @@
 # sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
 
 
-# iStore
+# # iStore
 # echo 'src-git istore https://github.com/linkease/istore;main' >> feeds.conf.default
