@@ -246,33 +246,3 @@ CONFIG_PACKAGE_luci-app-webadmin=y
 
 
 " >> .config
-
-pushd package/community
-if [ -d luci-app-adguardhome ];then
-    sed -i '/configpath/s#/etc/AdGuardHome.yaml#/etc/config/AdGuardHome.yaml#' luci-app-adguardhome/root/etc/config/AdGuardHome
-    # https://github.com/rufengsuixing/luci-app-adguardhome/issues/130
-    SED_NUM=$(awk '/^start_service/,/configpath/{a=NR}END{print a}' luci-app-adguardhome/root/etc/init.d/AdGuardHome)
-    sed -i "$SED_NUM"'a [ ! -f "${configpath}" ] && cp /usr/share/AdGuardHome/AdGuardHome_template.yaml ${configpath}' luci-app-adguardhome/root/etc/init.d/AdGuardHome
-    # 依赖问题，固件自带了 wget ca-bundle ca-certificates
-    sed -ri '/^LUCI_DEPENDS:=/s#\+(ca-certs|wget-ssl)##g' luci-app-adguardhome/Makefile
-fi
-if [ -d adguardhome -a ! -f 'adguardhome/files/AdGuardHome' ];then
-    wget  https://static.adguard.com/adguardhome/release/AdGuardHome_linux_mipsle_softfloat.tar.gz -O - | \
-      tar -zxvf -  --strip-components 2 -C adguardhome/files/ ./AdGuardHome/AdGuardHome 
-    upx -9 adguardhome/files/AdGuardHome
-    # 自带编译出来的 16.2M ，直接下载 upx 压缩会 9M 
-    sed -ri '/GoPackage/d' adguardhome/Makefile
-    SED_NUM=$(awk '$2=="Package/adguardhome/install"{print NR}' adguardhome/Makefile)
-    # 下面的插入内容前面必须是tab，而不是空格
-    sed -i "${SED_NUM}r "<(
-cat  <<'EOF' | sed -r 's#^\s+#\t#'
-  $(INSTALL_DIR) $(1)/usr/bin
-  $(INSTALL_DATA) ./files/AdGuardHome/AdGuardHome $(1)/usr/bin/AdGuardHome/AdGuardHome
-  chmod 0755 $(1)/usr/bin/AdGuardHome/AdGuardHome
-EOF
-  ) adguardhome/Makefile
-  # 必须保留最后的 BuildPackage ，否则编译不出来该包
-  sed -ri '/GoBinPackage,adguardhome/d' adguardhome/Makefile
-fi
-
-popd
