@@ -40,7 +40,7 @@ env:
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: config/immortalwrt-all.info
   Firmware_Name: immortalwrt-all
-  DIY_P1_SH: smpackage/immortalwrt-1.sh
+  DIY_P1_SH: smpackage/immortalwrt-all-1.sh
   DIY_P2_SH: smpackage/immortalwrt-2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
