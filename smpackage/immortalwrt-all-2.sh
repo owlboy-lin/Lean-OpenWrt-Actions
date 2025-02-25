@@ -134,8 +134,8 @@ if [ -d adguardhome -a ! -f 'adguardhome/files/AdGuardHome' ];then
     sed -i "${SED_NUM}r "<(
 cat  <<'EOF' | sed -r 's#^\s+#\t#'
   $(INSTALL_DIR) $(1)/usr/bin
-  $(INSTALL_DATA) ./files/AdGuardHome $(1)/usr/bin/AdGuardHome
-  chmod 0755 $(1)/usr/bin/AdGuardHome
+  $(INSTALL_DATA) ./files/AdGuardHome/AdGuardHome $(1)/usr/bin/AdGuardHome/AdGuardHome
+  chmod 0755 $(1)/usr/bin/AdGuardHome/AdGuardHome
 EOF
   ) adguardhome/Makefile
   # 必须保留最后的 BuildPackage ，否则编译不出来该包
