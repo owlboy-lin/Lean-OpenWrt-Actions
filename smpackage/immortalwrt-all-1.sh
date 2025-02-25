@@ -98,9 +98,9 @@ echo 'src-git netspeedtest https://github.com/sirpdboy/netspeedtest' >>feeds.con
 
 
 ## poweroff
-git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
+# git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
 # echo 'src-git poweroff https://github.com/esirplayground/luci-app-poweroff' >>feeds.conf.default
-
+git clone https://github.com/esirplayground/luci-app-poweroff.git package/luci-app-poweroff
 # sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default
 
 # sed -i '1i src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default
