@@ -217,7 +217,7 @@ CONFIG_PACKAGE_luci-app-adguardhome=y
 
 
 # # arpbind
-CONFIG_PACKAGE_luci-app-arpbind=y
+CONFIG_PACKAGE_luci-app-arpbind=n
 
 
 # 自动重启
