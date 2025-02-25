@@ -52,7 +52,8 @@
 
 
 # Add a feed source
-#echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
+echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
+
 #echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
 
 
@@ -64,15 +65,23 @@
 #  下载源码
 ## adguardhome
 # git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app-adguardhome
+echo 'src-git adguardhome https://github.com/rufengsuixing/luci-app-adguardhome' >>feeds.conf.default
 
 ## autoreboot
 # git clone https://github.com/f8q8/luci-app-autoreboot package/luci-app-autoreboot
 
 ## mosdns
 # echo 'src-git mosdns https://github.com/sbwml/luci-app-mosdns' >>feeds.conf.default
+find ./ | grep Makefile | grep v2ray-geodata | xargs rm -f
+find ./ | grep Makefile | grep mosdns | xargs rm -f
+
+git clone https://github.com/sbwml/luci-app-mosdns -b v5 package/mosdns
+git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 
 ## netspeedtest
 # git clone https://github.com/sirpdboy/netspeedtest.git package/netspeedtest
+# sed -i '$a src-git netspeedtest https://github.com/sirpdboy/netspeedtest' feeds.conf.default
+echo 'src-git netspeedtest https://github.com/sirpdboy/netspeedtest' >>feeds.conf.default
 
 ## OpenClash
 # echo 'src-git openclash https://github.com/vernesong/OpenClash' >>feeds.conf.default
@@ -88,7 +97,7 @@
 
 ## poweroff
 # git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
-
+echo 'src-git poweroff https://github.com/esirplayground/luci-app-poweroff' >>feeds.conf.default
 
 # sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default
 
@@ -100,6 +109,7 @@
 
 # sed -i '1i src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
 # sed -i '2i src-git small https://github.com/kenzok8/small' feeds.conf.default
+# cd openwrt
 # ./scripts/feeds update -a 
 # rm -rf feeds/luci/applications/luci-app-mosdns
 # rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,smartdns}
@@ -114,4 +124,8 @@
 
 
 # # iStore
-# echo 'src-git istore https://github.com/linkease/istore;main' >> feeds.conf.default
+echo 'src-git istore https://github.com/linkease/istore;main' >> feeds.conf.default
+
+
+cd openwrt
+./scripts/feeds update -a
