@@ -211,24 +211,17 @@ CONFIG_TARGET_ROOTFS_PARTSIZE=1024
 # # Themes
 CONFIG_PACKAGE_luci-theme-argon=y
 
-# # arpbind
-CONFIG_PACKAGE_luci-app-arpbind=y
-
-# 自动重启
-CONFIG_PACKAGE_luci-app-autoreboot=y
-
-
-
-# 关机
-CONFIG_PACKAGE_luci-app-poweroff=y
-
-
-# openclash
-CONFIG_PACKAGE_luci-app-openclash=y
-
 
 # adguardhome
 CONFIG_PACKAGE_luci-app-adguardhome=y
+
+
+# # arpbind
+CONFIG_PACKAGE_luci-app-arpbind=y
+
+
+# 自动重启
+CONFIG_PACKAGE_luci-app-autoreboot=y
 
 
 # mosdns
@@ -239,12 +232,23 @@ CONFIG_PACKAGE_luci-app-mosdns=y
 CONFIG_PACKAGE_luci-app-netspeedtest=y
 
 
+# nlbwmon
+CONFIG_PACKAGE_luci-app-nlbwmon=y
+
+
+# openclash
+CONFIG_PACKAGE_luci-app-openclash=y
+
+
+# 关机
+CONFIG_PACKAGE_luci-app-poweroff=y
+
+
 # passwall
 CONFIG_PACKAGE_luci-app-passwall=y
 
 
 CONFIG_PACKAGE_luci-app-passwall2=n
-
 
 
 # quickstart
@@ -253,6 +257,7 @@ CONFIG_PACKAGE_luci-app-quickstart=y
 
 # store
 CONFIG_PACKAGE_luci-app-store=y
+
 
 # luci-app-ttyd=y
 CONFIG_PACKAGE_luci-app-ttyd=y
