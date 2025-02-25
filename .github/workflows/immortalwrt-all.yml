@@ -38,10 +38,10 @@ env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
   REPO_BRANCH: openwrt-24.10
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: config/immortalwrt-all.info
+  CONFIG_FILE: config/immortalwrt.info
   Firmware_Name: immortalwrt-all
   DIY_P1_SH: smpackage/immortalwrt-all-1.sh
-  DIY_P2_SH: smpackage/immortalwrt-2.sh
+  DIY_P2_SH: smpackage/immortalwrt-all-2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_BUILDINFO: true

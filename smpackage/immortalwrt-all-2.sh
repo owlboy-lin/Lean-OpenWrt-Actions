@@ -211,58 +211,57 @@ CONFIG_TARGET_ROOTFS_PARTSIZE=1024
 # # Themes
 CONFIG_PACKAGE_luci-theme-argon=y
 
-CONFIG_TARGET_PREINIT_IP="192.168.24.1"
-CONFIG_TARGET_PREINIT_NETMASK="255.255.255.0"
-CONFIG_TARGET_PREINIT_BROADCAST="192.168.24.255"
+# # arpbind
+CONFIG_PACKAGE_luci-app-arpbind=y
 
 # 自动重启
 CONFIG_PACKAGE_luci-app-autoreboot=y
-CONFIG_PACKAGE_luci-i18n-autoreboot-zh-cn=y
+
 
 
 # 关机
 CONFIG_PACKAGE_luci-app-poweroff=y
-CONFIG_PACKAGE_luci-i18n-poweroff-zh-cn=y
+
 
 # openclash
 CONFIG_PACKAGE_luci-app-openclash=y
-CONFIG_PACKAGE_luci-i18n-openclash-zh-cn=y
+
 
 # adguardhome
 CONFIG_PACKAGE_luci-app-adguardhome=y
-CONFIG_PACKAGE_luci-i18n-adguardhome-zh-cn=y
+
 
 # mosdns
 CONFIG_PACKAGE_luci-app-mosdns=y
-CONFIG_PACKAGE_luci-i18n-mosdns-zh-cn=y
+
 
 # netspeedtest chmod +x /etc/init.d/netspeedtest
 CONFIG_PACKAGE_luci-app-netspeedtest=y
-CONFIG_PACKAGE_luci-i18n-netspeedtest-zh-cn=y
+
 
 # passwall
 CONFIG_PACKAGE_luci-app-passwall=y
-CONFIG_PACKAGE_luci-i18n-passwall-zh-cn=y
 
-CONFIG_PACKAGE_luci-app-passwall2=y
-CONFIG_PACKAGE_luci-i18n-passwall2-zh-cn=y
+
+CONFIG_PACKAGE_luci-app-passwall2=n
+
 
 
 # quickstart
 CONFIG_PACKAGE_luci-app-quickstart=y
-CONFIG_PACKAGE_luci-i18n-quickstart-zh-cn=y
+
 
 # store
 CONFIG_PACKAGE_luci-app-store=y
 
 # luci-app-ttyd=y
 CONFIG_PACKAGE_luci-app-ttyd=y
-CONFIG_PACKAGE_luci-i18n-ttyd-zh-cn=y
+
 
 
 # luci-app-webadmin=y
 CONFIG_PACKAGE_luci-app-webadmin=y
-CONFIG_PACKAGE_luci-i18n-webadmin-zh-cn=y
+
 
 
 
