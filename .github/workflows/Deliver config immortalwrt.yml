@@ -122,7 +122,7 @@
           run: cd openwrt && ./scripts/feeds update -a
 
         - name: 安装源 #Install feeds
-          run: cd openwrt && ./scripts/feeds install -a
+          run: cd openwrt && ./scripts/feeds install -a && ./scripts/feeds update packages 
 
         # - name: patch2补丁和自定义设置
         #   run: |
