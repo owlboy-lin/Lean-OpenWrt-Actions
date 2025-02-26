@@ -246,3 +246,6 @@ CONFIG_PACKAGE_luci-app-webadmin=y
 
 
 " >> .config
+cd openwrt
+./scripts/feeds update istore
+./scripts/feeds install -d y -p istore luci-app-store
