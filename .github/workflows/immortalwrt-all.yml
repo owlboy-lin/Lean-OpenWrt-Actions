@@ -148,7 +148,7 @@ jobs:
         run: |
           cd openwrt
           ./scripts/feeds install -a
-          ./scripts/feeds install -d y -p istore luci-app-store  
+      
 
       - name: patch2补丁和自定义设置
         run: |

@@ -36,7 +36,7 @@ on:
     
 env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
-  REPO_BRANCH: openwrt-24.10
+  REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: config/immortalwrt.info
   DIY_P1_SH: smpackage/immortalwrt-1.sh
@@ -99,7 +99,8 @@ jobs:
         working-directory: /workdir
         run: |
           df -hT $PWD
-          git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+          # git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+          git clone -b $REPO_BRANCH --single-branch --filter=blob:none $REPO_URL openwrt
           ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
 
@@ -133,13 +134,30 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }} 
 
-
       - name: 输出编译信息
         run: |
           cd openwrt
+
+          echo
           echo " 系统空间      类型   总数  已用  可用 使用率"
           df -hT $PWD
-            
+
+          echo
+          echo "=========================================="
+          echo
+
+          echo "	    CPU物理数量:$(cat /proc/cpuinfo| grep "physical id"| sort| uniq| wc -l)"
+          echo "	    CPU核心及版本信息：$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
+
+          echo
+          echo "=========================================="
+          echo
+
+          echo "KERNEL_PATCHVER=$(cat target/linux/x86/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')" >> $GITHUB_ENV
+          echo "	    内核版本：$(cat target/linux/x86/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')"
+
+          echo "	    编译时间：${{ env.FILE_TIME1 }}"
+
           echo
           echo "=========================================="
 
@@ -167,8 +185,7 @@ jobs:
           echo "输出完整插件信息..."
           echo
           echo
-          cat .config
-
+          # cat .config
 
       - name: 下载固件包
         id: package
