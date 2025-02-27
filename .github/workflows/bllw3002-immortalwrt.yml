@@ -41,7 +41,7 @@ env:
   CONFIG_FILE: config/immortalwrt.info
   Firmware_Name: bllw3002-immortalwrt
   DIY_P1_SH: smpackage/immortalwrt-all-1.sh
-  DIY_P2_SH: smpackage/openwrt-packages-small-2.sh
+  DIY_P2_SH: smpackage/immortalwrt-all-2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_BUILDINFO: true
