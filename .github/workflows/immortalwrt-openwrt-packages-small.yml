@@ -123,7 +123,7 @@ jobs:
         working-directory: /workdir
         run: |
           df -hT $PWD
-          git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+          git clone -b $REPO_BRANCH --single-branch --filter=blob:none $REPO_URL openwrt
           ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
       - name: 缓存
@@ -141,14 +141,14 @@ jobs:
           cd openwrt
           $GITHUB_WORKSPACE/$DIY_P1_SH
 
-      # - name: 更新源 #Update feeds
-      #   run: cd openwrt && ./scripts/feeds update -a
+      - name: 更新源 #Update feeds
+        run: cd openwrt && ./scripts/feeds update -a
           
       - name: 安装源 #Install feeds
         run: |
           cd openwrt
           ./scripts/feeds install -a -f
-          ./scripts/feeds install -d y -p istore luci-app-store  
+
 
       - name: patch2补丁和自定义设置
         run: |

@@ -9,6 +9,8 @@
 # File name: diy-part2.sh
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 #
+cd openwrt
+./scripts/feeds install -d y -p istore luci-appe  
 
 # 修改openwrt登陆地址,把下面的 10.0.0.1 修改成你想要的就可以了
 # sed -i 's/192.168.1.1/192.168.24.1/g' package/base-files/files/bin/config_generate
