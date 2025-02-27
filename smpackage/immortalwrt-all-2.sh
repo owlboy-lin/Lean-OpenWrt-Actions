@@ -10,6 +10,12 @@
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 #
 
+cd openwrt
+./scripts/feeds update istore
+./scripts/feeds install -d y -p istore luci-app-store
+
+
+
 # 修改openwrt登陆地址,把下面的 10.0.0.1 修改成你想要的就可以了
 # sed -i 's/192.168.1.1/192.168.24.1/g' package/base-files/files/bin/config_generate
 
@@ -246,6 +252,3 @@ CONFIG_PACKAGE_luci-app-webadmin=y
 
 
 " >> .config
-cd openwrt
-./scripts/feeds update istore
-./scripts/feeds install -d y -p istore luci-app-store
