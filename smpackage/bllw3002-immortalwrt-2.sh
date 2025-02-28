@@ -243,8 +243,8 @@ CONFIG_PACKAGE_luci-app-store=y
 # luci-app-ttyd=y
 CONFIG_PACKAGE_luci-app-ttyd=y
 
-# luci-app-uugamebooster=y
-CONFIG_PACKAGE_luci-app-uugamebooster=y
+# luci-app-uugamebooster
+CONFIG_PACKAGE_luci-app-uugamebooster=n
 
 # luci-app-webadmin=y
 CONFIG_PACKAGE_luci-app-webadmin=y
