@@ -9,8 +9,8 @@
 name: OpenWrt-CI - istoreos
 
 on:
-  schedule:
-    - cron: 0 20 * * *
+  # schedule:
+  #   - cron: 0 15 * * *
   release:
     types: [published]
 

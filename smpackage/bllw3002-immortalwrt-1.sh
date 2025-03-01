@@ -162,7 +162,7 @@
 
 
 # #adguardhome
-git clone -b 2023.10 --depth 1 https://github.com/XiaoBinin/luci-app-adguardhome.git feeds/luci-app-adguardhome
+git clone -b 2023.10 --depth 1 https://github.com/XiaoBinin/luci-app-adguardhome.git package/luci-app-adguardhome
 
 # #lucky
 # # git clone -b main --depth 1 https://github.com/sirpdboy/luci-app-lucky.git
@@ -172,7 +172,7 @@ git clone -b 2023.10 --depth 1 https://github.com/XiaoBinin/luci-app-adguardhome
 # # git clone -b master --depth 1 https://github.com/pymumu/smartdns.git
 
 # # #ssrp
-git clone -b master --depth 1 https://github.com/fw876/helloworld.git feeds/helloworld
+git clone -b master --depth 1 https://github.com/fw876/helloworld.git package/helloworld
 
 # # #passwall
 # git clone -b main --depth 1 https://github.com/xiaorouji/openwrt-passwall.git
@@ -190,13 +190,14 @@ git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 # git clone -b master --depth 1 https://github.com/vernesong/OpenClash.git
 
 # ## poweroff
-git clone -b master https://github.com/esirplayground/luci-app-poweroff.git feeds/luci-app-poweroff
+git clone -b master https://github.com/esirplayground/luci-app-poweroff.git package/luci-app-poweroff
 
 # ## iStore
-git clone -b main https://github.com/linkease/istore.git feeds/istore
+git clone -b main https://github.com/linkease/istore.git package/istore
 
 # ## netspeedtest
-git clone -b master https://github.com/sirpdboy/netspeedtest.git feeds/netspeedtes
+git clone -b master https://github.com/sirpdboy/netspeedtest.git package/netspeedtes
+# echo 'src-git netspeedtest https://github.com/sirpdboy/netspeedtest' >>feeds.conf.default
 
 # ## luci-app-UUGameAcc 
 git  clone -b master https://github.com/BCYDTZ/luci-app-UUGameAcc feeds/luci-app-UUGameAcc

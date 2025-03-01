@@ -12,8 +12,8 @@ on:
   schedule:
     - cron: 0 23 * * *
 
-  # release:
-  #   types: [published]
+  release:
+    types: [published]
   
   watch:
     types: [started]
@@ -40,7 +40,7 @@ env:
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: config/immortalwrt.info
   Firmware_Name: bllw3002-immortalwrt
-  DIY_P1_SH: smpackage/bllw3002-immortalwrt-1.sh
+  DIY_P1_SH: smpackage/immortalwrt-all-1.sh
   DIY_P2_SH: smpackage/bllw3002-immortalwrt-2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true

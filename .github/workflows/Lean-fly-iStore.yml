@@ -10,7 +10,7 @@ name: Lean-fly-iStore
 
 on:
   schedule:
-    - cron: 0 22 * * *
+    - cron: 0 17 * * *
 
   release:
     types: [published]

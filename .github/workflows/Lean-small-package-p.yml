@@ -10,7 +10,7 @@ name: Lean-small-package-p
 
 on:
   schedule:
-    - cron: 0 20 * * *
+    - cron: 0 16 * * *
   release:
     types: [published]
     
