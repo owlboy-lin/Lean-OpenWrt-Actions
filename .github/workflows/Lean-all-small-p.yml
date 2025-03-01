@@ -10,7 +10,7 @@ name: Lean-all-small-p
 
 on:
   schedule:
-    - cron: 0 22 * * *
+    - cron: 0 21 * * *
 
   # release:
   #   types: [published]
