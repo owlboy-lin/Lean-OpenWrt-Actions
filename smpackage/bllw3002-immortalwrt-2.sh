@@ -235,6 +235,8 @@ CONFIG_PACKAGE_luci-app-passwall2=n
 # quickstart
 CONFIG_PACKAGE_luci-app-quickstart=y
 
+# helloworld
+CONFIG_PACKAGE_luci-app-ssr-plus=y
 
 # store
 CONFIG_PACKAGE_luci-app-store=y
