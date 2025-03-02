@@ -178,7 +178,7 @@ jobs:
         run: cd openwrt && ./scripts/feeds install -a
 
 
-        
+
       - name: SSH connection to Actions
         uses: P3TERX/ssh2actions@v1.0.0
         if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
@@ -217,18 +217,18 @@ jobs:
 
           # echo "	    编译时间：${{ env.FILE_TIME1 }}"
 
-          # echo
-          # echo "=========================================="
+          echo
+          echo "=========================================="
 
-          # grep -i CONFIG_PACKAGE_luci-app .config | grep  -v \# > Plug-in
-          # grep -i CONFIG_PACKAGE_luci-theme .config | grep  -v \# >> Plug-in
-          # sed -i '/INCLUDE/d' Plug-in > /dev/null 2>&1
-          # sed -i 's/CONFIG_PACKAGE_/、/g' Plug-in
-          # sed -i '/Transparent_Proxy/d' Plug-in > /dev/null 2>&1 #排除 luci-app-passwall_Transparent_Proxy
-          # sed -i '/qbittorrent-simple_dynamic/d' Plug-in > /dev/null 2>&1 #排除 luci-app-qbittorrent-simple_dynamic
-          # sed -i 's/=y/\ /g' Plug-in
-          # awk '$0=NR$0' Plug-in > Plug-2
-          # awk '{print "	" $0}' Plug-2 > Plug-in
+          grep -i CONFIG_PACKAGE_luci-app .config | grep  -v \# > Plug-in
+          grep -i CONFIG_PACKAGE_luci-theme .config | grep  -v \# >> Plug-in
+          sed -i '/INCLUDE/d' Plug-in > /dev/null 2>&1
+          sed -i 's/CONFIG_PACKAGE_/、/g' Plug-in
+          sed -i '/Transparent_Proxy/d' Plug-in > /dev/null 2>&1 #排除 luci-app-passwall_Transparent_Proxy
+          sed -i '/qbittorrent-simple_dynamic/d' Plug-in > /dev/null 2>&1 #排除 luci-app-qbittorrent-simple_dynamic
+          sed -i 's/=y/\ /g' Plug-in
+          awk '$0=NR$0' Plug-in > Plug-2
+          awk '{print "	" $0}' Plug-2 > Plug-in
 
           echo
           echo
