@@ -41,7 +41,7 @@ env:
   CONFIG_FILE: config/immortalwrt.info
   Firmware_Name: bllw3002-immortalwrt
   DIY_P1_SH: smpackage/immortalwrt-all-1.sh
-  DIY_P2_SH: smpackage/bllw3002-immortalwrt-2.sh
+  DIY_P2_SH: smpackage/immortalwrt-all-2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_BUILDINFO: true
@@ -165,6 +165,7 @@ jobs:
         run: cd openwrt && ./scripts/feeds install -a
 
 
+
       - name: patch2补丁和自定义设置
         run: |
           [ -e files ] && mv files openwrt/files
@@ -173,6 +174,11 @@ jobs:
           cd openwrt
           $GITHUB_WORKSPACE/$DIY_P2_SH
 
+
+
+
+
+
       - name: SSH connection to Actions
         uses: P3TERX/ssh2actions@v1.0.0
         if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
@@ -180,25 +186,40 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}   
 
+
       - name: 输出编译信息
         run: |
           cd openwrt
+
+          echo
           echo " 系统空间      类型   总数  已用  可用 使用率"
           df -hT $PWD
-          
+
           echo
           echo "=========================================="
           echo
-  
-          ZZZ="package/lean/default-settings/files/zzz-default-settings"
-          echo "DISTRIB_REVISION=$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')" >> $GITHUB_ENV
-          echo "KERNEL_PATCHVER=$(cat target/linux/x86/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')" >> $GITHUB_ENV
-          echo "	    当前编译版本：$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')"
-          echo "	    内核版本：$(cat target/linux/x86/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')"
-  
+
+          echo "	    CPU物理数量:$(cat /proc/cpuinfo| grep "physical id"| sort| uniq| wc -l)"
+          echo "	    CPU核心及版本信息：$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c)"
+
           echo
           echo "=========================================="
-  
+          echo
+
+
+          # ZZZ="package/lean/default-settings/files/zzz-default-settings"
+          # if [ -f "$ZZZ" ]; then
+          #   echo "	    当前编译版本：$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')"
+          # fi
+
+          # echo "KERNEL_PATCHVER=$(cat target/linux/x86/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')" >> $GITHUB_ENV
+          # echo "	    内核版本：$(cat target/linux/x86/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')"
+
+          # echo "	    编译时间：${{ env.FILE_TIME1 }}"
+
+          echo
+          echo "=========================================="
+
           grep -i CONFIG_PACKAGE_luci-app .config | grep  -v \# > Plug-in
           grep -i CONFIG_PACKAGE_luci-theme .config | grep  -v \# >> Plug-in
           sed -i '/INCLUDE/d' Plug-in > /dev/null 2>&1
@@ -208,16 +229,16 @@ jobs:
           sed -i 's/=y/\ /g' Plug-in
           awk '$0=NR$0' Plug-in > Plug-2
           awk '{print "	" $0}' Plug-2 > Plug-in
-  
+
           echo
           echo
           echo "	      已选插件列表"
           cat Plug-in
           rm -rf {Plug-in,Plug-2}
-  
+
           echo
           echo "=========================================="
-  
+
           echo
           echo
           echo "输出完整插件信息..."
@@ -246,9 +267,9 @@ jobs:
           echo " 系统空间      类型   总数  已用  可用 使用率"
           df -hT
           echo "=========================================="
-          du -h --max-depth=1 openwrt/ --exclude=build_dir --exclude=bin
-          du -h --max-depth=1 openwrt/build_dir
-          du -h --max-depth=1 openwrt/bin
+          du -h --max-depth=1 ./ --exclude=build_dir --exclude=bin
+          du -h --max-depth=1 ./build_dir
+          du -h --max-depth=1 ./bin
           echo "status=success" >> $GITHUB_OUTPUT
           grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
           [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
