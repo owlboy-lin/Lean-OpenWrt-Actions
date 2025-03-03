@@ -10,7 +10,7 @@
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 #
 
-cd openwrt
+
 ./scripts/feeds update istore
 ./scripts/feeds install -d y -p istore luci-app-store
 
