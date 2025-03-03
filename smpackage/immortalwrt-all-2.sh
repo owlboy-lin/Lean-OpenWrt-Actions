@@ -10,7 +10,7 @@
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 #
 
-cd openwrt
+
 ./scripts/feeds update istore
 ./scripts/feeds install -d y -p istore luci-app-store
 
@@ -160,7 +160,12 @@ uci commit firewall
 
 EOF
 
+# =======================================================
 
+# 修改退出命令到最后
+# cd $HOME && sed -i '/exit 0/d' $ZZZ && echo "exit 0" >> $ZZZ
+
+# ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●● #
 
 
 
