@@ -202,6 +202,13 @@ git clone -b master https://github.com/sirpdboy/netspeedtest.git package/netspee
 # ## luci-app-UUGameAcc 
 git  clone -b master https://github.com/BCYDTZ/luci-app-UUGameAcc feeds/luci-app-UUGameAcc
 
+
+cd openwrt
+./scripts/feeds update -a
+# rm -rf feeds/luci/applications/luci-app-passwall
+
+
 # popd
 
 # echo "packages executed successfully!"
+

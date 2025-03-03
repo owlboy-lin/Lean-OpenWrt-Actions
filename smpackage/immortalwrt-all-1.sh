@@ -96,10 +96,11 @@ sed -i '$a src-git netspeedtest https://github.com/sirpdboy/netspeedtest' feeds.
 
 ## passwall
 # echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
+# git clone -b main --depth 1 https://github.com/xiaorouji/openwrt-passwall.git package/passwall
 
 ## passwall2
 # echo 'src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2' >>feeds.conf.default
-
+# git clone -b main --depth 1 https://github.com/xiaorouji/openwrt-passwall2.git package/passwall2
 
 ## poweroff
 # git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
