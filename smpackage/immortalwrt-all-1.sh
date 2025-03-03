@@ -139,4 +139,4 @@ echo 'src-git istore https://github.com/linkease/istore;main' >> feeds.conf.defa
 
 cd openwrt
 ./scripts/feeds update -a
-rm -rf feeds/luci/applications/luci-app-passwall
+# rm -rf feeds/luci/applications/luci-app-passwall
