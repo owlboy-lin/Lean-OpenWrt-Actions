@@ -1,0 +1,15 @@
+sed -i 's#downloads.openwrt.org#mirror.nju.edu.cn/openwrt#g' /etc/opkg/distfeeds.conf
+sed -i '/Powered by/,+4d' /usr/lib/lua/luci/view/themes/argon/footer.htm
+sed -i '/Powered by/,+4d' /usr/lib/lua/luci/view/themes/argon/footer_login.htm
+sed -i '/Powered by/d' /usr/lib/lua/luci/view/themes/bootstrap/footer.htm
+sed -i '/ula_prefix/d' /etc/config/network
+sed -i 's/60/64/g' /etc/config/network
+sed -ri '/check_signature/s@^[^#]@#&@' /etc/opkg.conf
+sed -i 's/3/7/g' /etc/config/autoreboot
+sed -i 's/5/3/g' /etc/config/autoreboot
+sed -i 's/0/1/g' /etc/config/autoreboot
+
+mv /etc/99-msd_lite /etc/hotplug.d/iface/99-msd_lite
+mv /etc/99-udpxy /etc/hotplug.d/iface/99-udpxy
+chmod a+rwx /etc/hotplug.d/iface/99-msd_lite
+chmod a+rwx /etc/hotplug.d/iface/99-udpxy

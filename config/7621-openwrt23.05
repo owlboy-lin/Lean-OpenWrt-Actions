@@ -1,0 +1,23 @@
+CONFIG_TARGET_ramips=y
+CONFIG_TARGET_ramips_mt7621=y
+CONFIG_TARGET_MULTI_PROFILE=y
+CONFIG_TARGET_DEVICE_ramips_mt7621_DEVICE_xiaomi_mi-router-3-pro=y
+CONFIG_TARGET_DEVICE_ramips_mt7621_DEVICE_phicomm_k2p=y
+
+CONFIG_PACKAGE_luci-app-autoreboot=y
+CONFIG_PACKAGE_luci-app-argon-config=y
+CONFIG_PACKAGE_luci-app-ramfree=y
+CONFIG_PACKAGE_luci-i18n-argon-config-zh-cn=y
+CONFIG_PACKAGE_luci-i18n-autoreboot-zh-cn=y
+CONFIG_PACKAGE_luci-i18n-ramfree-zh-cn=y
+CONFIG_PACKAGE_luci-theme-argon=y
+# CONFIG_TARGET_ROOTFS_INITRAMFS is not set
+
+CONFIG_PACKAGE_luci-app-arpbind=y
+CONFIG_PACKAGE_luci-app-udpxy=y
+CONFIG_PACKAGE_luci-app-msd_lite=y
+CONFIG_PACKAGE_luci-i18n-udpxy=y
+CONFIG_PACKAGE_luci-i18n-arpbind=y
+CONFIG_PACKAGE_luci-i18n-msd_lite=y
+CONFIG_PACKAGE_luci-app-fileassistant=y
+CONFIG_PACKAGE_luci-i18n-fileassistant=y

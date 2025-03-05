@@ -1,0 +1,122 @@
+CONFIG_TARGET_msm89xx=y
+CONFIG_TARGET_msm89xx_msm8916=y
+CONFIG_TARGET_msm89xx_msm8916_DEVICE_openstick-ufi003=y
+# CONFIG_KERNEL_WERROR is not set
+CONFIG_LIBQMI_COLLECTION_BASIC=y
+CONFIG_LIBQMI_WITH_MBIM_QMUX=y
+CONFIG_LIBQMI_WITH_QRTR_GLIB=y
+CONFIG_LUCI_LANG_zh_Hans=y
+# CONFIG_MODEMMANAGER_WITH_MBIM is not set
+# CONFIG_MODEMMANAGER_WITH_QMI is not set
+# CONFIG_MODEMMANAGER_WITH_QRTR is not set
+CONFIG_OPENSSL_ENGINE=y
+CONFIG_OPENSSL_WITH_ASM=y
+CONFIG_OPENSSL_WITH_CHACHA_POLY1305=y
+CONFIG_OPENSSL_WITH_CMS=y
+CONFIG_OPENSSL_WITH_DEPRECATED=y
+CONFIG_OPENSSL_WITH_ERROR_MESSAGES=y
+CONFIG_OPENSSL_WITH_IDEA=y
+CONFIG_OPENSSL_WITH_MDC2=y
+CONFIG_OPENSSL_WITH_PSK=y
+CONFIG_OPENSSL_WITH_SEED=y
+CONFIG_OPENSSL_WITH_SRP=y
+CONFIG_OPENSSL_WITH_TLS13=y
+CONFIG_OPENSSL_WITH_WHIRLPOOL=y
+CONFIG_PACKAGE_android-tools-adbd=y
+CONFIG_PACKAGE_cgi-io=y
+CONFIG_PACKAGE_dbus=y
+# CONFIG_PACKAGE_dnsmasq is not set
+CONFIG_PACKAGE_dnsmasq-full=y
+CONFIG_PACKAGE_gc=y
+CONFIG_PACKAGE_glib2=y
+CONFIG_PACKAGE_kmod-usb-gadget-functionfs=y
+CONFIG_PACKAGE_libattr=y
+CONFIG_PACKAGE_libconfig=y
+CONFIG_PACKAGE_libdbus=y
+CONFIG_PACKAGE_libexpat=y
+CONFIG_PACKAGE_libffi=y
+CONFIG_PACKAGE_liblucihttp=y
+CONFIG_PACKAGE_liblucihttp-ucode=y
+CONFIG_PACKAGE_libmbim=y
+CONFIG_PACKAGE_libmount=y
+CONFIG_PACKAGE_libopenssl=y
+CONFIG_PACKAGE_libpcre2=y
+CONFIG_PACKAGE_libqmi=y
+CONFIG_PACKAGE_libqrtr-glib=y
+CONFIG_PACKAGE_libusbgx=y
+CONFIG_PACKAGE_luci=y
+CONFIG_PACKAGE_luci-app-firewall=y
+CONFIG_PACKAGE_luci-app-opkg=y
+CONFIG_PACKAGE_luci-base=y
+CONFIG_PACKAGE_luci-compat=y
+CONFIG_PACKAGE_luci-i18n-base-zh-cn=y
+CONFIG_PACKAGE_luci-i18n-firewall-zh-cn=y
+CONFIG_PACKAGE_luci-i18n-opkg-zh-cn=y
+CONFIG_PACKAGE_luci-light=y
+CONFIG_PACKAGE_luci-mod-admin-full=y
+CONFIG_PACKAGE_luci-mod-network=y
+CONFIG_PACKAGE_luci-mod-status=y
+CONFIG_PACKAGE_luci-mod-system=y
+CONFIG_PACKAGE_luci-proto-ipv6=y
+# CONFIG_PACKAGE_luci-proto-modemmanager is not set
+CONFIG_PACKAGE_luci-proto-ppp=y
+CONFIG_PACKAGE_luci-theme-bootstrap=y
+# CONFIG_PACKAGE_modemmanager is not set
+CONFIG_PACKAGE_mount-utils=y
+CONFIG_PACKAGE_openstick-tweaks=y
+# CONFIG_DEFAULT_qcom-msm8916-modem-openstick-ufi003-firmware is not set
+# CONFIG_PACKAGE_qcom-msm8916-modem-openstick-ufi003-firmware is not set
+CONFIG_PACKAGE_qcom-msm8916-openstick-ufi003-wcnss-firmware=y
+CONFIG_PACKAGE_qcom-msm8916-wcnss-openstick-ufi003-nv=y
+CONFIG_PACKAGE_resize2fs=y
+CONFIG_PACKAGE_rootfs-resizer=y
+CONFIG_PACKAGE_rpcd=y
+CONFIG_PACKAGE_rpcd-mod-file=y
+CONFIG_PACKAGE_rpcd-mod-iwinfo=y
+CONFIG_PACKAGE_rpcd-mod-luci=y
+CONFIG_PACKAGE_rpcd-mod-rrdns=y
+CONFIG_PACKAGE_rpcd-mod-ucode=y
+CONFIG_PACKAGE_tune2fs=y
+CONFIG_PACKAGE_ucode-mod-html=y
+CONFIG_PACKAGE_ucode-mod-math=y
+CONFIG_PACKAGE_uhttpd=y
+CONFIG_PACKAGE_uhttpd-mod-ubus=y
+CONFIG_PACKAGE_zlib=y
+# CONFIG_TARGET_EXT4_JOURNAL is not set
+# CONFIG_TARGET_IMAGES_GZIP is not set
+CONFIG_TARGET_KERNEL_PARTSIZE=128
+CONFIG_TARGET_ROOTFS_PARTSIZE=480
+# CONFIG_TARGET_ROOTFS_SQUASHFS is not set
+# CONFIG_WPA_MBO_SUPPORT is not set
+
+CONFIG_PACKAGE_kmod-usb-net-rtl8152=y
+CONFIG_PACKAGE_kmod-usb2=y
+CONFIG_PACKAGE_openssl-util=y
+CONFIG_PACKAGE_usbutils=y
+CONFIG_PACKAGE_coremark=y
+CONFIG_PACKAGE_htop=y
+CONFIG_PACKAGE_iperf3=y
+
+CONFIG_PACKAGE_kmod-inet-diag=y
+CONFIG_PACKAGE_kmod-netlink-diag=y
+CONFIG_PACKAGE_kmod-nft-tproxy=y
+CONFIG_PACKAGE_kmod-tun=y
+CONFIG_PACKAGE_kmod-fs-btrfs=y
+CONFIG_PACKAGE_kmod-ipt-nat=y
+CONFIG_PACKAGE_kmod-ipt-nat6=y
+CONFIG_PACKAGE_kmod-ipt-physdev=y
+CONFIG_PACKAGE_kmod-nf-ipvs=y
+CONFIG_PACKAGE_kmod-veth=y
+CONFIG_PACKAGE_kmod-ipt-core=y
+CONFIG_PACKAGE_kmod-ipt-conntrack=y
+CONFIG_PACKAGE_kmod-nf-nat6=y
+CONFIG_PACKAGE_kmod-ipt-fullconenat=y
+CONFIG_PACKAGE_kmod-ipt-offload=y
+CONFIG_PACKAGE_kmod-ipt-ipset=y
+CONFIG_PACKAGE_kmod-fuse=y
+CONFIG_PACKAGE_kmod-vxlan=y
+CONFIG_PACKAGE_kmod-macvlan=y
+CONFIG_PACKAGE_kmod-dummy=y
+CONFIG_PACKAGE_kmod-ipsec=y
+CONFIG_PACKAGE_kmod-nf-nathelper=y
+CONFIG_PACKAGE_kmod-nf-nathelper-extra=y
