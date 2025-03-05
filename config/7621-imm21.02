@@ -1,0 +1,31 @@
+CONFIG_TARGET_ramips=y
+CONFIG_TARGET_ramips_mt7621=y
+CONFIG_TARGET_MULTI_PROFILE=y
+CONFIG_TARGET_DEVICE_ramips_mt7621_DEVICE_xiaoyu_xy-c5=y
+CONFIG_TARGET_DEVICE_ramips_mt7621_DEVICE_phicomm_k2p=y
+
+CONFIG_PACKAGE_kmod-usb-net-ipheth=n
+CONFIG_PACKAGE_kmod-usb-net-rndis=n
+CONFIG_PACKAGE_kmod-usb-storage=y
+CONFIG_PACKAGE_kmod-usb-storage-extras=y
+CONFIG_PACKAGE_kmod-usb2=y
+CONFIG_PACKAGE_kmod-usb3=y
+CONFIG_PACKAGE_usbmuxd=n
+CONFIG_PACKAGE_usbutils=n
+CONFIG_PACKAGE_libimobiledevice=n
+
+CONFIG_PACKAGE_luci-app-argon-config=m
+CONFIG_PACKAGE_luci-app-autoreboot=m
+CONFIG_PACKAGE_luci-app-ramfree=y
+CONFIG_PACKAGE_luci-i18n-argon-config-zh-cn=m
+CONFIG_PACKAGE_luci-i18n-autoreboot-zh-cn=m
+CONFIG_PACKAGE_luci-i18n-ramfree-zh-cn=y
+
+CONFIG_PACKAGE_luci-theme-argon=m
+# CONFIG_PACKAGE_luci-app-turboacc is not set
+# CONFIG_PACKAGE_luci-app-filetransfer is not set
+# CONFIG_PACKAGE_luci-i18n-filetransfer-zh-cn is not set
+
+CONFIG_PACKAGE_igmpproxy=m
+CONFIG_PACKAGE_luci-app-ddns-go=m
+CONFIG_PACKAGE_luci-app-msd_lite=m
