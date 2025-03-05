@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# 设置所有网口可访问网页终端
+uci delete ttyd.@ttyd[0].interface
+
+# 设置所有网口可连接 SSH
+uci set dropbear.@dropbear[0].Interface=''
+
+uci del network.wan6
+uci set network.lan.ip6assign=64
+uci del network.globals.ula_prefix
+uci set dhcp.lan.dns_service='0'
+
+uci set network.wan.proto='pppoe'
+uci set network.wan.username='037606332332'
+uci set network.wan.password='332332'
+
+uci commit
+
+#sed -i 's/root::0:0:99999:7:::/root:$1$wKsL1h.7$rqVC6MhBRN3YHpLj2KDNr.:20079:0:99999:7:::/g' /etc/shadow
+#sed -i 's/root:::0:99999:7:::/root:$1$wKsL1h.7$rqVC6MhBRN3YHpLj2KDNr.:20079:0:99999:7:::/g' /etc/shadow
+
+/etc/init.d/network restart
+#sleep 2
+#/etc/init.d/system restart
+
+exit 0

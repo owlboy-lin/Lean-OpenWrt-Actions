@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# 设置所有网口可访问网页终端
+uci delete ttyd.@ttyd[0].interface
+
+# 设置所有网口可连接 SSH
+uci set dropbear.@dropbear[0].Interface=''
+
+uci commit
+
+#sed -i '/Powered by/,+4d' /usr/lib/lua/luci/view/themes/argon/footer.htm
+#sed -i '/Powered by/,+4d' /usr/lib/lua/luci/view/themes/argon/footer_login.htm
+#sed -i '/Powered by/d' /usr/lib/lua/luci/view/themes/bootstrap/footer.htm
+sed -i '/ula_prefix/d' /etc/config/network
+sed -i 's/60/64/g' /etc/config/network
+sed -ri '/check_signature/s@^[^#]@#&@' /etc/opkg.conf
+
+exit 0
