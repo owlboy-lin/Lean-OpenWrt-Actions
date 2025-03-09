@@ -15,8 +15,8 @@ sed -i 's/192.168.1.1/192.168.23.1/g' package/base-files/files/bin/config_genera
 git clone --depth=1 -b main https://github.com/linkease/istore.git package/istore
 # git clone --depth=1 -b master https://github.com/linkease/nas-packages.git package/nas-packages
 # git clone --depth=1 -b main https://github.com/linkease/nas-packages-luci.git package/nas-luci
-mv package/nas-packages/network/services/* package/nas-packages/
-rm -rf package/nas-packages/network
+# mv package/nas-packages/network/services/* package/nas-packages/
+# rm -rf package/nas-packages/network
 
 rm -rf feeds/packages/lang/golang
 git clone https://github.com/sbwml/packages_lang_golang -b 23.x feeds/packages/lang/golang
