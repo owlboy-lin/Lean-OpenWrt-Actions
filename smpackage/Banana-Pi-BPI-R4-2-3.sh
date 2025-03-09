@@ -173,12 +173,18 @@ find ./ | grep Makefile | grep mosdns | xargs rm -f
 git clone https://github.com/sbwml/luci-app-mosdns -b v5 package/mosdns
 git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 
-git clone -b master --depth 1 https://github.com/fw876/helloworld.git package/ssrplus
+# git clone -b master --depth 1 https://github.com/fw876/helloworld.git package/ssrplus
 
 rm -rf feeds/packages/net/adguardhome
 git clone --depth=1 https://github.com/kenzok8/small-package.git package/kz8-small
+mv package/kz8-small/luci-app-ssr-plus package/luci-app-ssr-plus
 mv package/kz8-small/luci-app-adguardhome package/luci-app-adguardhome
+mv package/kz8-small/luci-app-ikoolproxy package/luci-app-ikoolproxy
+mv package/kz8-small/luci-app-partexp package/luci-app-partexp
+mv package/kz8-small/luci-app-wrtbwmon package/luci-app-wrtbwmon
+mv package/kz8-small/wrtbwmon package/wrtbwmon
 mv package/kz8-small/luci-app-netspeedtest package/luci-app-netspeedtest
+mv package/kz8-small/homebox package/homebox
 mv package/kz8-small/luci-app-poweroff package/luci-app-poweroff
 rm -rf package/kz8-small
 
