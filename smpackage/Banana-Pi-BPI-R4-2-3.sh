@@ -159,7 +159,7 @@ sed -i 's/192.168.1.1/192.168.89.1/g' package/base-files/files/bin/config_genera
 # echo "packages executed successfully!"
 # iStore
 git clone --depth=1 -b main https://github.com/linkease/istore.git package/istore
-./scripts/feeds install -d y -p istore luci-app-store
+
 # git clone --depth=1 -b master https://github.com/linkease/nas-packages.git package/nas-packages
 # git clone --depth=1 -b main https://github.com/linkease/nas-packages-luci.git package/nas-luci
 # mv package/nas-packages/network/services/* package/nas-packages/
