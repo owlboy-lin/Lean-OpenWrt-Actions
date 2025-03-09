@@ -110,8 +110,8 @@ sed -i 's/192.168.1.1/192.168.89.1/g' package/base-files/files/bin/config_genera
 
 
 #克隆的源码放在small文件夹
-mkdir package/small
-pushd package/small
+# mkdir package/small
+# pushd package/small
 
 
 ## adguardhome
@@ -134,29 +134,53 @@ pushd package/small
 # git clone -b main --depth 1 https://github.com/xiaorouji/openwrt-passwall2.git
 
 ## #mosdns
-find ./ | grep Makefile | grep v2ray-geodata | xargs rm -f
-find ./ | grep Makefile | grep mosdns | xargs rm -f
-git clone -b v5 https://github.com/sbwml/luci-app-mosdns.git
-git clone -b master https://github.com/sbwml/v2ray-geodata 
+# find ./ | grep Makefile | grep v2ray-geodata | xargs rm -f
+# find ./ | grep Makefile | grep mosdns | xargs rm -f
+# git clone -b v5 https://github.com/sbwml/luci-app-mosdns.git
+# git clone -b master https://github.com/sbwml/v2ray-geodata 
 
 ## openclash
 # git clone -b master --depth 1 https://github.com/vernesong/OpenClash.git
 
 ## poweroff
-git clone -b master https://github.com/esirplayground/luci-app-poweroff.git
+# git clone -b master https://github.com/esirplayground/luci-app-poweroff.git
 
 ## iStore
-git clone -b main https://github.com/linkease/istore.git
-./scripts/feeds install -d y -p istore luci-app-store
+# git clone -b main https://github.com/linkease/istore.git
+# ./scripts/feeds install -d y -p istore luci-app-store
 
 ## netspeedtest
-git clone -b master https://github.com/sirpdboy/netspeedtest.git
+# git clone -b master https://github.com/sirpdboy/netspeedtest.git
+
+# git clone --depth 1 https://github.com/fw876/helloworld.git package/helloworld
+
+# popd
+
+# echo "packages executed successfully!"
+# iStore
+git clone --depth=1 -b main https://github.com/linkease/istore.git package/istore
+./scripts/feeds install -d y -p istore luci-app-store
+# git clone --depth=1 -b master https://github.com/linkease/nas-packages.git package/nas-packages
+# git clone --depth=1 -b main https://github.com/linkease/nas-packages-luci.git package/nas-luci
+# mv package/nas-packages/network/services/* package/nas-packages/
+# rm -rf package/nas-packages/network
+
+rm -rf feeds/packages/net/mosdns
+rm -rf feeds/packages/lang/golang
+git clone https://github.com/sbwml/packages_lang_golang -b 23.x feeds/packages/lang/golang
+find ./ | grep Makefile | grep v2ray-geodata | xargs rm -f
+find ./ | grep Makefile | grep mosdns | xargs rm -f
+git clone https://github.com/sbwml/luci-app-mosdns -b v5 package/mosdns
+git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 
 git clone --depth 1 https://github.com/fw876/helloworld.git package/helloworld
 
-popd
-
-echo "packages executed successfully!"
+rm -rf feeds/packages/net/adguardhome
+git clone --depth=1 https://github.com/kenzok8/small-package.git package/kz8-small
+mv package/kz8-small/luci-app-adguardhome package/luci-app-adguardhome
+mv package/kz8-small/luci-app-netspeedtest package/luci-app-netspeedtest
+mv package/kz8-small/luci-app-poweroff package/luci-app-poweroff
+rm -rf package/kz8-small
 
 # 添加自定义软件包
 
