@@ -134,6 +134,8 @@ git clone -b 2023.10 --depth 1 https://github.com/XiaoBinin/luci-app-adguardhome
 # git clone -b main --depth 1 https://github.com/xiaorouji/openwrt-passwall2.git
 
 ## #mosdns
+find ./ | grep Makefile | grep v2ray-geodata | xargs rm -f
+find ./ | grep Makefile | grep mosdns | xargs rm -f
 git clone -b v5 https://github.com/sbwml/luci-app-mosdns.git
 git clone -b master https://github.com/sbwml/v2ray-geodata 
 
@@ -144,8 +146,8 @@ git clone -b master https://github.com/sbwml/v2ray-geodata
 git clone -b master https://github.com/esirplayground/luci-app-poweroff.git
 
 ## iStore
-# git clone -b main https://github.com/linkease/istore.git
-
+git clone -b main https://github.com/linkease/istore.git
+./scripts/feeds install -d y -p istore luci-app-store
 
 ## netspeedtest
 git clone -b master https://github.com/sirpdboy/netspeedtest.git

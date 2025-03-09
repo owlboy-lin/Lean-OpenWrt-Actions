@@ -148,7 +148,7 @@ CONFIG_PACKAGE_luci-app-adguardhome=y
 
 
 # netspeedtest chmod +x /etc/init.d/netspeedtest
-# CONFIG_PACKAGE_luci-app-netspeedtest=y
+CONFIG_PACKAGE_luci-app-netspeedtest=y
 
 
 # passwall
@@ -172,7 +172,7 @@ CONFIG_PACKAGE_luci-app-ttyd=y
 # turboacc
 CONFIG_PACKAGE_luci-app-turboacc=y
 
-# luci-app-uugamebooster=y
+luci-app-uugamebooster=y
 
 
 # luci-app-webadmin=y
